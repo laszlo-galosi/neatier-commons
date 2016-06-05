@@ -1,0 +1,79 @@
+/*
+ *  Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
+ *  Unauthorized copying of this file, via any medium is strictly prohibited.
+ *  Proprietary and confidential.
+ *
+ *  All information contained herein is, and remains the property of Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+ *  by trade secret or copyright law. Dissemination of this information or reproduction of
+ *  this material is strictly forbidden unless prior written permission is obtained from
+ *   Delight Solutions Kft.
+ */
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots/'
+  }
+}
+
+apply plugin: 'com.android.library'
+apply from: '../dependencies.gradle'
+//Retrolambda
+apply plugin: 'me.tatarka.retrolambda'
+
+
+android {
+  compileSdkVersion versions.androidCompileSdkVersion
+  buildToolsVersion versions.androidBuildToolsVersion
+
+  defaultConfig {
+    minSdkVersion versions.androidMinSdkVersion
+    targetSdkVersion versions.androidTargetSdkVersion
+    versionCode versions.code
+    versionName versions.name
+    testInstrumentationRunner versions.testInstrumentationRunner
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      debuggable false
+    }
+    debug {
+      minifyEnabled false
+      debuggable true
+    }
+  }
+}
+
+
+dependencies {
+  //Optional, Collections, Guava like but lightweight on method count library
+  compile project(':commons')
+  compile appBuildingDependencies.arrow
+  //    compile appBuildingDependencies.dagger
+  //    compile appBuildingDependencies.javaxInject
+  //  compile appBuildingDependencies.javaxAnnotationApi
+
+  compile appBuildingDependencies.trikitaLog
+  compile appBuildingDependencies.rxAndroid
+  compile appBuildingDependencies.rxJava
+  compile appBuildingDependencies.androidAnnotations
+  compile appBuildingDependencies.supportV7
+  compile appBuildingDependencies.supportDesign;
+  compile appBuildingDependencies.jodaTimeAndroid
+  //    compile dataDependencies.gson
+
+  testCompile robolectricTestDependencies.junit
+  //    testCompile robolectricTestDependencies.assertj
+  //    testCompile robolectricTestDependencies.mockito
+  //    testCompile robolectricTestDependencies.robolectric
+}

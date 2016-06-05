@@ -3,37 +3,35 @@
 apply from: 'dependencies.gradle'
 
 buildscript {
-    apply from: 'dependencies.gradle'
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath gradlePlugins.android
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+  apply from: 'dependencies.gradle'
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath gradlePlugins.android
+    classpath gradlePlugins.retrolambda
+  }
 }
 
 allprojects {
-    repositories {
-        jcenter()
-    }
+  repositories {
+    jcenter()
+  }
 
-    // print errors from test in the terminal
-    tasks.withType(Test) {
-        testLogging {
-            displayGranularity = 2
-            showStackTraces = true
-            showCauses = true
-            showExceptions = true
-            exceptionFormat = "full"
-            stackTraceFilters = ["entry_point", "truncate"]
-            events "passed", "skipped", "failed"
-        }
+  // print errors from test in the terminal
+  tasks.withType(Test) {
+    testLogging {
+      displayGranularity = 2
+      showStackTraces = true
+      showCauses = true
+      showExceptions = true
+      exceptionFormat = "full"
+      stackTraceFilters = ["entry_point", "truncate"]
+      events "passed", "skipped", "failed"
     }
+  }
 }
 
 task clean(type: Delete) {
-    delete rootProject.buildDir
+  delete rootProject.buildDir
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~  Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
+  ~  Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~  Proprietary and confidential.
+  ~
+  ~  All information contained herein is, and remains the property of Delight Solutions Kft.
+  ~  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+  ~   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+  ~  by trade secret or copyright law. Dissemination of this information or reproduction of
+  ~  this material is strictly forbidden unless prior written permission is obtained from
+  ~   Delight Solutions Kft.
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+  <attr name="labelWidgetStyle"
+      format="reference"/>
+
+
+  <declare-styleable name="twowayview_DividerItemDecoration">
+    <attr name="android:divider"
+        tools:ignore="ResourceName"/>
+    <attr name="twowayview_verticalDivider"
+        format="reference"/>
+    <attr name="twowayview_horizontalDivider"
+        format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="twowayview_StaggeredGridViewChild">
+    <attr name="twowayview_span"
+        format="integer"/>
+  </declare-styleable>
+
+  <declare-styleable name="twowayview_SpannableGridViewChild">
+    <attr name="twowayview_colSpan"
+        format="integer"/>
+    <attr name="twowayview_rowSpan"
+        format="integer"/>
+  </declare-styleable>
+
+
+  <!-- ColorState to be used in the TinOnImageView view -->
+  <declare-styleable name="TintOnStateImageView">
+    <attr name="colorStateList"
+        format="reference|color"/>
+  </declare-styleable>
+
+  <declare-styleable name="ItemWidget">
+    <attr name="iw_contentLayout" format="reference"/>
+    <attr name="iw_clickableContent" format="boolean"/>
+    <attr name="iw_layoutHeight" format="integer"/>
+    <attr name="iw_contentBackground" format="reference|color"/>
+  </declare-styleable>
+</resources>
