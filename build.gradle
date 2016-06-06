@@ -8,8 +8,8 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath gradlePlugins.android
-    classpath gradlePlugins.retrolambda
+//    classpath gradlePlugins.android
+//    classpath gradlePlugins.retrolambda
   }
 }
 

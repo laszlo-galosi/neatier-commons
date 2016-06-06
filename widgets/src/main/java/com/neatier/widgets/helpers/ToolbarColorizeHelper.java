@@ -27,7 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
-import com.neatier.commons.R;
+import com.neatier.widgets.R;
 import java.util.ArrayList;
 
 /**

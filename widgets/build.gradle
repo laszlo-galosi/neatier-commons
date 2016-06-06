@@ -56,8 +56,9 @@ android {
 
 
 dependencies {
+  //Internal dependencies
+  compile project(path: ':neatier-commons:commons')
   //Optional, Collections, Guava like but lightweight on method count library
-  compile project(':commons')
   compile appBuildingDependencies.arrow
   //    compile appBuildingDependencies.dagger
   //    compile appBuildingDependencies.javaxInject

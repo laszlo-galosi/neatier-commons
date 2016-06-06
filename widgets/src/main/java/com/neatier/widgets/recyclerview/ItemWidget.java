@@ -28,6 +28,7 @@ import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.Bindable;
 import com.neatier.widgets.R;
 import com.neatier.widgets.ThemeUtil;
+import com.neatier.widgets.helpers.WidgetUtils;
 
 /**
  * Created by László Gálosi on 31/10/15
@@ -98,9 +99,12 @@ public class ItemWidget extends LinearLayout implements Bindable {
               LayoutParams.MATCH_PARENT,
               ThemeUtil.dpToPx(getContext(), mLayoutHeight));
 
+        WidgetUtils.setLayoutSizeOf(mContentView.get(),  LayoutParams.MATCH_PARENT,
+                                    ThemeUtil.dpToPx(getContext(), mLayoutHeight));
+
         //layoutParams.leftMargin = ThemeUtil.dpToPx(getContext(), R.dimen.material_padding);
         //layoutParams.rightMargin = ThemeUtil.dpToPx(getContext(), R.dimen.material_padding);
-        setLayoutParams(layoutParams);
+        //setLayoutParams(layoutParams);
     }
 
     public ItemWidget(Context context, AttributeSet attrs, int defStyleAttr) {
