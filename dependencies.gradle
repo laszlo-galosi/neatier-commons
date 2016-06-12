@@ -67,8 +67,8 @@ ext.versions = [//Android framework
                 rxLintVersion                : '1.0',
                 rxAndroidVersion             : '0.24.0',
                 gsonVersion                  : '2.3.1',
-                retrofitVersion              : '1.9.0',
-                okHttpVersion                : '2.3.0',
+                retrofitVersion              : '2.0.0-beta4',
+                okHttpVersion                : '3.2.0',
                 picassoVersion               : '2.5.2',
                 androidAnnotationsVersion    : '23.2.1',
 
@@ -155,7 +155,7 @@ ext.appBuildingDependencies =
 
 //Dependencies used for application building in the data layer (networking, entites, mappers.)
 ext.dataDependencies = [retrofit     : "com.squareup.retrofit:retrofit:${versions.retrofitVersion}",
-                        okHttp       : "com.squareup.okhttp:okhttp:${versions.okHttpVersion}",
+                        okHttp       : "com.squareup.okhttp3:okhttp:${versions.okHttpVersion}",
                         gson         : "com.google.code.gson:gson:${versions.gsonVersion}",
                         stetho       : "com.facebook.stetho:stetho-urlconnection:${versions.stethoVersion}",
                         stetho_okhttp: "com.facebook.stetho:stetho-okhttp:${versions.stethoVersion}"]

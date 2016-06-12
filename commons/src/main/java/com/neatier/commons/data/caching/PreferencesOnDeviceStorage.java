@@ -44,7 +44,7 @@ public class PreferencesOnDeviceStorage<K, V>
                                       String prefix) {
         this.keyPrefix = prefix;
         this.mSharedKeyValueStore =
-                new SharedKeyValueStore<K, V>(context, preferenceFileName);
+                new SharedKeyValueStore<K, V>(context, jsonSerializer, preferenceFileName);
         this.mJsonSerializer = jsonSerializer;
     }
 
@@ -54,12 +54,10 @@ public class PreferencesOnDeviceStorage<K, V>
         if ((content instanceof JsonElement
                 || content instanceof JsonObject
                 || content instanceof LinkedTreeMap
-                || content instanceof List
-        )
-                && mJsonSerializer != null) {
-            mSharedKeyValueStore.put(keyToStore, (V) mJsonSerializer.serialize(content)).commit();
+                || content instanceof List) && mJsonSerializer != null) {
+            mSharedKeyValueStore.put(keyToStore, mJsonSerializer.serialize(content)).apply();
         } else {
-            mSharedKeyValueStore.put(keyToStore, content).commit();
+            mSharedKeyValueStore.put(keyToStore, content).apply();
         }
     }
 

@@ -54,6 +54,17 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
         mJsonSerializer = new JsonSerializer();
     }
 
+    public SharedKeyValueStore(final Context context, final JsonSerializer jsonSerializer,
+          final String preferencesFileName) {
+        if (context == null || TextUtils.isEmpty(preferencesFileName)) {
+            throw new IllegalArgumentException("The constructor parameters cannot be null!!!");
+        }
+        mSharedPreferences =
+                context.getSharedPreferences(preferencesFileName, Context.MODE_PRIVATE);
+        mPrefEditor = this.mSharedPreferences.edit();
+        mJsonSerializer = jsonSerializer;
+    }
+
     /**
      * @see Map#putAll(Map)
      */
@@ -67,7 +78,7 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
     /**
      * @see Map#put(Object, Object)
      */
-    public SharedKeyValueStore put(final String key, final V value) {
+    public SharedKeyValueStore put(final String key, final Object value) {
         if (value instanceof String) {
             this.putString(String.valueOf(key), String.valueOf(value));
         } else if (value instanceof Set) {
@@ -81,8 +92,7 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
         } else if (value instanceof Boolean) {
             this.putBoolean(String.valueOf(key), ((Boolean) value).booleanValue());
         } else {
-            throw new IllegalArgumentException(
-                    "Value type is not supported:" + value.getClass().getSimpleName());
+            this.putString(String.valueOf(key), mJsonSerializer.serialize(value, value.getClass()));
         }
         return this;
     }

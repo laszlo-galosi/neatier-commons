@@ -197,6 +197,15 @@ public class JsonSerializer<T> {
         }
     }
 
+    public boolean isJsonObject(final String jsonString) {
+        try {
+            JsonElement elem = jsonParser.parse(jsonString);
+            return elem.isJsonObject() || elem.isJsonArray();
+        } catch (final Exception ex) {
+            return false;
+        }
+    }
+
     public JsonParser getJsonParser() {
         return jsonParser;
     }

@@ -40,13 +40,16 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
     private static final String PREF_FILE_NAME = "entities";
     private static final String KEY_PREFIX = "entity_";
     private static final long FAKE_KEY = 1;
+    private static final String FAKE_NAME = "entity1";
     private static final long FAKE_KEY_2 = 2;
+    private static final String FAKE_NAME_2 = "entity2";
     private PreferencesOnDeviceStorage preferencesKeyedStorage;
     private SharedPreferences mSharedPreferences;
     private JsonSerializer mJsonSerializer;
 
     @Override
     public void setUp() throws Exception {
+        super.setUp();
         ShadowApplication application = ShadowApplication.getInstance();
         Context context = application.getApplicationContext();
         mSharedPreferences = application.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
@@ -143,17 +146,19 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         // removes the previous content on writing and fails this test.
         // TODD: check Robolectric 3.0+ versions if this is fixed and uncomment the next line.
         // preferencesKeyedStorage.clear();
-        preferencesKeyedStorage.writeKeyedContent(FAKE_KEY, "entity1");
-        preferencesKeyedStorage.writeKeyedContent(FAKE_KEY_2, "entity2");
+        preferencesKeyedStorage =
+              new PreferencesOnDeviceStorage<Long, String>(mContext, mJsonSerializer, PREF_FILE_NAME, KEY_PREFIX);
+        preferencesKeyedStorage.writeKeyedContent(FAKE_KEY, FAKE_NAME);
+        preferencesKeyedStorage.writeKeyedContent(FAKE_KEY_2, FAKE_NAME_2);
         assertThat(preferencesKeyedStorage.containsKey(FAKE_KEY), is(true));
         assertThat(preferencesKeyedStorage.containsKey(FAKE_KEY_2), is(true));
         assertThat(mSharedPreferences.getAll().size(), is(2));
 
-        assertThat((String) preferencesKeyedStorage.readOneByKey(FAKE_KEY), is("entity1"));
-        assertThat((String) preferencesKeyedStorage.readOneByKey(FAKE_KEY_2), is("entity2"));
+        assertThat((String) preferencesKeyedStorage.readOneByKey(FAKE_KEY), is(FAKE_NAME));
+        assertThat((String) preferencesKeyedStorage.readOneByKey(FAKE_KEY_2), is(FAKE_NAME_2));
 
         assertObservableContainsAll(preferencesKeyedStorage.readAll(), null, null,
-                "entity1", "entity2");
+                FAKE_NAME, FAKE_NAME_2);
     }
 
     @Test
