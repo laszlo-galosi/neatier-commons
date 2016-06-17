@@ -13,17 +13,21 @@
 
 package com.neatier.commons.helpers;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
+import com.fernandocejas.arrow.collections.Lists;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.TypeAdapter;
 import com.google.gson.internal.LinkedTreeMap;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Class  Serializer/Deserializer for basic entities of generic type.
@@ -96,7 +100,8 @@ public class JsonSerializer<T> {
      * @param entity to serialize.
      */
     public String serialize(T entity, Class<T> entityClass) {
-        String jsonString = gson.toJson(entity, entityClass);
+        String jsonString = gson.
+                                      toJson(entity, entityClass);
         return jsonString;
     }
 
@@ -114,12 +119,36 @@ public class JsonSerializer<T> {
         return jsonString;
     }
 
-    public List<T> deserializeAll(String jsonString, Class<T> entityClass) {
+    public Observable<List<T>> serializeAllAsync(String jsonString, final TypeAdapter<T> typeAdapter) {
         JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
+        return Observable.from(Lists.newArrayList(jsonArray.iterator()))
+                         .flatMap(new Func1<JsonElement, Observable<T>>() {
+                             @Override public Observable<T> call(final JsonElement jsonElement) {
+                                 return Observable.just(typeAdapter.fromJsonTree(jsonElement));
+                             }
+                         }).toList();
+    }
+
+    public List<T> deserializeAll(String jsonString, Class<T> returnClass) {
+        JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
+        return fromJsonArray(jsonArray, returnClass);
+    }
+
+    public Observable<List<T>> deserializeAllAsync(String jsonString, final TypeAdapter<T> typeAdapter) {
+        JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
+        return Observable.from(Lists.newArrayList(jsonArray.iterator()))
+                  .flatMap(new Func1<JsonElement, Observable<T>>() {
+                      @Override public Observable<T> call(final JsonElement jsonElement) {
+                          return Observable.just(typeAdapter.fromJsonTree(jsonElement));
+                      }
+                  }).toList();
+    }
+
+    @NonNull public List<T> fromJsonArray(final JsonArray jsonArray, final Class<T> returnClass) {
         int size = jsonArray.size();
         List<T> resultList = new ArrayList<>(size);
         for (int i = 0, len = size; i < len; i++) {
-            T elem = gson.fromJson(jsonArray.get(i), entityClass);
+            T elem = gson.fromJson(jsonArray.get(i), returnClass);
             resultList.add(elem);
         }
         return resultList;
@@ -133,6 +162,10 @@ public class JsonSerializer<T> {
         }
     }
 
+    public T fromJsonElement(final JsonElement jsonElement, Class<T> returnClass) {
+        return gson.fromJson(jsonElement, returnClass);
+    }
+
     /**
      * Deserialize a json representation of an object.
      *
@@ -143,6 +176,12 @@ public class JsonSerializer<T> {
         T entity = gson.fromJson(jsonString, entityClass);
         return entity;
     }
+
+    public <T> T deserialize(final String jsonString, final TypeAdapter<T> typeAdapter)
+          throws IOException {
+        return typeAdapter.fromJson(jsonString);
+    }
+
 
     /**
      * Deserialize a json representation of an object.

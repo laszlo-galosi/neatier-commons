@@ -14,13 +14,10 @@
 package com.neatier.commons.data.caching;
 
 import com.neatier.commons.CommonsTestCase;
-
+import java.io.File;
 import org.junit.After;
 import org.junit.Test;
 import org.robolectric.RuntimeEnvironment;
-
-import java.io.File;
-
 import rx.Observable;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -42,7 +39,11 @@ public class FileOnDeviceKeyedStorageImplTest extends CommonsTestCase {
     public void setUp() throws Exception {
         super.setUp();
         cacheDir = RuntimeEnvironment.application.getCacheDir();
-        mFileOnDeviceKeyedStorage = new FileOnDeviceKeyedStorageImpl<>(cacheDir, KEY_PREFIX);
+        mFileOnDeviceKeyedStorage = new FileOnDeviceKeyedStorageImpl<Long, String>(cacheDir, KEY_PREFIX) {
+            @Override public Class getKeyClass() {
+                return Long.class;
+            }
+        };
     }
 
     @After

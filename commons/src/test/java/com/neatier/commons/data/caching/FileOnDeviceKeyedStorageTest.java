@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -14,13 +15,10 @@
 package com.neatier.commons.data.caching;
 
 import com.neatier.commons.CommonsTestCase;
-
+import java.io.File;
 import org.junit.After;
 import org.junit.Test;
 import org.robolectric.RuntimeEnvironment;
-
-import java.io.File;
-
 import rx.Observable;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -42,7 +40,13 @@ public class FileOnDeviceKeyedStorageTest extends CommonsTestCase {
     public void setUp() throws Exception {
         super.setUp();
         cacheDir = RuntimeEnvironment.application.getCacheDir();
-        mFileOnDeviceKeyedStorage = new FileOnDeviceKeyedStorageImpl<>(cacheDir, KEY_PREFIX);
+        mFileOnDeviceKeyedStorage =
+              new FileOnDeviceKeyedStorageImpl<Long, String>(cacheDir, KEY_PREFIX) {
+
+                  @Override public Class getKeyClass() {
+                      return Long.class;
+                  }
+              };
     }
 
     @After

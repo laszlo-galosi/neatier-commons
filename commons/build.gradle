@@ -22,11 +22,16 @@ repositories {
 }
 
 apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
     compileSdkVersion versions.androidCompileSdkVersion
     buildToolsVersion versions.androidBuildToolsVersion
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 configurations {

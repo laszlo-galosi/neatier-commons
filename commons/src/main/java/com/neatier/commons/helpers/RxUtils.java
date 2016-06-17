@@ -19,7 +19,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import rx.Observable;
 import rx.Subscription;
 import rx.exceptions.OnErrorNotImplementedException;
@@ -106,6 +105,7 @@ public class RxUtils {
                         element.getLineNumber());
 
                 throw new OnErrorNotImplementedException(msg, throwable);
+                //Log.e(new OnErrorNotImplementedException(msg, throwable));
             }
         };
     }

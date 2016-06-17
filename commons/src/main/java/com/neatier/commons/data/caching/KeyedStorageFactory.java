@@ -14,11 +14,9 @@
 package com.neatier.commons.data.caching;
 
 import android.content.Context;
-
 import com.neatier.commons.helpers.JsonSerializer;
 import com.neatier.commons.helpers.KeyValuePairs;
 import com.neatier.commons.settings.FactorySettings;
-
 import java.io.File;
 
 /**
@@ -44,10 +42,18 @@ public class KeyedStorageFactory {
     public <T> T create(final Class<T> storageClass, final Context context, final String fileName,
                         final String keyPrefix) {
         if (storageClass == FileOnDeviceKeyedStorageImpl.class) {
-            return (T) new FileOnDeviceKeyedStorageImpl(new File(fileName), keyPrefix);
+            return (T) new FileOnDeviceKeyedStorageImpl(new File(fileName), keyPrefix) {
+                @Override public Class getKeyClass() {
+                    return Long.class;
+                }
+            };
         } else if (storageClass == PreferencesOnDeviceStorage.class) {
             return (T) new PreferencesOnDeviceStorage(context, new JsonSerializer(), fileName,
-                    keyPrefix);
+                    keyPrefix) {
+                @Override public Class getKeyClass() {
+                    return Long.class;
+                }
+            };
         } else if (storageClass == InMemoryOnDeviceKeyedStorage.class) {
             return (T) new InMemoryOnDeviceKeyedStorage(new KeyValuePairs<Long, String>());
         } else {

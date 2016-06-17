@@ -18,7 +18,7 @@ package com.neatier.commons.settings;
  */
 public class FactorySettings {
 
-    public static final String PACKAGE_NAME = "com.delightsolutions.hirtv";
+    public static final String PACKAGE_NAME = "com.neatier.data.caching";
 
     //Intent related constants
 
@@ -27,10 +27,6 @@ public class FactorySettings {
     public static final int CHECK_CACHED_NEWER = 1;
     public static final int CHECK_CACHED_UPTODATE = 0;
     public static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
-
-    //SharedPreferences related constants
-    public static final String PREF_DEFAULT_STORAGE_FILE = "HirTv";
-    public static final String PREF_DEV_SETTINGS_FILE = "HirTv.DevSttings";
 
     private FactorySettings() {
         // This class cannot be instantiated

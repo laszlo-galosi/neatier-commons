@@ -14,7 +14,6 @@
 package com.neatier.commons.data.caching;
 
 import android.support.annotation.NonNull;
-
 import rx.Observable;
 
 /**
@@ -68,6 +67,7 @@ public interface OnDeviceKeyedStorage<K, V> {
     interface FileOnDeviceKeyStorage<K, V> extends OnDeviceKeyedStorage<K, V> {
         Object extractKeyFromFileName(final String fileName);
 
-        Class getKeyClass();
+        Class<K> getKeyClass();
+
     }
 }

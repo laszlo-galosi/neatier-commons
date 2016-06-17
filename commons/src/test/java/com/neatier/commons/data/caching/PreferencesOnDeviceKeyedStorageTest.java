@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -15,18 +16,15 @@ package com.neatier.commons.data.caching;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.neatier.commons.CommonsTestCase;
 import com.neatier.commons.helpers.JsonSerializer;
-
+import java.util.Arrays;
 import org.junit.After;
 import org.junit.Test;
 import org.robolectric.shadows.ShadowApplication;
-
-import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -55,7 +53,11 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         mSharedPreferences = application.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
         mJsonSerializer = new JsonSerializer();
         preferencesKeyedStorage =
-                new PreferencesOnDeviceStorage(context, mJsonSerializer, PREF_FILE_NAME, KEY_PREFIX);
+              new PreferencesOnDeviceStorage(context, mJsonSerializer, PREF_FILE_NAME, KEY_PREFIX) {
+                  @Override public Class getKeyClass() {
+                      return Long.class;
+                  }
+              };
     }
 
     @After
@@ -76,7 +78,7 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         String jsonStringOne = "{\"foo\":\"bar\"}";
         String jsonStringTwo = "{\"bar\":\"foo\"}";
         JsonObject jsonObjectOne =
-                mJsonSerializer.getJsonParser().parse(jsonStringOne).getAsJsonObject();
+              mJsonSerializer.getJsonParser().parse(jsonStringOne).getAsJsonObject();
         preferencesKeyedStorage.writeKeyedContent(FAKE_KEY, jsonObjectOne);
         String key = String.format("%s%s", KEY_PREFIX, FAKE_KEY);
         assertThat(mSharedPreferences.getString(key, null), is(jsonStringOne));
@@ -97,9 +99,9 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         String jsonStringOne = "{\"foo\":\"bar\"}";
         String jsonStringTwo = "{\"bar\":\"foo\"}";
         JsonObject jsonObjectOne =
-                mJsonSerializer.getJsonParser().parse(jsonStringOne).getAsJsonObject();
+              mJsonSerializer.getJsonParser().parse(jsonStringOne).getAsJsonObject();
         JsonObject jsonObjectTwo =
-                mJsonSerializer.getJsonParser().parse(jsonStringTwo).getAsJsonObject();
+              mJsonSerializer.getJsonParser().parse(jsonStringTwo).getAsJsonObject();
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(jsonObjectOne);
         jsonArray.add(jsonObjectTwo);
@@ -115,12 +117,12 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         String jsonStringOne = "{\"foo\":\"bar\"}";
         String jsonStringTwo = "{\"bar\":\"foo\"}";
         JsonObject jsonObjectOne =
-                mJsonSerializer.getJsonParser().parse(jsonStringOne).getAsJsonObject();
+              mJsonSerializer.getJsonParser().parse(jsonStringOne).getAsJsonObject();
         JsonObject jsonObjectTwo =
-                mJsonSerializer.getJsonParser().parse(jsonStringTwo).getAsJsonObject();
+              mJsonSerializer.getJsonParser().parse(jsonStringTwo).getAsJsonObject();
 
         preferencesKeyedStorage.writeKeyedContent(FAKE_KEY,
-                Arrays.asList(jsonObjectOne, jsonObjectTwo));
+                                                  Arrays.asList(jsonObjectOne, jsonObjectTwo));
         String key = String.format("%s%s", KEY_PREFIX, FAKE_KEY);
         String expectedContent = String.format("[%s,%s]", jsonStringOne, jsonStringTwo);
         assertThat(mSharedPreferences.getString(key, null), is(expectedContent));
@@ -147,7 +149,13 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         // TODD: check Robolectric 3.0+ versions if this is fixed and uncomment the next line.
         // preferencesKeyedStorage.clear();
         preferencesKeyedStorage =
-              new PreferencesOnDeviceStorage<Long, String>(mContext, mJsonSerializer, PREF_FILE_NAME, KEY_PREFIX);
+              new PreferencesOnDeviceStorage<Long, String>(mContext, mJsonSerializer,
+                                                           PREF_FILE_NAME, KEY_PREFIX) {
+
+                  @Override public Class getKeyClass() {
+                      return Long.class;
+                  }
+              };
         preferencesKeyedStorage.writeKeyedContent(FAKE_KEY, FAKE_NAME);
         preferencesKeyedStorage.writeKeyedContent(FAKE_KEY_2, FAKE_NAME_2);
         assertThat(preferencesKeyedStorage.containsKey(FAKE_KEY), is(true));
@@ -158,7 +166,7 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         assertThat((String) preferencesKeyedStorage.readOneByKey(FAKE_KEY_2), is(FAKE_NAME_2));
 
         assertObservableContainsAll(preferencesKeyedStorage.readAll(), null, null,
-                FAKE_NAME, FAKE_NAME_2);
+                                    FAKE_NAME, FAKE_NAME_2);
     }
 
     @Test
@@ -189,6 +197,6 @@ public class PreferencesOnDeviceKeyedStorageTest extends CommonsTestCase {
         assertThat(mSharedPreferences.getAll().size(), is(2));
 
         assertObservableContainsAll(preferencesKeyedStorage.keys(), null, null,
-                FAKE_KEY, FAKE_KEY_2);
+                                    FAKE_KEY, FAKE_KEY_2);
     }
 }

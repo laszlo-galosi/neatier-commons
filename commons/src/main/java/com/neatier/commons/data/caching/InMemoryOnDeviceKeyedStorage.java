@@ -14,12 +14,9 @@
 package com.neatier.commons.data.caching;
 
 import android.util.SparseArray;
-
 import com.neatier.commons.helpers.KeyValuePairs;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import rx.Observable;
 
 /**

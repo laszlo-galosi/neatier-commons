@@ -19,9 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-
 import javax.inject.Singleton;
-
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -29,7 +27,7 @@ import rx.functions.Func1;
  * Created by László Gálosi on 24/07/15
  */
 @Singleton
-public class FileOnDeviceKeyedStorageImpl<K, V>
+public abstract class FileOnDeviceKeyedStorageImpl<K, V>
         implements OnDeviceKeyedStorage.FileOnDeviceKeyStorage<K, V> {
 
     private final File directory;
@@ -179,9 +177,7 @@ public class FileOnDeviceKeyedStorageImpl<K, V>
     }
 
     @Override
-    public Class getKeyClass() {
-        return Long.class;
-    }
+    public abstract Class<K> getKeyClass();
 
     private void setKeyedFile(final K key) {
         final StringBuilder fileNameBuilder = new StringBuilder();

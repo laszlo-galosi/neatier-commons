@@ -20,23 +20,19 @@ package com.neatier.commons.data.caching;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.neatier.commons.helpers.JsonSerializer;
 import com.neatier.commons.helpers.SharedKeyValueStore;
-
 import java.util.List;
-
 import rx.Observable;
-import rx.functions.Func1;
 
-public class PreferencesOnDeviceStorage<K, V>
+public abstract class PreferencesOnDeviceStorage<K, V>
         implements OnDeviceKeyedStorage.FileOnDeviceKeyStorage<K, V> {
-    private final String keyPrefix;
-    private final SharedKeyValueStore<K, V> mSharedKeyValueStore;
-    private final JsonSerializer mJsonSerializer;
+    protected final String keyPrefix;
+    protected final SharedKeyValueStore<K, V> mSharedKeyValueStore;
+    protected final JsonSerializer mJsonSerializer;
 
     public PreferencesOnDeviceStorage(final Context context,
                                       @Nullable final JsonSerializer jsonSerializer,
@@ -66,7 +62,7 @@ public class PreferencesOnDeviceStorage<K, V>
         return mSharedKeyValueStore.getOrDefault(getStorableKey(key), null);
     }
 
-    private K getStorableKey(final K key) {
+    protected K getStorableKey(final K key) {
         Class keyClass = getKeyClass();
         if (keyClass == Long.class) {
             return (K) String.format("%s%d", this.keyPrefix, key);
@@ -99,10 +95,13 @@ public class PreferencesOnDeviceStorage<K, V>
 
     @Override
     public Observable<Object> keys() {
-        return mSharedKeyValueStore.keysAsStream().map(new Func1<Object, Object>() {
-            @Override
-            public Long call(final Object o) {
+        return mSharedKeyValueStore.keysAsStream().map(o -> {
+            if (getKeyClass() == Long.class) {
                 return Long.parseLong(((String) o).substring(keyPrefix.length()));
+            } else if (getKeyClass() == Integer.class) {
+                return Integer.parseInt(((String) o).substring(keyPrefix.length()));
+            } else {
+                return (((String) o).substring(keyPrefix.length()));
             }
         });
     }
@@ -122,7 +121,5 @@ public class PreferencesOnDeviceStorage<K, V>
     }
 
     @Override
-    public Class getKeyClass() {
-        return Long.class;
-    }
+    public abstract Class<K> getKeyClass();
 }
