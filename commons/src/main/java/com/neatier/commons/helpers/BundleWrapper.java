@@ -15,7 +15,6 @@ package com.neatier.commons.helpers;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
@@ -161,9 +160,9 @@ public class BundleWrapper {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("BundleWrapper{");
-        sb.append("mBundle=").append(mBundle);
+        final StringBuilder sb = new StringBuilder("\nBundleWrapper{");
+        sb.append("\nmBundle=").append(mBundle);
         sb.append('}');
-        return sb.toString();
+        return CommonUtils.cleanNewLine(sb.toString());
     }
 }

@@ -21,6 +21,7 @@ import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.commons.helpers.DateTimeHelper;
 import net.danlew.android.joda.DateUtils;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /**
  * Created by László Gálosi on 29/04/16
@@ -37,7 +38,8 @@ public class DateTimeRenderer implements Renderable<DateTime> {
         mDateTimeData = Optional.fromNullable(itemData);
         if (itemView != null) {
             ((TextView) itemView).setText(DateUtils.getRelativeTimeSpanString(
-                  itemView.getContext(), mDateTimeData.or(DateTimeHelper.defaultLocalDate()))
+                  itemView.getContext(), mDateTimeData.or(DateTimeHelper.defaultLocalDate())
+                                                      .withZone(DateTimeZone.UTC))
             );
         }
     }
