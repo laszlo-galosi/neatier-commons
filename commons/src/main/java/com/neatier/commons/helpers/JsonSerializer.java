@@ -60,6 +60,8 @@ public class JsonSerializer<T> {
                     return (M) Float.valueOf(jsonObject.get(memberName).getAsFloat());
                 } else if (returnClass == Double.class) {
                     return (M) Double.valueOf(jsonObject.get(memberName).getAsDouble());
+                } else if (returnClass == Boolean.class) {
+                    return (M) Boolean.valueOf(jsonObject.get(memberName).getAsBoolean());
                 }
             }
             return (M) jsonObject.get(memberName);
