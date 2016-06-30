@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -14,15 +15,32 @@
 package com.neatier.commons.helpers;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import java.io.Serializable;
 
 /**
  * Created by László Gálosi on 27/03/16
  */
-public class BundleWrapper {
+public class BundleWrapper implements Parcelable {
 
     final Bundle mBundle;
+
+    public BundleWrapper(Parcel in) {
+        mBundle = in.readBundle();
+    }
+
+    public static final Creator<BundleWrapper> CREATOR = new Creator<BundleWrapper>() {
+        @Override
+        public BundleWrapper createFromParcel(Parcel in) {
+            return new BundleWrapper(in);
+        }
+
+        @Override
+        public BundleWrapper[] newArray(int size) {
+            return new BundleWrapper[size];
+        }
+    };
 
     public static BundleWrapper wrap(final Bundle bundle) {
         return new BundleWrapper(bundle);
@@ -38,6 +56,14 @@ public class BundleWrapper {
 
     public int getInt(final String itemId) {
         return mBundle.getInt(itemId);
+    }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeBundle(mBundle);
     }
 
     protected BundleWrapper() {
@@ -94,13 +120,13 @@ public class BundleWrapper {
             mBundle.putSerializable(key, (Serializable) value);
         } else {
             throw new IllegalArgumentException(
-                    String.format("Invalid value type: %s", value.getClass().getSimpleName()));
+                  String.format("Invalid value type: %s", value.getClass().getSimpleName()));
         }
         return this;
     }
 
     public <T> T getAsOrThrows(final String key, final Class<T> returnClass, final Exception t)
-            throws Exception {
+          throws Exception {
         T result = getAs(key, returnClass);
         if (result == null) {
             throw t;
@@ -132,7 +158,7 @@ public class BundleWrapper {
             return (T) mBundle.getSerializable(key);
         }
         throw new IllegalArgumentException(
-                String.format("Invalid returnClass type: %s", returnClass.getSimpleName()));
+              String.format("Invalid returnClass type: %s", returnClass.getSimpleName()));
     }
 
     public BundleWrapper putBoolean(String key, final boolean b) {
