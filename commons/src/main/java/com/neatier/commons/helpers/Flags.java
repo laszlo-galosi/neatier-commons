@@ -17,8 +17,16 @@ package com.neatier.commons.helpers;
  * Created by László Gálosi on 17/04/16
  */
 public class Flags {
-    public static boolean hasFlag(int flags, int flag) {
+    public static boolean isSet(int flags, int flag) {
         return (flags & flag) != 0;
+    }
+
+    public static int addFlag(int flags, int flag) {
+        return flags |= flag;
+    }
+
+    public static int clearFlag(int flags, int flag) {
+        return flags & ~flag;
     }
 
     public static boolean isValidFlagsOf(int flags, int... validFlags) {
