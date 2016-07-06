@@ -36,9 +36,10 @@ public class TextRenderer<T> implements Renderable<Object> {
     public void render(final View itemView, @NonNull Object itemData) {
         final TextView textView = (TextView) itemView;
         mTextData = Optional.absent();
-        if (itemData instanceof Integer) {
-            mTextData =
-                  Optional.of(itemView.getContext().getString(((Integer) itemData).intValue()));
+        if (itemData instanceof Integer ) {
+            int stringRes = (Integer) itemData;
+            mTextData = stringRes > 0 ? Optional.of(itemView.getContext().getString(stringRes))
+                                      : Optional.absent();
         } else if (itemData instanceof String) {
             mTextData = Optional.of((String) itemData);
         } else if (itemData instanceof DisplayableValue) {
