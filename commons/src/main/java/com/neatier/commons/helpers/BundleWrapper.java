@@ -17,7 +17,10 @@ package com.neatier.commons.helpers;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import java.io.Serializable;
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by László Gálosi on 27/03/16
@@ -182,6 +185,45 @@ public class BundleWrapper implements Parcelable {
 
     public Bundle getBundle() {
         return mBundle;
+    }
+
+    /**
+     * Removes all the parameters except the ones specified in retainParams
+     * @param retainParams the parameters which should be retained.
+     * @return this instance.
+     */
+    public BundleWrapper clear(String... retainParams) {
+        removeKeys(key -> {
+            boolean shouldFilter = true;
+            for (int i = 0, len = retainParams.length; i < len; i++) {
+                shouldFilter &= (!key.equals(retainParams[i]));
+            }
+            return shouldFilter;
+        });
+        return this;
+    }
+
+    /**
+     * Removes all the entries in this bundle of which key filter applies.
+     * @param keyFilterFunction key filtering function-
+     */
+    public BundleWrapper removeKeys(final Func1<String, Boolean> keyFilterFunction) {
+        getKeysAsStream(keyFilterFunction)
+              .toList()
+              .flatMap(keys -> Observable.defer(() -> Observable.from(keys)))
+              .subscribe(key -> getBundle().remove(key));
+        return this;
+    }
+
+    /**
+     * Returns an {@lin Observable<String>} emitting all
+     * the keys in this bundle of which the filterFunction applies.
+     * @param keyFilterFunction filter function
+     */
+    public Observable<String> getKeysAsStream(
+          @NonNull final Func1<String, Boolean> keyFilterFunction) {
+        return Observable.from(getBundle().keySet())
+                         .filter(keyFilterFunction);
     }
 
     @Override
