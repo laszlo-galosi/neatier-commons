@@ -16,6 +16,7 @@ package com.neatier.widgets.renderers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 import com.fernandocejas.arrow.optional.Optional;
@@ -84,7 +85,9 @@ public class TimeRangeRenderer implements Renderable<DateTime> {
         if (mDisplayableValue.isPresent()) {
             return mDisplayableValue.get().toString(value, context);
         }
-        return DateTimeHelper.formatTime(value, context);
+        return DateTimeHelper.formatDate(value, DateUtils.FORMAT_SHOW_DATE |
+                                         DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_TIME,
+                                         context);
     }
 
     @Override

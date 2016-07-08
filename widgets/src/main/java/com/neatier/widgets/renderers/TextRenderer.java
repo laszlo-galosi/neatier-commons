@@ -16,9 +16,7 @@ package com.neatier.widgets.renderers;
 
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.TextView;
 import com.fernandocejas.arrow.optional.Optional;
-import com.neatier.widgets.helpers.DisplayableValue;
 import com.neatier.widgets.helpers.WidgetUtils;
 
 /**
@@ -34,20 +32,9 @@ public class TextRenderer<T> implements Renderable<Object> {
 
     @Override
     public void render(final View itemView, @NonNull Object itemData) {
-        final TextView textView = (TextView) itemView;
-        mTextData = Optional.absent();
-        if (itemData instanceof Integer ) {
-            int stringRes = (Integer) itemData;
-            mTextData = stringRes > 0 ? Optional.of(itemView.getContext().getString(stringRes))
-                                      : Optional.absent();
-        } else if (itemData instanceof String) {
-            mTextData = Optional.of((String) itemData);
-        } else if (itemData instanceof DisplayableValue) {
-            mTextData = Optional.of(((DisplayableValue) itemData).toString(itemView.getContext()));
-        } else {
-            mTextData = Optional.fromNullable(itemData.toString());
-        }
-        WidgetUtils.setTextOf(itemView, mTextData.or(""));
+        WidgetUtils.setTextOf(itemView,
+                              WidgetUtils.getTextData(itemData, itemView.getContext(), "")
+        );
     }
 
     public Optional<String> getText() {

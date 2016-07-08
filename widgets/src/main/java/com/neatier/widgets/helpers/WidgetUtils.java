@@ -30,6 +30,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.fernandocejas.arrow.optional.Optional;
 
 /**
  * Created by László Gálosi on 06/04/16
@@ -196,5 +197,22 @@ public class WidgetUtils {
             end--;
         }
         return charSequence.subSequence(0, end + 1);
+    }
+
+    @Nullable
+    public static String getTextData(Object data, @Nullable Context context, String... fallback) {
+        Optional<String> textData = Optional.absent();
+        if (data instanceof Integer && context != null) {
+            int stringRes = (Integer) data;
+            textData = stringRes > 0 ? Optional.of(context.getString(stringRes))
+                                     : Optional.absent();
+        } else if (data instanceof String) {
+            textData = Optional.of((String) data);
+        } else if (data instanceof DisplayableValue && context != null) {
+            textData = Optional.of(((DisplayableValue) data).toString(context));
+        } else {
+            textData = Optional.fromNullable(data.toString());
+        }
+        return textData.or(fallback.length > 0 ? fallback[0] : null);
     }
 }
