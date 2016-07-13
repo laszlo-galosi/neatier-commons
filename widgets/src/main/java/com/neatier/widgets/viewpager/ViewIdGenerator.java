@@ -1,4 +1,4 @@
-package com.novoda.viewpageradapter;
+package com.neatier.widgets.viewpager;
 
 import android.os.Build;
 import android.view.View;

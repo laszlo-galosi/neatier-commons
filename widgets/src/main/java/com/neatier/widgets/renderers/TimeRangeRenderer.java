@@ -34,6 +34,8 @@ public class TimeRangeRenderer implements Renderable<DateTime> {
     private Optional<Long> mDurationInMillis = Optional.absent();
     private Optional<DisplayableValue> mDisplayableValue = Optional.absent();
 
+    private int mTimeFormatFlags = DateUtils.FORMAT_SHOW_TIME;
+
     public TimeRangeRenderer() {
     }
 
@@ -76,6 +78,11 @@ public class TimeRangeRenderer implements Renderable<DateTime> {
         return this;
     }
 
+    public TimeRangeRenderer withFormatFlags(final int timeFormatFlags) {
+        mTimeFormatFlags = timeFormatFlags;
+        return this;
+    }
+
     public TimeRangeRenderer withDisplayableValue(Optional<DisplayableValue> mDisplayableValue) {
         this.mDisplayableValue = mDisplayableValue;
         return this;
@@ -85,9 +92,7 @@ public class TimeRangeRenderer implements Renderable<DateTime> {
         if (mDisplayableValue.isPresent()) {
             return mDisplayableValue.get().toString(value, context);
         }
-        return DateTimeHelper.formatDate(value, DateUtils.FORMAT_SHOW_DATE |
-                                         DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_SHOW_TIME,
-                                         context);
+        return DateTimeHelper.formatDate(value, mTimeFormatFlags, context);
     }
 
     @Override

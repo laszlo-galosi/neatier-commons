@@ -137,7 +137,8 @@ public class BundleWrapper implements Parcelable {
         return result;
     }
 
-    public <T> T getAs(final String key, final Class<T> returnClass, final T... defaultValue) {
+    public <T> T getAs(final String key, final Class<T> returnClass, final T... defaultValue)
+          throws ClassCastException{
         if (!mBundle.containsKey(key)) {
             return defaultValue.length > 0 ? defaultValue[0] : null;
         }
@@ -189,6 +190,7 @@ public class BundleWrapper implements Parcelable {
 
     /**
      * Removes all the parameters except the ones specified in retainParams
+     *
      * @param retainParams the parameters which should be retained.
      * @return this instance.
      */
@@ -205,6 +207,7 @@ public class BundleWrapper implements Parcelable {
 
     /**
      * Removes all the entries in this bundle of which key filter applies.
+     *
      * @param keyFilterFunction key filtering function-
      */
     public BundleWrapper removeKeys(final Func1<String, Boolean> keyFilterFunction) {
@@ -218,6 +221,7 @@ public class BundleWrapper implements Parcelable {
     /**
      * Returns an {@lin Observable<String>} emitting all
      * the keys in this bundle of which the filterFunction applies.
+     *
      * @param keyFilterFunction filter function
      */
     public Observable<String> getKeysAsStream(

@@ -15,18 +15,15 @@ package com.neatier.commons.helpers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import net.danlew.android.joda.DateUtils;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import static net.danlew.android.joda.DateUtils.FORMAT_ABBREV_ALL;
 import static net.danlew.android.joda.DateUtils.FORMAT_ABBREV_MONTH;
@@ -214,6 +211,11 @@ public class DateTimeHelper {
         return dateTime.toString(STANDARD_PATTERN);
     }
 
+    public static DateTime withLocalTime(DateTime dateTime, Object timeObject) {
+        DateTime result = dateTime.withZone(DateTimeZone.getDefault());
+        return result.withTime(new LocalTime(timeObject));
+    }
+
     public static LocalTime parseLocalTime(final String timeStr, String pattern,
                                            String defaultTime) {
         String timeToParse = timeStr;
@@ -256,7 +258,7 @@ public class DateTimeHelper {
         //return ((flags & invalidFlags) == 0);
     }
 
-    public static DateTime defaultLocalDate() {
+    public static DateTime nowLocal() {
         return DateTime.now().withZone(DateTimeZone.getDefault());
     }
 

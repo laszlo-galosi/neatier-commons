@@ -38,7 +38,7 @@ public class DateTimeRenderer implements Renderable<DateTime> {
         mDateTimeData = Optional.fromNullable(itemData);
         if (itemView != null) {
             ((TextView) itemView).setText(DateUtils.getRelativeTimeSpanString(
-                  itemView.getContext(), mDateTimeData.or(DateTimeHelper.defaultLocalDate())
+                  itemView.getContext(), mDateTimeData.or(DateTimeHelper.nowLocal())
                                                       .withZone(DateTimeZone.UTC))
             );
         }

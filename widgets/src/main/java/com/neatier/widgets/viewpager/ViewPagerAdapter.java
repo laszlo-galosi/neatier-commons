@@ -1,4 +1,4 @@
-package com.novoda.viewpageradapter;
+package com.neatier.widgets.viewpager;
 
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
@@ -10,10 +10,10 @@ import java.util.WeakHashMap;
 
 public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
 
-    private final Map<V, Integer> instantiatedViews = new WeakHashMap<>();
+    protected final Map<V, Integer> instantiatedViews = new WeakHashMap<>();
     private final ViewIdGenerator viewIdGenerator = new ViewIdGenerator();
 
-    private ViewPagerAdapterState viewPagerAdapterState = ViewPagerAdapterState.newInstance();
+    protected ViewPagerAdapterState viewPagerAdapterState = ViewPagerAdapterState.newInstance();
 
     @Override
     public V instantiateItem(ViewGroup container, int position) {
@@ -49,7 +49,7 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
      */
     protected abstract void bindView(V view, int position);
 
-    private void restoreViewState(int position, V view) {
+    protected void restoreViewState(int position, V view) {
         SparseArray<Parcelable> parcelableSparseArray = viewPagerAdapterState.get(position);
         if (parcelableSparseArray == null) {
             return;
@@ -65,6 +65,7 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
         }
     }
 
+
     @SuppressWarnings("unchecked")
     // `key` is the object we return in `instantiateItem(ViewGroup container, int position)`
     @Override
@@ -74,7 +75,7 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
         container.removeView(view);
     }
 
-    private void saveViewState(int position, V view) {
+    protected void saveViewState(int position, V view) {
         SparseArray<Parcelable> viewState = new SparseArray<>();
         view.saveHierarchyState(viewState);
         viewPagerAdapterState.put(position, viewState);
