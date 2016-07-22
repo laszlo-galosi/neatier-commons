@@ -115,6 +115,9 @@ public class WidgetUtils {
     }
 
     private static String cleanNewLine(final String text) {
+        if (text == null) {
+            return text;
+        }
         String newLine = System.getProperty("line.separator");
         String s = text.replaceAll("\\r\\n", newLine).replaceAll("\\t", " ");
         //Log.v("cleanNewLine", text, s);

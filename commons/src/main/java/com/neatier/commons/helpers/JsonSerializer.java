@@ -238,10 +238,19 @@ public class JsonSerializer<T> {
         }
     }
 
-    public boolean isJsonObject(final String jsonString) {
+    public boolean isJsonObject(final Object object) {
         try {
-            JsonElement elem = jsonParser.parse(jsonString);
+            JsonElement elem = jsonParser.parse((String) object);
             return elem.isJsonObject() || elem.isJsonArray();
+        } catch (final Exception ex) {
+            return false;
+        }
+    }
+
+    public boolean isJsonPrimitive(final Object jsonString) {
+        try {
+            JsonElement elem = jsonParser.parse((String) jsonString);
+            return elem.isJsonPrimitive();
         } catch (final Exception ex) {
             return false;
         }

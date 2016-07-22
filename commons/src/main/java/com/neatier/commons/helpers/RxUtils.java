@@ -93,20 +93,17 @@ public class RxUtils {
 
     public static Action1<Throwable> logRxError() {
         final Throwable checkpoint = new Throwable();
-        return new Action1<Throwable>() {
-            @Override
-            public void call(final Throwable throwable) {
-                StackTraceElement[] stackTrace = checkpoint.getStackTrace();
-                StackTraceElement element = stackTrace[1]; // First element after `crashOnError()`
-                String msg = String.format("onError() crash from subscribe() in %s.%s(%s:%s)",
-                        element.getClassName(),
-                        element.getMethodName(),
-                        element.getFileName(),
-                        element.getLineNumber());
+        return throwable -> {
+            StackTraceElement[] stackTrace = checkpoint.getStackTrace();
+            StackTraceElement element = stackTrace[1]; // First element after `crashOnError()`
+            String msg = String.format("onError() crash from subscribe() in %s.%s(%s:%s)",
+                    element.getClassName(),
+                    element.getMethodName(),
+                    element.getFileName(),
+                    element.getLineNumber());
 
-                throw new OnErrorNotImplementedException(msg, throwable);
-                //Log.e(new OnErrorNotImplementedException(msg, throwable));
-            }
+            throw new OnErrorNotImplementedException(msg, throwable);
+            //Log.e(new OnErrorNotImplementedException(msg, throwable));
         };
     }
 

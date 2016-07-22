@@ -55,7 +55,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
      */
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemWidget itemWidget =
-              new ItemWidget(getItemLayout(viewType), mItemHeight, mContext)
+              new ItemWidget(getItemLayout(viewType), getItemHeight(viewType), mContext)
                     .setContentClickable(mItemClickable);
         itemWidget.initView(mContext);
         return new ListItemViewHolder(itemWidget, R.id.itemText, mContext);
@@ -141,7 +141,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
         return mDataset;
     }
 
-    public int getItemHeight() {
+    public int getItemHeight(int viewType) {
         return mItemHeight;
     }
 

@@ -16,6 +16,7 @@ package com.neatier.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.DimenRes;
 import android.util.TypedValue;
 
 /**
@@ -37,6 +38,15 @@ public class ThemeUtil {
     public static int spToPx(Context context, float sp) {
         return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
                                                 context.getResources().getDisplayMetrics()) + 0.5f);
+    }
+
+    public static int dimenToPx(Context context, @DimenRes int dimenRes) {
+        return context.getResources().getDimensionPixelSize(dimenRes);
+    }
+
+    public static int dimenToDp(Context context, @DimenRes int dimenRes) {
+        Resources resources = context.getResources();
+        return (int) (resources.getDimension(dimenRes) / resources.getDisplayMetrics().density);
     }
 
     @SuppressWarnings("deprecation")

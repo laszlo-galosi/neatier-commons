@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -19,14 +20,11 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.neatier.commons.exception.ErrorBundleException;
-
 import java.util.Map;
 import java.util.Set;
-
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -49,7 +47,7 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
             throw new IllegalArgumentException("The constructor parameters cannot be null!!!");
         }
         mSharedPreferences =
-                context.getSharedPreferences(preferencesFileName, Context.MODE_PRIVATE);
+              context.getSharedPreferences(preferencesFileName, Context.MODE_PRIVATE);
         mPrefEditor = this.mSharedPreferences.edit();
         mJsonSerializer = new JsonSerializer();
     }
@@ -60,7 +58,7 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
             throw new IllegalArgumentException("The constructor parameters cannot be null!!!");
         }
         mSharedPreferences =
-                context.getSharedPreferences(preferencesFileName, Context.MODE_PRIVATE);
+              context.getSharedPreferences(preferencesFileName, Context.MODE_PRIVATE);
         mPrefEditor = this.mSharedPreferences.edit();
         mJsonSerializer = jsonSerializer;
     }
@@ -104,20 +102,22 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
             return (T) mJsonSerializer.deserialize((String) this.get(key), returnClass);
         } else if (returnClass == JsonObject.class && containsKey(key)) {
             return (T) mJsonSerializer.deserialize((String) this.get(key));
+        } else if (containsKey(key) && mJsonSerializer.isJsonObject(get(key))) {
+            return (T) mJsonSerializer.deserialize((String) this.get(key), returnClass);
         }
         return containsKey(key) ? (T) get(key) : defaultValue;
     }
 
     @Override
     public SharedPreferences.Editor putString(final java.lang.String key,
-                                              final java.lang.String value) {
+          final java.lang.String value) {
         return this.mPrefEditor.putString(key, value);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public SharedPreferences.Editor putStringSet(final java.lang.String key,
-                                                 final Set<java.lang.String> values) {
+          final Set<java.lang.String> values) {
         return this.mPrefEditor.putStringSet(key, values);
     }
 
@@ -225,7 +225,7 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
      */
     @Override
     public Observable<V> getOrError(final K key, final V errorIfEquals,
-                                    ErrorBundleException t) {
+          ErrorBundleException t) {
         if (containsKey(key)) {
             V val = (V) mSharedPreferences.getAll().get(key);
             if (val.equals(errorIfEquals)) {
@@ -309,7 +309,7 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
      * Observable#error(Throwable)}
      */
     public V getOrThrows(final K key, final V throwIfEquals, ErrorBundleException t)
-            throws ErrorBundleException {
+          throws ErrorBundleException {
         if (containsKey(key)) {
             V val = (V) mSharedPreferences.getAll().get(key);
             if (val.equals(throwIfEquals)) {

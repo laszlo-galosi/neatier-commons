@@ -15,6 +15,7 @@ package com.neatier.widgets.helpers;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
+import com.neatier.commons.helpers.CommonUtils;
 import com.neatier.commons.helpers.DateTimeHelper;
 import java.util.Arrays;
 import org.joda.time.DateTime;
@@ -37,6 +38,10 @@ public class DisplayableValue {
 
     public static DisplayableValue simpleText(@StringRes final int stringRes) {
         return new DisplayableValue("", "%s%s", stringRes);
+    }
+
+    public static DisplayableValue formatText(String formatString, Object... args) {
+        return new DisplayableValue("", "%s" + formatString, args);
     }
 
     public static DisplayableValue simpleText(final String text) {
@@ -98,10 +103,12 @@ public class DisplayableValue {
                               new DateTime(dateTime, DateTimeZone.getDefault()),
                               (Integer) formatParam, context);
                     }
-                } else if (formatParam instanceof Integer) {
+                } else if (formatParam instanceof Integer
+                      && CommonUtils.isResource((Integer) formatParam, context)) {
                     formatParams[i] = context.getString((Integer) formatParam);
                 } else {
-                    formatParams[i] = formatParam.toString();
+                    formatParams[i] = formatParam
+                    ;
                 }
             }
             return String.format(valueFormat, formatParams);
