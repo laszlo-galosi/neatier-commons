@@ -216,6 +216,9 @@ public class WidgetUtils {
         } else {
             textData = Optional.fromNullable(data.toString());
         }
-        return textData.or(fallback.length > 0 ? fallback[0] : null);
+        if (fallback.length > 0) {
+            return textData.or(fallback[0]);
+        }
+        return textData.orNull();
     }
 }

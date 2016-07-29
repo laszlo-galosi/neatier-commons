@@ -16,7 +16,9 @@ package com.neatier.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
 /**
@@ -49,8 +51,16 @@ public class ThemeUtil {
         return (int) (resources.getDimension(dimenRes) / resources.getDisplayMetrics().density);
     }
 
+    @ColorInt public static int getColor(Context context, int id, @ColorInt int defaultValue) {
+        try {
+            return ContextCompat.getColor(context, id);
+        } catch (Resources.NotFoundException nfe) {
+        }
+        return defaultValue;
+    }
+
     @SuppressWarnings("deprecation")
-    private static int getColor(Context context, int id, int defaultValue) {
+    private static int getThemeColor(Context context, int id, int defaultValue) {
         if (value == null) {
             value = new TypedValue();
         }
@@ -72,14 +82,14 @@ public class ThemeUtil {
     }
 
     public static int windowBackground(Context context, int defaultValue) {
-        return getColor(context, android.R.attr.windowBackground, defaultValue);
+        return getThemeColor(context, android.R.attr.windowBackground, defaultValue);
     }
 
     public static int textColorPrimary(Context context, int defaultValue) {
-        return getColor(context, android.R.attr.textColorPrimary, defaultValue);
+        return getThemeColor(context, android.R.attr.textColorPrimary, defaultValue);
     }
 
     public static int textColorSecondary(Context context, int defaultValue) {
-        return getColor(context, android.R.attr.textColorSecondary, defaultValue);
+        return getThemeColor(context, android.R.attr.textColorSecondary, defaultValue);
     }
 }
