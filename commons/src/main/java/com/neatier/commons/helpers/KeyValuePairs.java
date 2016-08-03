@@ -22,16 +22,13 @@ import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
-
 import com.neatier.commons.exception.ErrorBundleException;
 import com.neatier.commons.exception.InternalErrorException;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -61,7 +58,7 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
         //}
     }
 
-    protected KeyValuePairs(final Map<K, V> map) {
+    public KeyValuePairs(final Map<K, V> map) {
         this.internalMap = map;
     }
 
