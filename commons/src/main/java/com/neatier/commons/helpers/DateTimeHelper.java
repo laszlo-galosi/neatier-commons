@@ -164,6 +164,13 @@ public class DateTimeHelper {
                 .withZone(DateTimeZone.getDefault());
     }
 
+    public static String formatLocalTime(final DateTime dateTime, String timePattern) {
+        //See http://stackoverflow.com/a/24643661
+        DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(timePattern)
+                                                        .withZone(DateTimeZone.getDefault());
+        return dateTime.toString(timeFormatter);
+    }
+
     public static String formatLocalTime(final LocalTime localTime, final Context context) {
         //See http://stackoverflow.com/a/24643661
         //DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(STANDARD_TIME_PATTERN)
