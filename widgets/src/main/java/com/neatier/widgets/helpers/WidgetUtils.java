@@ -16,6 +16,7 @@ package com.neatier.widgets.helpers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.fernandocejas.arrow.optional.Optional;
 
@@ -111,6 +113,18 @@ public class WidgetUtils {
     public static void setTextOf(@Nullable View view, String text) {
         if (view != null) {
             ((TextView) view).setText(cleanNewLine(text));
+        }
+    }
+
+    public static void setImageOf(@Nullable View view, Object imageObject, Context context) {
+        if (view != null && view instanceof ImageView) {
+            if (imageObject instanceof Integer) {
+                ((ImageView) view).setImageResource((Integer) imageObject);
+            } else if (imageObject instanceof Bitmap) {
+                ((ImageView) view).setImageBitmap((Bitmap) imageObject);
+            } else if (imageObject instanceof Drawable) {
+                ((ImageView) view).setImageDrawable((Drawable) imageObject);
+            }
         }
     }
 
