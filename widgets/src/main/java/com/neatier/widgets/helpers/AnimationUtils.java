@@ -37,6 +37,9 @@ import rx.functions.Action1;
  * Created by László Gálosi on 26/08/15
  */
 public class AnimationUtils {
+
+    private static final boolean HONEYCOMB_AND_ABOVE =
+          Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
     public static final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
     private static final Interpolator FAST_OUT_SLOW_IN_INTERPOLATOR =
           new FastOutSlowInInterpolator();
@@ -238,6 +241,105 @@ public class AnimationUtils {
               final AnimationCompatCallback... animationCompatCallbacks) {
             mAnimationCompatCallbacks = animationCompatCallbacks;
             return this;
+        }
+    }
+
+    public static class RotateAnimator<V extends View> {
+
+        private Interpolator mInterpolator = FAST_OUT_SLOW_IN_INTERPOLATOR;
+        private AnimationCompatCallback[] mAnimationCompatCallbacks;
+        private long mDuration = 250;
+        private float mToDegree = 180.0f;
+        private boolean mRotating;
+        private boolean mRotatationCompleted;
+
+        public RotateAnimator() {
+        }
+
+        public void rotate(View targetView) {
+            if (Build.VERSION.SDK_INT >= 14) {
+                ViewCompat.animate(targetView)
+                          .rotation(mToDegree)
+                          .setInterpolator(mInterpolator)
+                          .setDuration(mDuration)
+                          .withLayer()
+                          .setListener(new ViewPropertyAnimatorListener() {
+                              public void onAnimationStart(View view) {
+                                  mRotating = true;
+                                  callBackOnAnimationStart(targetView,
+                                                           mAnimationCompatCallbacks[0]);
+                              }
+
+                              public void onAnimationEnd(View view) {
+                                  mRotating = false;
+                                  mRotatationCompleted = true;
+                                  //view.setVisibility(View.GONE);
+                                  callBackOnAnimationEnd(targetView,
+                                                         mAnimationCompatCallbacks[0]);
+                              }
+
+                              public void onAnimationCancel(View view) {
+                                  mRotating = false;
+                                  mRotatationCompleted = false;
+                                  callBackOnAnimationCancel(view, mAnimationCompatCallbacks[0]);
+                              }
+                          }).start();
+            } else {
+                rotateLegacy(targetView, mToDegree, mDuration, mInterpolator,
+                             new Animation.AnimationListener() {
+                                 @Override public void onAnimationStart(final Animation animation) {
+                                     mRotating = true;
+                                     callBackOnAnimationStart(targetView,
+                                                              mAnimationCompatCallbacks[1]);
+                                 }
+
+                                 @Override public void onAnimationEnd(final Animation animation) {
+                                     mRotating = false;
+                                     mRotatationCompleted = true;
+                                     //view.setVisibility(View.GONE);
+                                     callBackOnAnimationEnd(targetView,
+                                                            mAnimationCompatCallbacks[1]);
+                                 }
+
+                                 @Override
+                                 public void onAnimationRepeat(final Animation animation) {
+
+                                 }
+                             }).start();
+            }
+        }
+
+        public RotateAnimator withInterpolator(final Interpolator interpolator) {
+            mInterpolator = interpolator;
+            return this;
+        }
+
+        public RotateAnimator withDuration(final long duration) {
+            mDuration = duration;
+            return this;
+        }
+
+        public RotateAnimator toDegree(final float toDegree) {
+            mToDegree = toDegree;
+            return this;
+        }
+
+        public RotateAnimator setAnimationCompatCallback(
+              final AnimationCompatCallback... animationCompatCallbacks) {
+            mAnimationCompatCallbacks = animationCompatCallbacks;
+            return this;
+        }
+
+        public boolean isRotating() {
+            return mRotating;
+        }
+
+        public boolean isRotatationCompleted() {
+            return mRotatationCompleted;
+        }
+
+        public float getToDegree() {
+            return mToDegree;
         }
     }
 
