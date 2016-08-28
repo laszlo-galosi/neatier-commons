@@ -18,8 +18,11 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
+import java.security.MessageDigest;
 import java.util.Locale;
 import java.util.StringTokenizer;
+import org.jetbrains.annotations.NotNull;
+import trikita.log.Log;
 
 /**
  * Created by László Gálosi on 19/06/16
@@ -63,5 +66,21 @@ public class CommonUtils {
         }
         StringTokenizer tokenizer = new StringTokenizer(langTag, "-");
         return new Locale((String) tokenizer.nextElement(), (String) tokenizer.nextElement());
+    }
+
+    @NotNull public static String getSha1Hex(String plainString) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
+            messageDigest.update(plainString.getBytes("UTF-8"));
+            byte[] bytes = messageDigest.digest();
+            StringBuilder buffer = new StringBuilder();
+            for (byte b : bytes) {
+                buffer.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            }
+            return buffer.toString();
+        } catch (Exception ignored) {
+            Log.e("Error at getSha1Hex", ignored);
+            return null;
+        }
     }
 }
