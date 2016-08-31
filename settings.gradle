@@ -1,1 +1,1 @@
-include ':commons', ':widgets'
+include ':commons', ':widgets', ':repository'

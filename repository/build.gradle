@@ -11,19 +11,13 @@
  *   Delight Solutions Kft.
  */
 
-repositories {
-  jcenter()
-  mavenCentral()
-  maven {
-    url 'https://oss.sonatype.org/content/repositories/snapshots/'
-  }
-}
-
-apply plugin: 'com.android.library'
 apply from: '../dependencies.gradle'
-//Retrolambda
+apply plugin: 'com.android.library'
+//Dagger 2 annotation processor
+apply plugin: 'com.neenbedankt.android-apt'
+//RxJava debugging
+apply plugin: 'com.fernandocejas.frodo'
 apply plugin: 'me.tatarka.retrolambda'
-
 
 android {
   compileSdkVersion versions.androidCompileSdkVersion
@@ -34,7 +28,6 @@ android {
     targetSdkVersion versions.androidTargetSdkVersion
     versionCode versions.code
     versionName versions.name
-    testInstrumentationRunner versions.testInstrumentationRunner
   }
 
   compileOptions {
@@ -56,28 +49,44 @@ android {
 
 
 dependencies {
-  //Internal dependencies
+  //    compile fileTree(dir: 'libs', include: ['*.jar'])
+
   //Uncomment next line when building a project using this library
   //    compile project(path: ':neatier-commons:commons')
   //Uncomment next line  while building the library.
   //      compile project(path: ':commons')
+
   //Optional, Collections, Guava like but lightweight on method count library
   compile appBuildingDependencies.arrow
-  //    compile appBuildingDependencies.dagger
-  //    compile appBuildingDependencies.javaxInject
-  //  compile appBuildingDependencies.javaxAnnotationApi
-
-  compile appBuildingDependencies.trikitaLog
-  compile appBuildingDependencies.rxAndroid
   compile appBuildingDependencies.rxJava
-  compile appBuildingDependencies.androidAnnotations
-  compile appBuildingDependencies.supportV7
-  compile appBuildingDependencies.supportDesign;
-  compile appBuildingDependencies.jodaTimeAndroid
-  //    compile dataDependencies.gson
+  apt appBuildingDependencies.autoValue
+  provided 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
+  apt 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
 
+  //Dagger 2 related
+  compile appBuildingDependencies.daggerCompiler
+  compile appBuildingDependencies.dagger
+  compile appBuildingDependencies.javaxInject
+  compile appBuildingDependencies.javaxAnnotationApi
+
+  //libraries on demand per project
+  compile appBuildingDependencies.trikitaLog
+
+  //Networking
+  compile dataDependencies.gson
+  compile dataDependencies.okHttp
+  compile dataDependencies.okHttpInterceptor
+  compile dataDependencies.retrofit
+  compile dataDependencies.retrofitRxJava
+  compile dataDependencies.retrofitGsonConverter
+
+  //Datarepository
+  //    compile 'com.karumi.rosie:rosie:2.0.0'
+
+  //testing
   testCompile robolectricTestDependencies.junit
-  //    testCompile robolectricTestDependencies.assertj
-  //    testCompile robolectricTestDependencies.mockito
-  //    testCompile robolectricTestDependencies.robolectric
+  testCompile robolectricTestDependencies.assertj
+  testCompile robolectricTestDependencies.mockito
+  testCompile robolectricTestDependencies.robolectric
+  testCompile robolectricTestDependencies.okHttpMockWebServer
 }
