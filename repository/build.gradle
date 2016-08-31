@@ -52,7 +52,7 @@ dependencies {
   //    compile fileTree(dir: 'libs', include: ['*.jar'])
 
   //Uncomment next line when building a project using this library
-  //    compile project(path: ':neatier-commons:commons')
+  compile project(path: ':neatier-commons:commons')
   //Uncomment next line  while building the library.
   //      compile project(path: ':commons')
 
