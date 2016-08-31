@@ -6,11 +6,24 @@ buildscript {
   apply from: 'dependencies.gradle'
   repositories {
     jcenter()
+    maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
-//    classpath gradlePlugins.android
-//    classpath gradlePlugins.retrolambda
+    classpath gradlePlugins.android
+    // Compile-time annotation processing.
+    classpath gradlePlugins.apt
+    classpath gradlePlugins.retrolambda
+    //Rxjava Debugging tool
+    classpath 'com.fernandocejas.frodo:frodo-plugin:0.8.3'
+    //Gradle build scan
+    classpath 'com.gradle:build-scan-plugin:1.0'
   }
+}
+
+apply plugin: 'com.gradle.build-scan'
+buildScan {
+  licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+  licenseAgree = 'yes'
 }
 
 allprojects {
@@ -30,6 +43,11 @@ allprojects {
       events "passed", "skipped", "failed"
     }
   }
+}
+
+allprojects.each { p ->
+  println "$p.name - mindSdkVersion=${minSdk()}"
+  println()
 }
 
 task clean(type: Delete) {
