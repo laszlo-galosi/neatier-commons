@@ -160,6 +160,7 @@ public class RestApiResponseException extends ErrorBundleException {
         public static final int CLIENT = 2;
         public static final int SERVER = 3;
         public static final int UNEXPECTED = 4;
+        public static final int REQUEST = 5;
 
         private static SparseArray<ErrorKind> values = new SparseArray<>(6);
 
@@ -171,6 +172,8 @@ public class RestApiResponseException extends ErrorBundleException {
             values.put(SERVER, new ErrorKind(SERVER, "Server", "Server error"));
             values.put(UNEXPECTED,
                        new ErrorKind(UNEXPECTED, "Unexpected", "Unexpected fatal error"));
+            values.put(REQUEST,
+                       new ErrorKind(UNEXPECTED, "Request", "Server responded with an error."));
         }
 
         public static Optional<ErrorKind> find(int id) {
