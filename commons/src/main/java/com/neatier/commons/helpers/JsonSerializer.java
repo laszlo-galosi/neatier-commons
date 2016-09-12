@@ -274,8 +274,10 @@ public class JsonSerializer<T> {
         JsonObject bodyObject = new JsonObject();
         for (Map.Entry<String, JsonElement> entry :
               templateObject.entrySet()) {
-            bodyObject.add(entry.getKey(),
-                           getCheckedJsonEntry(entry, params, templateObject));
+            if (params.containsKey(entry.getKey())) {
+                bodyObject.add(entry.getKey(),
+                               getCheckedJsonEntry(entry, params, templateObject));
+            }
         }
         return bodyObject;
     }

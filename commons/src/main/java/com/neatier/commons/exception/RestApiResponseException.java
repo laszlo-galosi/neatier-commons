@@ -127,6 +127,7 @@ public class RestApiResponseException extends ErrorBundleException {
         final StringBuilder sb = new StringBuilder("RestApiResponseException{");
         sb.append("ResponseInfo=").append(mResponseInfo);
         sb.append(", tatusCode=").append(mStatusCode);
+        sb.append(", errorKind=").append(getKind());
         sb.append(", url=").append(mResponseUrl);
         sb.append(", ErrorResponse=").append(mErrorResponse);
         sb.append('}');
