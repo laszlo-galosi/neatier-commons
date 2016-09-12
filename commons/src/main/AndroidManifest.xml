@@ -17,7 +17,7 @@
 
     <uses-sdk
         tools:overrideLibrary="android.support.v4"
-        android:minSdkVersion="9"
+        android:minSdkVersion="21"
         android:targetSdkVersion="23" />
     <application android:allowBackup="true" />
 </manifest>
