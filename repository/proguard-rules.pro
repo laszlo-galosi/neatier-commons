@@ -93,6 +93,7 @@ public void *(android.view.MenuItem);
 -keepattributes *Annotation*
 
 -keepattributes EnclosingMethod
+-keepattributes InnerClasses
 
 # Gson specific classes
 -keep class sun.misc.Unsafe { *; }
