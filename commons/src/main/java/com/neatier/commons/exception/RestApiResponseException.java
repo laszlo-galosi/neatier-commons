@@ -92,6 +92,10 @@ public class RestApiResponseException extends ErrorBundleException {
         return ErrorKind.find(errorKindId).get();
     }
 
+    public KeyValuePairs<String, Object> getResponseInfo() {
+        return mResponseInfo;
+    }
+
     public boolean shouldRetry() {
         int errorKindId =
               (int) mResponseInfo.getOrDefaultChecked(RESP_KIND, ErrorKind.UNEXPECTED);
@@ -174,7 +178,7 @@ public class RestApiResponseException extends ErrorBundleException {
             values.put(UNEXPECTED,
                        new ErrorKind(UNEXPECTED, "Unexpected", "Unexpected fatal error"));
             values.put(REQUEST,
-                       new ErrorKind(UNEXPECTED, "Request", "Server responded with an error."));
+                       new ErrorKind(REQUEST, "Request", "Server responded with an error."));
         }
 
         public static Optional<ErrorKind> find(int id) {
