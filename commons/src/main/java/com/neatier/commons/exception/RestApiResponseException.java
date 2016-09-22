@@ -92,6 +92,10 @@ public class RestApiResponseException extends ErrorBundleException {
         return ErrorKind.find(errorKindId).get();
     }
 
+    public String getReason() {
+        return (String) mResponseInfo.get(RESP_REASON);
+    }
+
     public KeyValuePairs<String, Object> getResponseInfo() {
         return mResponseInfo;
     }
@@ -185,6 +189,10 @@ public class RestApiResponseException extends ErrorBundleException {
             return Optional.fromNullable(values.get(id));
         }
 
+        public static ErrorKind request() {
+            return find(REQUEST).get();
+        }
+
         public static ErrorKind getByCode(int code) {
             @ErrorKindId int errorKindId;
             if (code == 401) {
@@ -213,7 +221,7 @@ public class RestApiResponseException extends ErrorBundleException {
             return name;
         }
 
-        @IntDef({ NETWORK, AUTHENTICATION, CLIENT, SERVER, UNEXPECTED })
+        @IntDef({ NETWORK, AUTHENTICATION, CLIENT, SERVER, UNEXPECTED, REQUEST })
         @Retention(RetentionPolicy.SOURCE)
         /**
          * {@link InDef} annotation for identifying unique app events.
