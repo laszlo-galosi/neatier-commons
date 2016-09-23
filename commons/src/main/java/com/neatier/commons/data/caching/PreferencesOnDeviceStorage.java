@@ -46,7 +46,7 @@ public abstract class PreferencesOnDeviceStorage<K, V>
 
     @Override
     public void writeKeyedContent(final K key, final V content) {
-        String keyToStore = String.format("%s%s", this.keyPrefix, key);
+        String keyToStore = (String) getStorableKey(key);
         if ((content instanceof JsonElement
                 || content instanceof JsonObject
                 || content instanceof LinkedTreeMap
@@ -79,13 +79,13 @@ public abstract class PreferencesOnDeviceStorage<K, V>
 
     @Override
     public void removeOneByKey(final K key) {
-        mSharedKeyValueStore.remove(String.format("%s%d", this.keyPrefix, key))
+        mSharedKeyValueStore.remove((String)getStorableKey(key))
                 .commit();
     }
 
     @Override
     public boolean containsKey(final K key) {
-        return mSharedKeyValueStore.containsKey(String.format("%s%d", this.keyPrefix, key));
+            return mSharedKeyValueStore.containsKey(getStorableKey(key));
     }
 
     @Override
