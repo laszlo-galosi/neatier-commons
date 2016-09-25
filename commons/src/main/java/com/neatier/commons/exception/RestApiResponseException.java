@@ -176,8 +176,8 @@ public class RestApiResponseException extends ErrorBundleException {
         static {
             values.put(NETWORK, new ErrorKind(NETWORK, "Network", "Network connection error"));
             values.put(AUTHENTICATION,
-                       new ErrorKind(AUTHENTICATION, "Auth", "Serevr authentication error"));
-            values.put(CLIENT, new ErrorKind(CLIENT, "Client", "Clien error"));
+                       new ErrorKind(AUTHENTICATION, "Auth", "Server authentication error"));
+            values.put(CLIENT, new ErrorKind(CLIENT, "Client", "Client error"));
             values.put(SERVER, new ErrorKind(SERVER, "Server", "Server error"));
             values.put(UNEXPECTED,
                        new ErrorKind(UNEXPECTED, "Unexpected", "Unexpected fatal error"));
