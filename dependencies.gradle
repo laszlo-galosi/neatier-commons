@@ -62,7 +62,7 @@ ext.versions = [//Android framework
                 rxLintVersion                : '1.0',
                 rxAndroidVersion             : '0.24.0',
                 gsonVersion                  : '2.3.1',
-                retrofitVersion              : '2.0.0-beta4',
+                retrofitVersion              : '2.1.0',
                 okHttpVersion                : '3.2.0',
                 picassoVersion               : '2.5.2',
                 androidAnnotationsVersion    : '23.2.1',
