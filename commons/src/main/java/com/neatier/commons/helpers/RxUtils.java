@@ -25,6 +25,7 @@ import rx.exceptions.OnErrorNotImplementedException;
 import rx.functions.Action1;
 import rx.observables.BlockingObservable;
 import rx.subscriptions.CompositeSubscription;
+import trikita.log.Log;
 
 public class RxUtils {
 
@@ -102,8 +103,8 @@ public class RxUtils {
                     element.getFileName(),
                     element.getLineNumber());
 
-            throw new OnErrorNotImplementedException(msg, throwable);
-            //Log.e(new OnErrorNotImplementedException(msg, throwable));
+            //throw new OnErrorNotImplementedException(msg, throwable);
+            Log.e("logRxError", new OnErrorNotImplementedException(msg, throwable));
         };
     }
 
