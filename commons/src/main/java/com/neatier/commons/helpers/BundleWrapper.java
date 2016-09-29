@@ -123,7 +123,7 @@ public class BundleWrapper implements Parcelable {
             mBundle.putSerializable(key, (Serializable) value);
         } else {
             throw new IllegalArgumentException(
-                  String.format("Invalid value type: %s", value.getClass().getSimpleName()));
+                  String.format("Invalid value type: %s", value));
         }
         return this;
     }
