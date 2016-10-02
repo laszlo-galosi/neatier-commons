@@ -205,6 +205,11 @@ public class BundleWrapper implements Parcelable {
         return this;
     }
 
+    public BundleWrapper remove(String key) {
+        mBundle.remove(key);
+        return this;
+    }
+
     /**
      * Removes all the entries in this bundle of which key filter applies.
      *

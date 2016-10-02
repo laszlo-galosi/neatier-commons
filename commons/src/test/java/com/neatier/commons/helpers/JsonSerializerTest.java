@@ -47,7 +47,7 @@ public class JsonSerializerTest extends CommonsTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        mGson = new GsonBuilder().setLenient().create();
+        mGson = new GsonBuilder()/*.setLenient()*/.create();
         mJsonSerializer = new JsonSerializer(mGson, new JsonParser());
     }
 
