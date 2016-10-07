@@ -17,12 +17,11 @@ package com.neatier.data.network;
 import android.support.annotation.NonNull;
 import java.util.concurrent.atomic.AtomicReference;
 import okhttp3.HttpUrl;
-import retrofit2.BaseUrl;
 
 /**
  * Such implementation allows us easily change base url in the integration and functional tests!
  */
-public class ChangeableBaseUrl implements BaseUrl {
+public class ChangeableBaseUrl {
 
     @NonNull
     private final AtomicReference<HttpUrl> baseUrl;
@@ -35,8 +34,7 @@ public class ChangeableBaseUrl implements BaseUrl {
         this.baseUrl.set(HttpUrl.parse(baseUrl));
     }
 
-    @Override @NonNull
-    public HttpUrl url() {
+    public HttpUrl getUrl() {
         return baseUrl.get();
     }
 }
