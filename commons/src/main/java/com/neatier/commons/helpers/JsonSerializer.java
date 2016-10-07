@@ -23,6 +23,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import rx.Observable;
 import rx.functions.Func1;
+import trikita.log.Log;
 
 /**
  * Class  Serializer/Deserializer for basic entities of generic type.
@@ -147,19 +149,22 @@ public class JsonSerializer<T> {
           final TypeAdapter<T> typeAdapter) {
         JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
         return Observable.from(Lists.newArrayList(jsonArray.iterator()))
-                         .flatMap(new Func1<JsonElement, Observable<T>>() {
-                             @Override public Observable<T> call(final JsonElement jsonElement) {
-                                 return Observable.just(typeAdapter.fromJsonTree(jsonElement));
-                             }
-                         }).toList();
+                         .flatMap(jsonElement ->
+                                        Observable.just(typeAdapter.fromJsonTree(jsonElement)))
+                         .toList();
     }
 
     @NonNull public List<T> fromJsonArray(final JsonArray jsonArray, final Class<T> returnClass) {
         int size = jsonArray.size();
         List<T> resultList = new ArrayList<>(size);
         for (int i = 0, len = size; i < len; i++) {
-            T elem = gson.fromJson(jsonArray.get(i), returnClass);
-            resultList.add(elem);
+            try {
+                T elem = gson.fromJson(jsonArray.get(i), returnClass);
+                resultList.add(elem);
+            } catch (JsonSyntaxException jse) {
+                Log.e("fromJsonArray error", jse);
+                continue;
+            }
         }
         return resultList;
     }

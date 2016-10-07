@@ -425,7 +425,14 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
      * Observable#error(Throwable)}
      */
     public V getOrThrows(K key, ErrorBundleException t) throws ErrorBundleException {
-        return getOrThrows(key, this.mErrorIfAnyIsThisValue, t);
+        if (internalMap.containsKey(key)) {
+            V val = internalMap.get(key);
+            if (val == null) {
+                throw t;
+            }
+            return internalMap.get(key);
+        }
+        throw t;
     }
 
     /**
@@ -436,7 +443,10 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
             throws ErrorBundleException {
         if (internalMap.containsKey(key)) {
             V val = internalMap.get(key);
-            if (val.equals(throwIfEquals)) {
+            if (val == null) {
+                throw t;
+            }
+            if (val != null && val.equals(throwIfEquals)) {
                 throw t;
             }
             return internalMap.get(key);
