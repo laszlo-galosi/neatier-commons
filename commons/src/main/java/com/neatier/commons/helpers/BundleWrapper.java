@@ -235,11 +235,14 @@ public class BundleWrapper implements Parcelable {
                          .filter(keyFilterFunction);
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("\nBundleWrapper{");
-        sb.append("\nmBundle=").append(mBundle);
-        sb.append('}');
-        return CommonUtils.cleanNewLine(sb.toString());
+    @Override public String toString() {
+        final StringBuilder sb = new StringBuilder("BundleWrapper{");
+        Observable.from(getBundle().keySet()).toBlocking()
+                  .subscribe(key -> {
+                      sb.append("\n" + key)
+                        .append(" : '" + getBundle().get(key) + "', ");
+                  });
+        sb.append("\n}");
+        return sb.toString();
     }
 }
