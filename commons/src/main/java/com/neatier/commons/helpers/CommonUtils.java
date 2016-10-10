@@ -68,7 +68,7 @@ public class CommonUtils {
         return new Locale((String) tokenizer.nextElement(), (String) tokenizer.nextElement());
     }
 
-    @NotNull public static String getSha1Hex(String plainString) {
+    @NotNull public static String getSha1Hash(String plainString) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
             messageDigest.update(plainString.getBytes("UTF-8"));
@@ -79,7 +79,23 @@ public class CommonUtils {
             }
             return buffer.toString();
         } catch (Exception ignored) {
-            Log.e("Error at getSha1Hex", ignored);
+            Log.e("Error at getSha1Hash", ignored);
+            return null;
+        }
+    }
+
+    @NotNull public static String getMD5Hash(String plainString) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(plainString.getBytes("UTF-8"));
+            byte[] bytes = messageDigest.digest();
+            StringBuilder buffer = new StringBuilder();
+            for (byte b : bytes) {
+                buffer.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            }
+            return buffer.toString();
+        } catch (Exception ignored) {
+            Log.e("Error at getMD5Hash", ignored);
             return null;
         }
     }

@@ -53,7 +53,7 @@ public class RestApiResponseException extends ErrorBundleException {
     private String mRawErrorResponse;
     private LongTaskScheduler mSerializeOn;
     private int mStatusCode;
-    private String mResponseUrl;
+    private String mRemoteAddress;
 
     public RestApiResponseException(final KeyValuePairs<String, Object> params) {
         this(params, null);
@@ -66,7 +66,7 @@ public class RestApiResponseException extends ErrorBundleException {
         this.mSerializeOn = new LongTaskOnIOScheduler();
         this.mJsonSerializer = new JsonSerializer<>();
         this.mStatusCode = (int) params.getOrDefault(RESP_STATUS, -1);
-        this.mResponseUrl = (String) params.get(RESP_URL_FROM);
+        this.mRemoteAddress = (String) params.get(RESP_URL_FROM);
     }
 
     public int getStatusCode() {
@@ -136,10 +136,14 @@ public class RestApiResponseException extends ErrorBundleException {
         sb.append("ResponseInfo=").append(mResponseInfo);
         sb.append(", tatusCode=").append(mStatusCode);
         sb.append(", errorKind=").append(getKind());
-        sb.append(", url=").append(mResponseUrl);
+        sb.append(", url=").append(mRemoteAddress);
         sb.append(", ErrorResponse=").append(mErrorResponse);
         sb.append('}');
         return sb.toString();
+    }
+
+    public String getRemoteAddress() {
+        return mRemoteAddress;
     }
 
     public static class ErrorResponse {
