@@ -32,4 +32,8 @@ public class ErrorBundleException extends Exception {
     public ErrorBundleException(final Throwable cause) {
         super(cause);
     }
+
+    public static ErrorBundleException wrap(Throwable t) {
+        return new ErrorBundleException(t.getMessage(), t);
+    }
 }

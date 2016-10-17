@@ -22,7 +22,7 @@
   <uses-sdk
       tools:overrideLibrary=
           "android.support.v4, android.support.v7.appcompat,android.support.graphics.drawable,
-          net.danlew.android.joda"
+          net.danlew.android.joda" android:minSdkVersion="9"
   />
 
   <application android:allowBackup="true"/>

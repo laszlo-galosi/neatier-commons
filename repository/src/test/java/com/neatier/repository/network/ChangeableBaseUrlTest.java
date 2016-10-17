@@ -30,13 +30,13 @@ public class ChangeableBaseUrlTest {
     @Test
     public void constructor_shouldUsePassedBaseUrl() {
         ChangeableBaseUrl changeableBaseUrl = new ChangeableBaseUrl(BASE_URL);
-        assertThat(changeableBaseUrl.url()).isEqualTo(HttpUrl.parse(BASE_URL));
+        assertThat(changeableBaseUrl.getUrl()).isEqualTo(HttpUrl.parse(BASE_URL));
     }
 
     @Test
     public void setBaseUrl() {
         ChangeableBaseUrl changeableBaseUrl = new ChangeableBaseUrl("https://1");
         changeableBaseUrl.setBaseUrl("https://2");
-        assertThat(changeableBaseUrl.url()).isEqualTo(HttpUrl.parse("https://2"));
+        assertThat(changeableBaseUrl.getUrl()).isEqualTo(HttpUrl.parse("https://2"));
     }
 }
