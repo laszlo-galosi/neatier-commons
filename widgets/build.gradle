@@ -78,6 +78,7 @@ dependencies {
   compile appBuildingDependencies.supportV7
   compile appBuildingDependencies.supportDesign;
   compile appBuildingDependencies.jodaTimeAndroid
+  compile appBuildingDependencies.picasso
   //    compile dataDependencies.gson
 
   testCompile robolectricTestDependencies.junit

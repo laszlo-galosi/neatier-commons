@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.fernandocejas.arrow.optional.Optional;
+import com.squareup.picasso.Transformation;
 
 /**
  * Created by László Gálosi on 06/04/16
@@ -259,5 +260,32 @@ public class WidgetUtils {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public static class FixedWidthResizeTransform implements Transformation {
+        final int mTargetWidth;
+
+        public FixedWidthResizeTransform(final int mtargetWidth) {
+            this.mTargetWidth = mtargetWidth;
+        }
+
+        public Bitmap getTransformedBitmap(Bitmap bitmap) {
+            float aspectRatio = (float) bitmap.getHeight() / (float) bitmap.getWidth();
+            int targetHeight = (int) (mTargetWidth * aspectRatio);
+            Bitmap output = Bitmap.createScaledBitmap(bitmap, mTargetWidth, targetHeight, false);
+            if (output != bitmap) {
+                // Same bitmap is returned if sizes are the same
+                bitmap.recycle();
+            }
+            return output;
+        }
+
+        @Override public Bitmap transform(final Bitmap source) {
+            return getTransformedBitmap(source);
+        }
+
+        @Override public String key() {
+            return String.format("%s_%d", getClass().getSimpleName(), mTargetWidth);
+        }
     }
 }
