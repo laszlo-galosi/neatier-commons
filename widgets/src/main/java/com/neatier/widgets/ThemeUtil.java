@@ -16,6 +16,7 @@ package com.neatier.widgets;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +27,10 @@ import android.util.TypedValue;
  */
 public class ThemeUtil {
     private static TypedValue value;
+
+    private static final int[] APPCOMPAT_CHECK_ATTRS = {
+          android.support.v7.appcompat.R.attr.colorPrimary
+    };
 
     public static int dpToPx(Context context, float dp) {
         return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
@@ -91,5 +96,17 @@ public class ThemeUtil {
 
     public static int textColorSecondary(Context context, int defaultValue) {
         return getThemeColor(context, android.R.attr.textColorSecondary, defaultValue);
+    }
+
+    public static void checkAppCompatTheme(Context context) {
+        TypedArray a = context.obtainStyledAttributes(APPCOMPAT_CHECK_ATTRS);
+        final boolean failed = !a.hasValue(0);
+        if (a != null) {
+            a.recycle();
+        }
+        if (failed) {
+            throw new IllegalArgumentException("You need to use a Theme.AppCompat theme "
+                                                     + "(or descendant) with the design library.");
+        }
     }
 }
