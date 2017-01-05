@@ -11,20 +11,6 @@
  *
  */
 
-/*
- *  Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
- *  Unauthorized copying of this file, via any medium is strictly prohibited.
- *  Proprietary and confidential.
- *
- *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
-  *  Kft.
- *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
- *  by trade secret or copyright law. Dissemination of this information or reproduction of
- *  this material is strictly forbidden unless prior written permission is obtained from
- *   Delight Solutions Kft.
- */
-
 package com.neatier.widgets.helpers;
 
 import android.annotation.SuppressLint;
@@ -34,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.text.Html;
@@ -49,11 +36,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.fernandocejas.arrow.optional.Optional;
 import com.squareup.picasso.Transformation;
+import trikita.log.Log;
 
 /**
  * Created by László Gálosi on 06/04/16
  */
 public class WidgetUtils {
+
+    private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
+    private static final int COLORDRAWABLE_DIMENSION = 2;
+
 
     /**
      * @param stateDrawables map containing states and corresponding drawables.
@@ -258,7 +250,10 @@ public class WidgetUtils {
         return textData.orNull();
     }
 
-    public static Bitmap drawableToBitmap(Drawable drawable) {
+    @Nullable public static Bitmap drawableToBitmap(@NonNull Drawable drawable) {
+        if (drawable == null) {
+            return null;
+        }
         Bitmap bitmap = null;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
@@ -266,19 +261,23 @@ public class WidgetUtils {
                 return bitmapDrawable.getBitmap();
             }
         }
-        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
-            // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
-                                         drawable.getIntrinsicHeight(),
-                                         Bitmap.Config.ARGB_8888);
-        }
+        try {
+            if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+                bitmap = Bitmap.createBitmap(1, 1, BITMAP_CONFIG);
+                // Single color bitmap will be created of 1x1 pixel
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                                             drawable.getIntrinsicHeight(), BITMAP_CONFIG);
+            }
 
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } catch (Exception e) {
+            Log.e("Unable to create bitmap from drawable", e);
+            return null;
+        }
     }
 
     public static class FixedWidthResizeTransform implements Transformation {
