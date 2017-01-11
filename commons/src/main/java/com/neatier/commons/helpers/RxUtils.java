@@ -13,6 +13,7 @@
 
 package com.neatier.commons.helpers;
 
+import android.support.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +37,7 @@ public class RxUtils {
     }
 
     public static CompositeSubscription getNewCompositeSubIfUnsubscribed(
-            CompositeSubscription subscription) {
+          @Nullable CompositeSubscription subscription) {
         if (subscription == null || subscription.isUnsubscribed()) {
             return new CompositeSubscription();
         }
