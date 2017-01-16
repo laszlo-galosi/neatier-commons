@@ -14,6 +14,7 @@
 
 package com.neatier.widgets.renderers;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
@@ -28,7 +29,7 @@ import org.joda.time.DateTimeZone;
  */
 public class DateTimeRenderer implements Renderable<DateTime> {
 
-    private Optional<DateTime> mDateTimeData;
+    protected Optional<DateTime> mDateTimeData;
 
     public DateTimeRenderer() {
     }
@@ -37,15 +38,18 @@ public class DateTimeRenderer implements Renderable<DateTime> {
     public void render(final View itemView, @NonNull DateTime itemData) {
         mDateTimeData = Optional.fromNullable(itemData);
         if (itemView != null) {
-            ((TextView) itemView).setText(DateUtils.getRelativeTimeSpanString(
-                  itemView.getContext(), mDateTimeData.or(DateTimeHelper.nowLocal())
-                                                      .withZone(DateTimeZone.UTC))
-            );
+            ((TextView) itemView).setText(getFormattedText(itemView.getContext()));
         }
     }
 
     public Optional<DateTime> getData() {
         return mDateTimeData;
+    }
+
+    public String getFormattedText(Context context) {
+        return (String) DateUtils.getRelativeTimeSpanString(
+              context, mDateTimeData.or(DateTimeHelper.nowLocal())
+                                    .withZone(DateTimeZone.UTC));
     }
 
     @Override public String toString() {
