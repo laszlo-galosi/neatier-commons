@@ -19,6 +19,7 @@ import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import java.security.MessageDigest;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,10 @@ public class CommonUtils {
 
     public static int compare(int x, int y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
+    public static Comparator<String> stringComparator() {
+        return (o1, o2) -> o2.compareTo(o1);
     }
 
     public static String colorIntToHex(int color) {
