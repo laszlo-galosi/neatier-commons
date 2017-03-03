@@ -42,6 +42,11 @@ public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, Shared
     private final SharedPreferences.Editor mPrefEditor;
     private JsonSerializer mJsonSerializer;
 
+    public static SharedKeyValueStore newInstance(final String preferencesFileName,
+          final Context context) {
+        return new SharedKeyValueStore(context, preferencesFileName);
+    }
+
     public SharedKeyValueStore(final Context context, final String preferencesFileName) {
         if (context == null || TextUtils.isEmpty(preferencesFileName)) {
             throw new IllegalArgumentException("The constructor parameters cannot be null!!!");
