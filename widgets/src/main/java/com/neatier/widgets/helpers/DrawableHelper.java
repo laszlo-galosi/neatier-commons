@@ -19,6 +19,7 @@ import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -128,4 +129,32 @@ public class DrawableHelper {
 
         return mWrappedDrawable;
     }
+
+    public static Drawable drawableForColorState(@DrawableRes int drawableRes,
+          @ColorRes int colorStateRes, int[] state, @ColorRes int defaultColorRes,
+          final Context context) {
+        ColorStateList colorStateList = ContextCompat.getColorStateList(context, colorStateRes);
+        Drawable drawable = ContextCompat.getDrawable(context, drawableRes);
+        int defaultColor = ContextCompat.getColor(context, defaultColorRes);
+        return drawableForColorState(drawable, colorStateList, state, defaultColor, context);
+    }
+
+    public static Drawable drawableForColorState(Drawable drawable, ColorStateList colorStateList,
+          int[] state, @ColorInt int defaultColor, final Context context) {
+        int baseColor = colorStateList.getColorForState(state, defaultColor);
+        if (baseColor == defaultColor) {
+            return DrawableHelper.withContext(context)
+                                 .withDrawable(drawable)
+                                 .withColor(baseColor)
+                                 .tint().get();
+        }
+        if (drawable != null) {
+            return DrawableHelper.withContext(context)
+                                 .withColorState(colorStateList, state, defaultColor)
+                                 .withDrawable(drawable)
+                                 .tint().get();
+        }
+        return drawable;
+    }
+
 }

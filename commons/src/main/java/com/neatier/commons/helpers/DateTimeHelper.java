@@ -251,7 +251,7 @@ public class DateTimeHelper {
         if (dateTimeToParse == null) {
             dateTimeToParse = defaultDateTime;
         }
-        return parseDate(dateTimeToParse, STANDARD_PATTERN, DateTimeZone.getDefault());
+        return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());
     }
 
     public static boolean isValidFormattingFlag(int flags) {
