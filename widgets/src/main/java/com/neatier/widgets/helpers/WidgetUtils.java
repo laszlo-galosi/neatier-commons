@@ -17,6 +17,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
@@ -24,6 +25,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.widget.NestedScrollView;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
@@ -46,7 +48,6 @@ public class WidgetUtils {
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;
-
 
     /**
      * @param stateDrawables map containing states and corresponding drawables.
@@ -255,6 +256,33 @@ public class WidgetUtils {
             return textData.or(fallback[0]);
         }
         return textData.orNull();
+    }
+
+    /**
+     * Will scroll the {@code scrollView} to make {@code viewToScroll} visible
+     *
+     * @param scrollView parent of {@code scrollableContent}
+     * @param scrollableContent a child of {@code scrollView} which holds the scrollable content
+     * (fills the viewport).
+     * @param viewToScroll a child of {@code scrollableContent} to whitch will scroll the the
+     * {@code
+     * scrollView}
+     */
+    public static void scrollToView(final NestedScrollView scrollView,
+          final ViewGroup scrollableContent,
+          final View viewToScroll) {
+        long delay = 100; //delay to let finish with possible modifications to ScrollView
+        scrollView.postDelayed(new Runnable() {
+            public void run() {
+                Rect viewToScrollRect = new Rect(); //coordinates to scroll to
+                viewToScroll.getHitRect(
+                      viewToScrollRect); //fills viewToScrollRect with coordinates of
+                // viewToScroll relative to its parent (LinearLayout)
+                scrollView.requestChildRectangleOnScreen(scrollableContent, viewToScrollRect,
+                                                         false); //ScrollView will make sure, the
+                // given viewToScrollRect is visible
+            }
+        }, delay);
     }
 
     @Nullable public static Bitmap drawableToBitmap(@NonNull Drawable drawable) {
