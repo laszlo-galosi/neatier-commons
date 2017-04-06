@@ -237,7 +237,7 @@ public class BundleWrapper implements Parcelable {
 
     @Override public String toString() {
         final StringBuilder sb = new StringBuilder("BundleWrapper{");
-        Observable.from(getBundle().keySet()).toBlocking()
+        Observable.from(getBundle().keySet())
                   .subscribe(key -> {
                       sb.append("\n" + key)
                         .append(" : '" + getBundle().get(key) + "', ");
