@@ -30,7 +30,7 @@ public interface CameraInteraction extends Leakable {
 
     Observable<Intent> stillImageCaptureIntent(int requestCode);
 
-    Observable<Intent> videoCaptureChooserEvent();
+    Observable<Intent> videoCaptureChooserIntent(int requestCode);
 
     Intent videoImageCaptureIntent(int requestCode);
 
