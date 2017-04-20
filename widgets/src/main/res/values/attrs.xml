@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
-  ~  Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
-  ~  Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~ Copyright (C) 2017 Extremenet Ltd., All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
   ~  Proprietary and confidential.
-  ~
-  ~  All information contained herein is, and remains the property of Delight Solutions Kft.
-  ~  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+  ~  All information contained herein is, and remains the property of Extremenet Ltd.
+  ~  The intellectual and technical concepts contained herein are proprietary to Extremenet Ltd.
   ~   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
   ~  by trade secret or copyright law. Dissemination of this information or reproduction of
   ~  this material is strictly forbidden unless prior written permission is obtained from
-  ~   Delight Solutions Kft.
+  ~   Extremenet Ltd.
+  ~
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
@@ -53,4 +52,96 @@
     <attr name="iw_layoutHeight" format="integer"/>
     <attr name="iw_contentBackground" format="reference|color"/>
   </declare-styleable>
+
+  <!--Circle shaped determinate progress bar attributes-->
+  <declare-styleable name="DonutProgress">
+    <attr name="progressValue" format="float"/>
+    <attr name="maxValue" format="integer"/>
+    <attr name="finishedColor" format="reference|color"/>
+    <attr name="unfinishedColor" format="reference|color"/>
+    <attr name="innerCircleBackgroundColor" format="reference|color"/>
+    <attr name="progressTextFormat" format="reference|string"/>
+    <attr name="progressTextSize" format="reference|dimension"/>
+    <attr name="progressTextColor" format="reference|color"/>
+    <attr name="labelText" format="reference|string"/>
+    <attr name="labelTextSize" format="reference|dimension"/>
+    <attr name="labelTextColor" format="reference|color"/>
+    <attr name="suffixText" format="reference|string"/>
+    <attr name="suffixTextSize" format="reference|dimension"/>
+    <attr name="suffixTextColor" format="reference|color"/>
+    <attr name="finishedStrokeWidth" format="reference|dimension"/>
+    <attr name="unfinishedStrokeWidth" format="reference|dimension"/>
+    <attr name="donut_widgetLayout" format="reference"/>
+    <attr name="startAngle" format="float"/>
+    <attr name="animDuration" format="integer"/>
+    <attr name="animInterpolator" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="HasInputField">
+    <attr name="if_fieldKey" format="reference|string"/>
+    <attr name="if_labelViewId" format="reference"/>
+    <attr name="if_helperViewId" format="reference"/>
+    <attr name="if_widgetLayout" format="reference|integer"/>
+    <attr name="if_showLabel" format="boolean"/>
+    <attr name="if_showHelper" format="boolean"/>
+    <attr name="if_label" format="string"/>
+    <attr name="if_helper" format="string"/>
+    <attr name="if_labelFormat" format="string"/>
+    <attr name="if_labelTextColor" format="reference|color"/>
+    <attr name="if_helperTextColor" format="reference|color"/>
+    <attr name="if_fieldTextColor" format="reference|color"/>
+  </declare-styleable>
+
+
+  <declare-styleable name="EditFieldWidget">
+    <attr name="ew_labelAsHint" format="boolean"/>
+    <attr name="ew_helperAsHint" format="boolean"/>
+    <attr name="ew_multiLine" format="boolean"/>
+    <attr name="ew_unfocusedFieldAlign">
+      <enum name="center" value="17"/>
+      <enum name="center_horizontal" value="1"/>
+      <enum name="end" value="8388613"/>
+      <enum name="left" value="3"/>
+      <enum name="right" value="5"/>
+      <enum name="start" value="8388611"/>
+    </attr>
+    <attr name="ew_focusedFieldAlign">
+      <enum name="center" value="17"/>
+      <enum name="center_horizontal" value="1"/>
+      <enum name="end" value="8388613"/>
+      <enum name="left" value="3"/>
+      <enum name="right" value="5"/>
+      <enum name="start" value="8388611"/>
+    </attr>
+    <attr name="value" format="string"/>
+  </declare-styleable>
+
+  <declare-styleable name="CompoundButtonWidget">
+    <attr name="cbw_iconViewId" format="reference"/>
+    <attr name="cbw_icon" format="reference"/>
+    <attr name="cbw_iconTintList" format="reference|color"/>
+    <attr name="cbw_showIcon" format="boolean"/>
+    <attr name="cbw_background" format="reference"/>
+    <attr name="cbw_backgroundTintList" format="reference|color"/>
+  </declare-styleable>
+
+  <declare-styleable name="CompoundButtonFieldWidget">
+    <attr name="cbfw_buttonDrawable" format="reference"/>
+    <attr name="cbfw_drawableTintList" format="reference|color"/>
+  </declare-styleable>
+
+  <declare-styleable name="PasswordRevealed">
+    <attr name="state_revealed" format="boolean"/>
+  </declare-styleable>
+
+  <declare-styleable name="PasswordFieldWidget">
+    <attr name="pf_buttonDrawable" format="reference"/>
+    <attr name="pf_buttonTintList" format="reference|color"/>
+    <attr name="pf_autoHide" format="boolean"/>
+  </declare-styleable>
+
+  <declare-styleable name="ColoredCircleImageView">
+    <attr name="cciv_fillColor" format="reference|color"/>
+  </declare-styleable>
+
 </resources>

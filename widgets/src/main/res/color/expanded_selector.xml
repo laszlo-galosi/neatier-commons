@@ -12,6 +12,7 @@
   ~
   -->
 
-<resources>
-  <item name="item_click_support" type="id"/>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:color="@color/colorAccent" android:state_expanded="true"/>
+  <item android:color="@color/colorTextPrimary" android:state_expanded="false"/>
+</selector>

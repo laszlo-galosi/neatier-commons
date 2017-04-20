@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Extremenet Ltd., All Rights Reserved
+  ~ Unauthorized copying of this file, via any medium is strictly prohibited.
+  ~  Proprietary and confidential.
+  ~  All information contained herein is, and remains the property of Extremenet Ltd.
+  ~  The intellectual and technical concepts contained herein are proprietary to Extremenet Ltd.
+  ~   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+  ~  by trade secret or copyright law. Dissemination of this information or reproduction of
+  ~  this material is strictly forbidden unless prior written permission is obtained from
+  ~   Extremenet Ltd.
+  ~
+  -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+>
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+  >
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/inputField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        tools:hint="Addj meg valamit"
+        android:textColor="@color/colorTextPrimary"
+        android:textColorHint="@color/colorTextSecondary"
+        style="@style/WidgetTextView.input"
+        android:layout_gravity="end|center_vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:ems="10"/>
+  </FrameLayout>
+  <TextView
+      android:id="@+id/helpText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:gravity="left|center_vertical"
+      android:paddingLeft="10dp"
+      android:paddingRight="10dp"
+      android:maxLines="2"
+      android:textColor="@color/colorTextSecondary"
+      android:ellipsize="end"
+      android:visibility="gone"
+      tools:text="Addj meg valamit valaminek valamikor"
+      style="@style/WidgetTextView.label"
+      tools:visibility="visible"
+  />
+</LinearLayout>

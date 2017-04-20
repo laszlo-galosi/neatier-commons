@@ -12,6 +12,10 @@
   ~
   -->
 
-<resources>
-  <item name="item_click_support" type="id"/>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <gradient
+      android:angle="90"
+      android:startColor="#1F000000"
+      android:endColor="#00000000"
+      android:type="linear"/>
+</shape>

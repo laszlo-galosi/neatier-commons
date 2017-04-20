@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2017 Extremenet Ltd., All Rights Reserved
+  ~ Copyright (C) 2016 Extremenet Ltd., All Rights Reserved
   ~ Unauthorized copying of this file, via any medium is strictly prohibited.
   ~  Proprietary and confidential.
   ~  All information contained herein is, and remains the property of Extremenet Ltd.
@@ -12,6 +12,16 @@
   ~
   -->
 
-<resources>
-  <item name="item_click_support" type="id"/>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+>
+
+  <item android:id="@+id/outerRectangle">
+    <shape android:shape="rectangle">
+      <!-- view background color -->
+      <solid android:color="@color/colorAccent"/>
+      <!-- The radius makes the corners rounded -->
+      <corners android:bottomRightRadius="2dp" android:bottomLeftRadius="2dp"
+          android:topLeftRadius="2dp" android:topRightRadius="2dp"/>
+    </shape>
+  </item>
+</selector>

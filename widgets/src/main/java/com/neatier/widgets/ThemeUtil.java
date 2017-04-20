@@ -1,4 +1,17 @@
 /*
+ * Copyright (C) 2017 Extremenet Ltd., All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ *  Proprietary and confidential.
+ *  All information contained herein is, and remains the property of Extremenet Ltd.
+ *  The intellectual and technical concepts contained herein are proprietary to Extremenet Ltd.
+ *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+ *  by trade secret or copyright law. Dissemination of this information or reproduction of
+ *  this material is strictly forbidden unless prior written permission is obtained from
+ *   Extremenet Ltd.
+ *
+ */
+
+/*
  *  Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
  *  Unauthorized copying of this file, via any medium is strictly prohibited.
  *  Proprietary and confidential.
@@ -17,6 +30,7 @@ package com.neatier.widgets;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DimenRes;
 import android.support.v4.content.ContextCompat;
@@ -54,6 +68,14 @@ public class ThemeUtil {
     public static int dimenToDp(Context context, @DimenRes int dimenRes) {
         Resources resources = context.getResources();
         return (int) (resources.getDimension(dimenRes) / resources.getDisplayMetrics().density);
+    }
+
+    public static int attrToPx(Context context, @AttrRes int attrRes) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+              new int[] { attrRes });
+        int px = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        return px;
     }
 
     @ColorInt public static int getColor(Context context, int id, @ColorInt int defaultValue) {

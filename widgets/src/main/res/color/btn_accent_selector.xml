@@ -12,6 +12,15 @@
   ~
   -->
 
-<resources>
-  <item name="item_click_support" type="id"/>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:color="@color/colorPrimaryDark"
+      android:state_pressed="true"
+      android:state_enabled="true"
+  />
+  <item android:color="@color/colorPrimary"
+      android:state_enabled="true"
+  />
+  <item android:color="@color/colorControlDisabled"
+      android:state_enabled="false"
+  />
+</selector>

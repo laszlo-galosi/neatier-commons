@@ -6,17 +6,30 @@ allprojects {
 }
 
 
+/*
+ * Copyright (C) 2017 Extremenet Ltd., All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ *  Proprietary and confidential.
+ *  All information contained herein is, and remains the property of Extremenet Ltd.
+ *  The intellectual and technical concepts contained herein are proprietary to Extremenet Ltd.
+ *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+ *  by trade secret or copyright law. Dissemination of this information or reproduction of
+ *  this material is strictly forbidden unless prior written permission is obtained from
+ *   Extremenet Ltd.
+ *
+ */
+
 /**
  * Dependency version definitions. Use exact version numbers instead od '+'
  * may cause breakage in the code with automatic upgrade)
  **/
 def supportVersion = '25.0.0'
 ext.versions = [//Android framework
-                code                         : 1,
-                name                         : '1.0',
+                code                         : 3,
+                name                         : '1.3.0',
 
                 androidBuildToolsVersion     : "25.0.2",
-                androidMinSdkVersion         : 15,
+                androidMinSdkVersion         : 16,
                 androidTargetSdkVersion      : 25,
                 androidCompileSdkVersion     : 25,
                 multidexVersion              : '1.0.1',
@@ -61,12 +74,13 @@ ext.versions = [//Android framework
                 rxJavaVersion                : '1.1.3',
                 rxLintVersion                : '1.0',
                 rxAndroidVersion             : '0.24.0',
+                rxBindingVersion             : '1.0.0',
+                rxAnimVersion                : '0.9.1',
                 gsonVersion                  : '2.3.1',
                 retrofitVersion              : '2.1.0',
                 okHttpVersion                : '3.2.0',
                 picassoVersion               : '2.5.2',
                 androidAnnotationsVersion    : '23.2.1',
-
                 //helper libraries which substitutes default framework solution
                 // of a specified task with more usable API.
                 trikitaLogVersion            : '1.1.1',
@@ -115,6 +129,8 @@ ext.appBuildingDependencies =
      rxJava                : "io.reactivex:rxjava:${versions.rxJavaVersion}",
      rxLint                : "nl.littlerobots.rxlint:rxlint:$versions.rxLintVersion",
      rxAndroid             : "io.reactivex:rxandroid:${versions.rxAndroidVersion}",
+     rxBinding             : "com.jakewharton.rxbinding:rxbinding:${versions.rxBindingVersion}",
+     rxAnim                : "oxim.digital:rxanim:${versions.rxAnimVersion}",
      arrow                 : "com.fernandocejas:arrow:${versions.arrowVersion}",
      autoValue             : "com.google.auto.value:auto-value:${versions.autoValueVersion}",
 
