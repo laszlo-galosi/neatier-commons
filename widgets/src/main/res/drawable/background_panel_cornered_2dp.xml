@@ -20,7 +20,7 @@
       <!-- view background color -->
       <solid android:color="@color/colorAccent"/>
       <!-- The radius makes the corners rounded -->
-      <corners android:bottomRightRadius="2dp" android:bottomLeftRadius="2dp"
+      <corners android:bottomRightRadius="3dp" android:bottomLeftRadius="3dp"
           android:topLeftRadius="2dp" android:topRightRadius="2dp"/>
     </shape>
   </item>

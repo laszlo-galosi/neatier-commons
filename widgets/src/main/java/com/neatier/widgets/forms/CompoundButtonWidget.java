@@ -256,18 +256,22 @@ public class CompoundButtonWidget extends FrameLayout
 
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mItemView.findViewById(R.id.btn_action).setOnClickListener(v -> {
+        if (mLabelView == null) {
+            return;
+        }
+        mLabelView.setOnClickListener(v -> {
             if (mOnClickListener != null) {
-                mOnClickListener.onClick(v);
+                mOnClickListener.onClick(this);
             }
             if (mAction != null) {
-                mAction.call(v);
+                mAction.call(this);
             }
         });
+        //mLabelView.setTag(this.getId());
     }
 
     @Override protected void onDetachedFromWindow() {
-        mItemView.findViewById(R.id.btn_action).setOnClickListener(null);
+        mLabelView.setOnClickListener(null);
         mOnClickListener = null;
         super.onDetachedFromWindow();
     }
