@@ -130,6 +130,18 @@
     <attr name="cbfw_drawableTintList" format="reference|color"/>
   </declare-styleable>
 
+  <declare-styleable name="ChoiceWidget">
+    <attr name="cw_choiceIds" format="reference"/>
+    <attr name="cw_choiceNames" format="reference"/>
+    <attr name="cw_choiceValues" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="RadioButtonChoiceWidget">
+    <attr name="rbcw_buttonGroupId" format="reference|"/>
+    <attr name="rbcw_buttonLayout" format="reference"/>
+    <attr name="rbcw_selectedValue" format="integer"/>
+  </declare-styleable>
+
   <declare-styleable name="PasswordRevealed">
     <attr name="state_revealed" format="boolean"/>
   </declare-styleable>

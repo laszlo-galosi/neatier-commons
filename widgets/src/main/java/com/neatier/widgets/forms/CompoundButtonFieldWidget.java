@@ -15,6 +15,8 @@ package com.neatier.widgets.forms;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.databinding.BindingMethod;
+import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
@@ -25,12 +27,16 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
-import com.fernandocejas.arrow.checks.Preconditions;
 import com.neatier.widgets.R;
+import com.neatier.widgets.helpers.DrawableHelper;
 
 /**
  * Created by László Gálosi on 27/02/17
  */
+@BindingMethods(
+      @BindingMethod(type = CompoundButtonFieldWidget.class, attribute = "app:cbfw_onClick",
+                     method = "setOnClickListener")
+)
 public class CompoundButtonFieldWidget extends EditFieldWidget {
 
     public static final int[] EXPANDED_STATE_SET = { android.R.attr.state_expanded };
@@ -75,32 +81,40 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
     @Override public void initView(final Context context) {
         super.initView(context);
         mButton = (ImageButton) mItemView.findViewById(R.id.btn_action);
-        getEditText().setInputType(
-              InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        Preconditions.checkNotNull(mButton, "No ImageButton with id btn_action found.");
-        mButton.setOnClickListener(v -> {
-            if (mOnClickListener != null) {
-                mOnClickListener.onClick(v);
-            }
-        });
+        getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
     }
 
-    @Override public void setOnClickListener(
-          final View.OnClickListener onClickListener) {
+    @Override public void setOnClickListener(final View.OnClickListener onClickListener) {
         mOnClickListener = onClickListener;
+    }
+
+    @Override protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mButton == null) {
+            return;
+        }
+        mButton.setOnClickListener(v -> {
+            if (mOnClickListener != null) {
+                mOnClickListener.onClick(this);
+            }
+        });
+        //mLabelView.setTag(this.getId());
+    }
+
+    @Override protected void onDetachedFromWindow() {
+        mButton.setOnClickListener(null);
+        mOnClickListener = null;
+        super.onDetachedFromWindow();
     }
 
     public void setExpanded(final boolean expanded) {
         mExpanded = expanded;
-        int defaultColor = ContextCompat.getColor(getContext(), R.color.colorTextPrimary);
+        int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
         mButton.setImageDrawable(
-              /*DrawableHelper.drawableForColorState(mIconDrawable, mIconTintList,
+              DrawableHelper.drawableForColorState(mButtonDrawable, mDrawableColor,
                                                    getDrawableState(getDrawableState()),
                                                    defaultColor, getContext()
-              )*/
-              /*getDrawableForColorState(
-              mIconDrawable, mIconTintList, R.color.colorTextPrimary, getContext())*/
-              mButtonDrawable
+              )
         );
         super.refreshDrawableState();
     }

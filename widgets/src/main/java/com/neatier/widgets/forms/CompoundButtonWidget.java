@@ -41,14 +41,14 @@ import com.neatier.widgets.helpers.DrawableHelper;
 import com.neatier.widgets.helpers.WidgetUtils;
 import rx.functions.Action1;
 
-import static com.neatier.widgets.forms.CompoundButtonFieldWidget.EXPANDED_STATE_SET;
-
 /**
  * Created by László Gálosi on 27/02/17
  */
 
-@BindingMethods(@BindingMethod(type = CompoundButtonWidget.class, attribute = "app:cbw_onClick",
-                               method = "setOnClickListener"))
+@BindingMethods(
+      @BindingMethod(type = CompoundButtonWidget.class, attribute = "app:cbw_onClick",
+                     method = "setOnClickListener")
+)
 public class CompoundButtonWidget extends FrameLayout
       implements HasInputField<String, Action1<View>> {
 
@@ -77,7 +77,6 @@ public class CompoundButtonWidget extends FrameLayout
     private TextView mHelperView;
 
     View.OnClickListener mOnClickListener;
-    protected boolean mExpanded;
     private Action1 mAction;
     private String mKey;
     private Paint mLabelTextPaint;
@@ -170,7 +169,7 @@ public class CompoundButtonWidget extends FrameLayout
             }
             if (mIconViewId > 0) {
                 mIconView = (ImageView) mItemView.findViewById(mIconViewId);
-                setDrawables(context);
+                setDrawables();
             }
             WidgetUtils.setVisibilityOf(mHelperView, mShowHelper);
             WidgetUtils.setVisibilityOf(mLabelView, mShowLabel);
@@ -178,13 +177,15 @@ public class CompoundButtonWidget extends FrameLayout
         }
     }
 
-    private void setDrawables(final Context context) {
+    private void setDrawables() {
+        final Context context = getContext();
+        int[] drawableState = getDrawableState(getDrawableState());
         if (mItemView != null) {
             Drawable backgroundDrawable =
                   DrawableHelper.drawableForColorState(
                         mBackgroundDrawable,
                         mBackgroundTintList,
-                        getDrawableState(),
+                        drawableState,
                         ContextCompat.getColor(context, R.color.colorAccent), context);
             mItemView.setBackground(backgroundDrawable);
         }
@@ -193,7 +194,7 @@ public class CompoundButtonWidget extends FrameLayout
                   DrawableHelper.drawableForColorState(
                         mIconDrawable,
                         mIconTintList,
-                        getDrawableState(),
+                        drawableState,
                         ContextCompat.getColor(context, R.color.colorTextPrimary), context);
             mIconView.setImageDrawable(iconDrawable);
         }
@@ -201,8 +202,10 @@ public class CompoundButtonWidget extends FrameLayout
 
     public void initLabelPaint() {
         mLabelTextPaint = new TextPaint();
-        mLabelTextPaint.setColor(mLabelView.getTextColors().getDefaultColor());
-        mLabelTextPaint.setTextSize(mLabelView.getTextSize());
+        mLabelTextPaint.setColor(mLabelTextColor);
+        if (mLabelView != null) {
+            mLabelTextPaint.setTextSize(mLabelView.getTextSize());
+        }
         mLabelTextPaint.setAntiAlias(true);
     }
 
@@ -278,10 +281,7 @@ public class CompoundButtonWidget extends FrameLayout
 
     @Override public void refreshDrawableState() {
         super.refreshDrawableState();
-    }
-
-    public boolean isExpanded() {
-        return mExpanded;
+        setDrawables();
     }
 
     @Override
@@ -291,9 +291,6 @@ public class CompoundButtonWidget extends FrameLayout
     }
 
     protected int[] getDrawableState(final int[] state) {
-        if (mExpanded) {
-            mergeDrawableStates(state, EXPANDED_STATE_SET);
-        }
         //Log.v("onCreateDrawableState", getId(), Arrays.toString(state));
         return state;
     }

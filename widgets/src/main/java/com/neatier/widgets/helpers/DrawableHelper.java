@@ -141,20 +141,13 @@ public class DrawableHelper {
 
     public static Drawable drawableForColorState(Drawable drawable, ColorStateList colorStateList,
           int[] state, @ColorInt int defaultColor, final Context context) {
-        int baseColor = colorStateList.getColorForState(state, defaultColor);
-        if (baseColor == defaultColor) {
-            return DrawableHelper.withContext(context)
-                                 .withDrawable(drawable)
-                                 .withColor(baseColor)
-                                 .tint().get();
-        }
+        int color = colorStateList.getColorForState(state, defaultColor);
         if (drawable != null) {
             return DrawableHelper.withContext(context)
-                                 .withColorState(colorStateList, state, defaultColor)
                                  .withDrawable(drawable)
+                                 .withColor(color)
                                  .tint().get();
         }
         return drawable;
     }
-
 }

@@ -211,8 +211,10 @@ public class EditFieldWidget extends FrameLayout
 
     public void initLabelPaint() {
         mLabelTextPaint = new TextPaint();
-        mLabelTextPaint.setColor(mEditText.getTextColors().getDefaultColor());
-        mLabelTextPaint.setTextSize(mEditText.getTextSize());
+        mLabelTextPaint.setColor(mLabelTextColor);
+        if (mLabelView != null) {
+            mLabelTextPaint.setTextSize(mLabelView.getTextSize());
+        }
         mLabelTextPaint.setAntiAlias(true);
     }
 
