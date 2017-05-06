@@ -46,7 +46,7 @@ import rx.functions.Action1;
  */
 
 @BindingMethods(
-      @BindingMethod(type = CompoundButtonWidget.class, attribute = "app:cbw_onClick",
+      @BindingMethod(type = CompoundButtonWidget.class, attribute = "cbw_onClick",
                      method = "setOnClickListener")
 )
 public class CompoundButtonWidget extends FrameLayout
@@ -142,7 +142,7 @@ public class CompoundButtonWidget extends FrameLayout
         mBackgroundTintList =
               createDefaultColorStateList(wa,
                                           R.styleable.CompoundButtonWidget_cbw_backgroundTintList,
-                                          android.R.attr.colorAccent, R.color.colorAccent);
+                                          android.R.attr.textColorPrimary, R.color.colorAccent);
         prefa.recycle();
         ifa.recycle();
         wa.recycle();

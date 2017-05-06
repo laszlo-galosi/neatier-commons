@@ -53,22 +53,22 @@ import trikita.log.Log;
 public class EditFieldWidget extends FrameLayout
       implements HasInputField<String, String> {
     public static final int DEFAULT_TEXTEVENT_FREQ = 400;
-    private final int mLabelTextColor;
-    private final int mHelperTextColor;
-    private final int mFieldTextColor;
-    private String mLabelFormat = "%s";
-    private float mInputTextSize;
-    private @ColorInt int mInputTextColor;
+    protected final int mLabelTextColor;
+    protected final int mHelperTextColor;
+    protected final int mFieldTextColor;
+    protected String mLabelFormat = "%s";
+    protected float mInputTextSize;
+    protected @ColorInt int mInputTextColor;
     protected String mLabelText;
-    private String mHelperText;
+    protected String mHelperText;
 
-    private int mFocusedFieldAlign = Gravity.LEFT;
-    private int mUnFocusedFieldAlign = Gravity.LEFT;
+    protected int mFocusedFieldAlign = Gravity.LEFT;
+    protected int mUnFocusedFieldAlign = Gravity.LEFT;
 
-    private boolean mShowHelper;
-    private boolean mShowLabel;
-    private boolean mHelperAsHint;
-    private boolean mLabelAsHint;
+    protected boolean mShowHelper;
+    protected boolean mShowLabel;
+    protected boolean mHelperAsHint;
+    protected boolean mLabelAsHint;
 
     private EditText mEditText;
     protected View mItemView;

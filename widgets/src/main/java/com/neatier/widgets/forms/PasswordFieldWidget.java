@@ -95,8 +95,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
     public PasswordFieldWidget setPasswordRevealed(final boolean passwordRevealed) {
         isPasswordRevealed = passwordRevealed;
         WidgetUtils.setVisibilityOf(mBtnReveal, mAutoHide ? getEditText().hasFocus() : true);
-        int defaultColor = ContextCompat.getColor(getContext(),
-                                                  R.color.colorTextPrimary);
+        int defaultColor = mFieldTextColor;
         mBtnReveal.setImageDrawable(
               /*DrawableHelper.drawableForColorState*/
               getDrawableForColorState(mRevealDrawable, mIconColorStateList,
@@ -106,7 +105,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
 
         getEditText().setInputType(inputType);
         getEditText().setTransformationMethod(isPasswordRevealed
-                                              ? PasswordTransformationMethod.getInstance() : null);
+                                              ? null : PasswordTransformationMethod.getInstance());
         super.refreshDrawableState();
         moveCursorToEnd();
         return this;

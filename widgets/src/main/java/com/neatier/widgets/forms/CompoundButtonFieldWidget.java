@@ -34,7 +34,7 @@ import com.neatier.widgets.helpers.DrawableHelper;
  * Created by László Gálosi on 27/02/17
  */
 @BindingMethods(
-      @BindingMethod(type = CompoundButtonFieldWidget.class, attribute = "app:cbfw_onClick",
+      @BindingMethod(type = CompoundButtonFieldWidget.class, attribute = "cbfw_onClick",
                      method = "setOnClickListener")
 )
 public class CompoundButtonFieldWidget extends EditFieldWidget {

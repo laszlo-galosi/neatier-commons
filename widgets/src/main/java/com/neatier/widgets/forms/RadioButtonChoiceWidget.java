@@ -31,7 +31,7 @@ import rx.functions.Func1;
  * Created by László Gálosi on 26/04/17
  */
 @BindingMethods(
-      @BindingMethod(type = RadioButtonChoiceWidget.class, attribute = "app:rbcw_onCheckedChanged",
+      @BindingMethod(type = RadioButtonChoiceWidget.class, attribute = "rbcw_onCheckedChanged",
                      method = "setOnCheckedChangeListener")
 )
 public class RadioButtonChoiceWidget extends ChoiceFieldWidget {
