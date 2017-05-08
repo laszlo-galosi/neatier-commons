@@ -137,7 +137,7 @@
   </declare-styleable>
 
   <declare-styleable name="RadioButtonChoiceWidget">
-    <attr name="rbcw_buttonGroupId" format="reference|"/>
+    <attr name="rbcw_buttonGroupId" format="reference"/>
     <attr name="rbcw_buttonLayout" format="reference"/>
     <attr name="rbcw_selectedValue" format="integer"/>
   </declare-styleable>
