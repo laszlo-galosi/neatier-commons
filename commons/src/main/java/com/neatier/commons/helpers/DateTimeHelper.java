@@ -197,23 +197,23 @@ public class DateTimeHelper {
         return dateTime.toString(pattern);
     }
 
-    public static String toStoreableTimeString(final Object dateObject) {
+    public static String toStoreableTimeString(final Object dateObject, String pattern) {
         DateTime dateTime = DateTime.now();
         if (dateObject instanceof DateTime) {
             dateTime = (DateTime) dateObject;
             LocalTime localtime = new LocalTime(dateTime);
-            return localtime.toString(STANDARD_TIME_PATTERN);
+            return localtime.toString(pattern);
         } else if (dateObject instanceof Long) {
             dateTime = dateTime.withMillis((Long) dateObject);
             LocalTime localtime = new LocalTime(dateTime);
-            return localtime.toString(STANDARD_TIME_PATTERN);
+            return localtime.toString(pattern);
         } else if (dateObject instanceof LocalTime) {
             //return DateTimeHelper.formatLocalTime((LocalTime) dateObject, mContext);
-            return ((LocalTime) dateObject).toString(STANDARD_TIME_PATTERN);
+            return ((LocalTime) dateObject).toString(pattern);
         } else if (dateObject instanceof Calendar) {
             Calendar calendar = (Calendar) dateObject;
             DateTimeZone tz = DateTimeZone.forTimeZone(calendar.getTimeZone());
-            return toStoreableTimeString(new DateTime(calendar.getTime()).withZone(tz));
+            return toStoreableTimeString(new DateTime(calendar.getTime()).withZone(tz), pattern);
         }
         return dateTime.toString(STANDARD_PATTERN);
     }

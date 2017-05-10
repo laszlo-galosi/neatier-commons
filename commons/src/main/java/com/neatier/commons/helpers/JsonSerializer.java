@@ -32,6 +32,8 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import rx.Observable;
 import rx.functions.Func1;
 import trikita.log.Log;
@@ -331,6 +333,20 @@ public class JsonSerializer<T> {
         JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
         jsonReader.setLenient(true);
         return JSON_PARSER.parse(jsonReader);
+    }
+
+    public static SortedMap<String, JsonElement> sortedMapFromJson(JsonObject json) {
+        if (json == null) {
+            return null;
+        }
+        SortedMap map = new TreeMap();
+        Observable.from(json.entrySet())
+                  .subscribe(entry -> {
+                      String key = entry.getKey();
+                      JsonElement value = entry.getValue();
+                      map.put(key, value);
+                  });
+        return map;
     }
 }
 
