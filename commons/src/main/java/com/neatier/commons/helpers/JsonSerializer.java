@@ -53,6 +53,10 @@ public class JsonSerializer<T> {
           final JsonObject jsonObject,
           final Class<M> returnClass) {
         if (jsonObject != null && jsonObject.has(memberName)) {
+            JsonElement jsonElem = jsonObject.get(memberName);
+            if (jsonElem.isJsonNull()) {
+                return null;
+            }
             if (returnClass == JsonObject.class && jsonObject.get(memberName).isJsonObject()) {
                 return (M) jsonObject.get(memberName).getAsJsonObject();
             } else if (returnClass == JsonArray.class && jsonObject.get(memberName).isJsonArray()) {
