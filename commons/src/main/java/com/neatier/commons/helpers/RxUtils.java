@@ -13,6 +13,9 @@
 package com.neatier.commons.helpers;
 
 import android.support.annotation.Nullable;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -132,4 +135,18 @@ public class RxUtils {
         int len = items.size();
         return items.get(random.nextInt(len));
     }
+
+    public static Observable<JsonElement> jsonStreamFromArray(JsonArray jsonArray) {
+        return Observable.range(0, jsonArray.size())
+                         .flatMap(i -> Observable.just(jsonArray.get(i)));
+    }
+
+    public static Observable<String> jsonKeyStream(JsonObject jsonObject) {
+        return Observable.from(JsonSerializer.treeMapFromJson(jsonObject).keySet());
+    }
+
+    public static Observable<JsonElement> jsonValueStream(JsonObject jsonObject) {
+        return Observable.from(JsonSerializer.treeMapFromJson(jsonObject).values());
+    }
+
 }

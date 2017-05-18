@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import java.util.Map;
 import java.util.WeakHashMap;
+import trikita.log.Log;
 
 public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
 
@@ -22,6 +23,7 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
 
         view.setId(viewIdGenerator.generateViewId());
         instantiatedViews.put(view, position);
+        view.setTag(position);
         restoreViewState(position, view);
         container.addView(view);
 
@@ -32,20 +34,30 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
     /**
      * Inflate the view representing an item at the given position.
      * <p>
+     * You should set tag on the view if you want to find the view from the viewPager,
+     * because NestedScrollView
+     * WRAP_CONTENT don't measure height correctly.
+
+     * </p>
+     * <p>
      * Do not add the view to the container, this is handled.
      *
      * @param container the parent view from which sizing information can be grabbed during
      * inflation
      * @param position the position of the data set that is to be represented by this view
      * @return the inflated and view
+     * @see LockableViewPager#onMeasure(int, int)
      */
     protected abstract V createView(ViewGroup container, int position);
 
     /**
      * Bind the view to the item at the given position.
-     *
+     * <p>
+     *  Must set tag if you want to find the view from the viewPager, because NestedScrollView
+     * WRAP_CONTENT don't measure height correctly.
      * @param view the view to bind
      * @param position the position of the data set that is to be represented by this view
+     * @see LockableViewPager#onMeasure(int, int)
      */
     protected abstract void bindView(V view, int position);
 
@@ -60,6 +72,7 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
     @Override
     public void notifyDataSetChanged() {
         super.notifyDataSetChanged();
+        Log.d("notifyDataSetChanged", instantiatedViews.size());
         for (Map.Entry<V, Integer> entry : instantiatedViews.entrySet()) {
             bindView(entry.getKey(), entry.getValue());
         }
@@ -103,5 +116,9 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
     @Override
     public boolean isViewFromObject(View view, Object key) {
         return view.equals(key);
+    }
+
+    @Override public int getItemPosition(final Object object) {
+        return instantiatedViews.containsKey(object) ? POSITION_UNCHANGED : POSITION_NONE;
     }
 }

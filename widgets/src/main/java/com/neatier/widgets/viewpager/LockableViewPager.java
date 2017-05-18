@@ -18,6 +18,7 @@ import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 
 /**
  * Created by László Gálosi on 23/05/16
@@ -55,5 +56,22 @@ public class LockableViewPager extends ViewPager {
 
     public void setSwipeable(boolean swipeable) {
         this.swipeable = swipeable;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int height = 0;
+        View child = findViewWithTag(getCurrentItem());
+        if (child != null) {
+            child.measure(widthMeasureSpec,
+                          MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+            int h = child.getMeasuredHeight();
+            if (h > height) {
+                height = h;
+            }
+        }
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }

@@ -44,7 +44,8 @@ import trikita.log.Log;
 /**
  * Created by László Gálosi on 06/04/16
  */
-public class WidgetUtils {
+public class
+WidgetUtils {
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;
@@ -173,6 +174,18 @@ public class WidgetUtils {
             layoutParams.width = width;
             layoutParams.height = height;
         }
+    }
+
+    public static void setPaddingOf(final View view, int... paddings) {
+        final int len = paddings.length;
+        if (view == null || len == 0) {
+            return;
+        }
+        view.setPadding(len > 0 ? paddings[0] : view.getPaddingLeft(),
+                        len > 1 ? paddings[1] : view.getPaddingTop(),
+                        len > 2 ? paddings[2] : view.getPaddingRight(),
+                        len > 3 ? paddings[3] : view.getPaddingBottom()
+        );
     }
 
     public static void setTextWithLinksOf(TextView textView, String htmlText) {
