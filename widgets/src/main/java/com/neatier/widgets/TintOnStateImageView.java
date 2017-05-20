@@ -81,7 +81,7 @@ public class TintOnStateImageView extends ImageView {
 
     public @ColorInt int getTintColor() {
         return mColorStateList.getColorForState(getDrawableState(),
-                                                getResources().getColor(R.color.colorTextPrimary));
+                                                mColorStateList.getDefaultColor());
     }
 
     public void setColorStateList(final ColorStateList colorStateList) {

@@ -130,6 +130,11 @@
     <attr name="cbfw_drawableTintList" format="reference|color"/>
   </declare-styleable>
 
+  <declare-styleable name="TintedImageView">
+    <attr name="tiv_drawable" format="reference"/>
+    <attr name="tiv_drawableTintList" format="reference|color"/>
+  </declare-styleable>
+
   <declare-styleable name="ChoiceWidget">
     <attr name="cw_choiceIds" format="reference"/>
     <attr name="cw_choiceNames" format="reference"/>

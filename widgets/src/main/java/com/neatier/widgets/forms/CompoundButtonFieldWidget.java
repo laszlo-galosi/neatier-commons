@@ -76,6 +76,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
                                           android.R.attr.textColorPrimary,
                                           R.color.colorTextPrimary);
         setExpanded(mExpanded);
+        a.recycle();
     }
 
     @Override public void initView(final Context context) {
