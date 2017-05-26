@@ -137,6 +137,9 @@ public class RxUtils {
     }
 
     public static Observable<JsonElement> jsonStreamFromArray(JsonArray jsonArray) {
+        if (jsonArray == null) {
+            return Observable.empty();
+        }
         return Observable.range(0, jsonArray.size())
                          .flatMap(i -> Observable.just(jsonArray.get(i)));
     }

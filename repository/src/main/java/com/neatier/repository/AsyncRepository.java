@@ -80,7 +80,7 @@ public class AsyncRepository<K, V extends Identifiable<K>>
         return getAllAsync(mReadPolicy, requestParams);
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<V> getByKeyAsync(K key, ReadPolicy policy,
           final KeyValuePairs<String, Object> requestParams) {
         validateKey(key);
@@ -106,7 +106,7 @@ public class AsyncRepository<K, V extends Identifiable<K>>
         });
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<List<V>> getAllAsync(final ReadPolicy policy,
           final KeyValuePairs<String, Object> requestPatams) {
         return Observable.just(policy).flatMap(p -> {
@@ -130,12 +130,12 @@ public class AsyncRepository<K, V extends Identifiable<K>>
         });
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<V> addOrUpdate(final V value) {
         return addOrUpdateAsync(value, mWritePolicy);
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<V> addOrUpdateAsync(final V value, final WritePolicy policy) {
         return Observable.from(writeableDataSources)
                          .toList().switchMap(dataSources -> {
@@ -157,13 +157,13 @@ public class AsyncRepository<K, V extends Identifiable<K>>
                          }).takeLast(1);
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<List<V>> addOrUpdateAll(final Collection<V> values,
           final KeyValuePairs<String, Object> requestParams) {
         return addOrUpdateAllAsync(values, mWritePolicy, requestParams);
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<List<V>> addOrUpdateAllAsync(final Collection<V> values,
           final WritePolicy policy, final KeyValuePairs<String, Object> requestParams) {
         return Observable.from(writeableDataSources)
@@ -186,7 +186,7 @@ public class AsyncRepository<K, V extends Identifiable<K>>
                          });
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<Boolean> deleteByKey(K key,
           final KeyValuePairs<String, Object> requestParams) {
         return Observable.from(writeableDataSources)
@@ -202,7 +202,7 @@ public class AsyncRepository<K, V extends Identifiable<K>>
                          .flatMap(v -> removeFromCaches(key));
     }
 
-    @RxLogObservable
+    @RxLogObservable(RxLogObservable.Scope.NOTHING)
     public Observable<Boolean> deleteAll(final KeyValuePairs<String, Object> requestParams) {
         return Observable.from(writeableDataSources)
                          .toList().switchMap(dataSources -> {

@@ -15,6 +15,8 @@ package com.neatier.widgets;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.databinding.BindingMethod;
+import android.databinding.BindingMethods;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.content.res.AppCompatResources;
@@ -27,9 +29,13 @@ import com.neatier.widgets.helpers.DrawableHelper;
 /**
  * Created by László Gálosi on 27/02/17
  */
+@BindingMethods(
+      @BindingMethod(type = TintedImageView.class, attribute = "tiv_drawableTintList",
+                     method = "setDrawableColor")
+)
 public class TintedImageView extends AppCompatImageView {
 
-    protected final ColorStateList mDrawableColor;
+    private ColorStateList mDrawableColor;
 
     public TintedImageView(final Context context) {
         this(context, null);
@@ -58,15 +64,10 @@ public class TintedImageView extends AppCompatImageView {
         int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
         this.setImageDrawable(
               DrawableHelper.drawableForColorState(getDrawable(), mDrawableColor,
-                                                   getDrawableState(getDrawableState()),
+                                                   getDrawableState(),
                                                    defaultColor, getContext()
               )
         );
-    }
-
-    protected int[] getDrawableState(final int[] state) {
-        //Log.v("onCreateDrawableState", getId(), Arrays.toString(state));
-        return state;
     }
 
     private ColorStateList createDefaultColorStateList(TintTypedArray a, int attr,
@@ -91,5 +92,13 @@ public class TintedImageView extends AppCompatImageView {
         }, new int[] {
               a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
         });
+    }
+
+    public ColorStateList getDrawableColor() {
+        return mDrawableColor;
+    }
+
+    public void setDrawableColor(final ColorStateList drawableColor) {
+        mDrawableColor = drawableColor;
     }
 }
