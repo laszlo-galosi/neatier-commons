@@ -36,6 +36,7 @@
     />
     <TextView
         android:id="@+id/itemText"
+        android:freezesText="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -47,6 +48,7 @@
     />
   </LinearLayout>
   <ImageView
+      android:id="@+id/shadow"
       android:layout_width="match_parent"
       android:layout_height="1dp"
       android:background="@drawable/drop_shadow"
