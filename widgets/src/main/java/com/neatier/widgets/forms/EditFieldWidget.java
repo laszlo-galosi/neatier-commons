@@ -29,6 +29,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class EditFieldWidget extends FrameLayout
     public static final int FOCUS_FLAG_GRAVITY = 1 << 1;
     public static final int FOCUS_FLAG_LABEL_COLOR = 1 << 2;
     public static final int FOCUS_FLAG_EDIT_COLOR = 1 << 3;
+    public static final int FOCUS_FLAG_SHOW_KEYBOARD = 1 << 4;
     private int mFocusFlags = FOCUS_FLAG_NONE;
     private OnFocusChangeListener mFocusChangeListener;
     OnFocusChangeListener mDefaultFocusChangeListener = new OnFocusChangeListener() {
@@ -105,6 +107,9 @@ public class EditFieldWidget extends FrameLayout
                 mLabelView.setTextColor(color);
             }
             moveCursorToEnd();
+            if (Flags.isSet(mFocusFlags, FOCUS_FLAG_SHOW_KEYBOARD) && hasFocus) {
+                getEditText().post(() -> showSoftInput());
+            }
         }
     };
     private boolean mMultiLine;
@@ -383,5 +388,11 @@ public class EditFieldWidget extends FrameLayout
         @Override public void onNext(final TextViewTextChangeEvent event) {
             Log.d("onTextChangeEvent", "text", event.text()).v(event);
         }
+    }
+
+    private void showSoftInput() {
+        InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
+              Context.INPUT_METHOD_SERVICE);
+        mgr.showSoftInput(getEditText(), InputMethodManager.SHOW_IMPLICIT);
     }
 }
