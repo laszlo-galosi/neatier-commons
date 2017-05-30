@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  * All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *  and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -18,12 +19,15 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import java.security.MessageDigest;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import org.jetbrains.annotations.NotNull;
 import trikita.log.Log;
+
+import static android.text.Html.fromHtml;
 
 /**
  * Created by László Gálosi on 19/06/16
@@ -59,6 +63,20 @@ public class CommonUtils {
         } catch (Resources.NotFoundException e) {
             return false;
         }
+    }
+
+    public static String stripHtml(String html) {
+        if (html == null) {
+            return html;
+        }
+        String plainText = html;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            plainText = fromHtml(html).toString();
+        } else {
+            plainText = Html.fromHtml(html).toString();
+        }
+        return plainText.replace('\n', (char) 32)
+                        .replace((char) 160, (char) 32).replace((char) 65532, (char) 32).trim();
     }
 
     public static Locale languageTagToLocale(String languageTag) {
