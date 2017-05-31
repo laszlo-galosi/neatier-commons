@@ -34,7 +34,7 @@ import rx.functions.Func1;
       @BindingMethod(type = RadioButtonChoiceWidget.class, attribute = "rbcw_onCheckedChanged",
                      method = "setOnCheckedChangeListener")
 )
-public class RadioButtonChoiceWidget extends ChoiceFieldWidget {
+public class RadioButtonChoiceWidget extends ChoiceFieldWidget<Integer> {
 
     @IdRes private int mButtonGroupId;
     @LayoutRes private final int mButtonLayoutId;

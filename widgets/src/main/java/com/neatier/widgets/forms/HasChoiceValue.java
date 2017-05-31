@@ -31,5 +31,7 @@ public interface HasChoiceValue<K, V> {
 
     int indexByKey(K key);
 
+    int indexByValue(V value);
+
     K keyAt(int index);
 }

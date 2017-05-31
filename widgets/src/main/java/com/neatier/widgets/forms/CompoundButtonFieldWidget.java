@@ -115,16 +115,16 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         if (mButtonDrawable.isStateful()) {
             mButtonDrawable.setState(drawableState);
         }
-/*        mButton.setImageDrawable(
+        mButton.setImageDrawable(
               DrawableHelper.drawableForColorState(mButtonDrawable, mDrawableColor,
                                                    getDrawableState(getDrawableState()),
                                                    defaultColor, getContext()
               )
-        );*/
+        );
         super.refreshDrawableState();
     }
 
-    @Override protected void drawableStateChanged() {
+    /*@Override protected void drawableStateChanged() {
         super.drawableStateChanged();
         int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
         mButton.setImageDrawable(
@@ -132,7 +132,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
                                                    getDrawableState(getDrawableState()),
                                                    defaultColor, getContext()
               ));
-    }
+    }*/
 
     public boolean isExpanded() {
         return mExpanded;

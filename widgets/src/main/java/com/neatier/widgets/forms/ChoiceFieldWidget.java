@@ -41,8 +41,8 @@ import trikita.log.Log;
 /**
  * Created by László Gálosi on 12/05/16
  */
-public abstract class ChoiceFieldWidget extends FrameLayout
-      implements HasInputField<String, Integer>, HasChoiceValue<Integer, Integer> {
+public abstract class ChoiceFieldWidget<V> extends FrameLayout
+      implements HasInputField<String, V>, HasChoiceValue<Integer, V> {
 
     private final int mLabelTextColor;
     private final int mHelperTextColor;
@@ -54,7 +54,7 @@ public abstract class ChoiceFieldWidget extends FrameLayout
     private boolean mShowLabel;
     protected View mItemView;
 
-    protected Integer mValue;
+    protected V mValue;
 
     private @LayoutRes int mLayoutRes;
     private @IdRes int mLabelViewId;
@@ -66,7 +66,7 @@ public abstract class ChoiceFieldWidget extends FrameLayout
     private Paint mLabelTextPaint;
 
     SparseArray<Integer> mChoiceIdMap = new SparseArray<>(5);
-    SparseArray<Integer> mChoiceValueMap = new SparseArray<>(5);
+    SparseArray<V> mChoiceValueMap = new SparseArray<>(5);
     SparseArray<String> mChoiceNameMap = new SparseArray<>(5);
 
     public ChoiceFieldWidget(final Context context) {
@@ -130,13 +130,25 @@ public abstract class ChoiceFieldWidget extends FrameLayout
                   createSparseArray(choiceValues, choiceValueTypedValueType(), keyAtFunc());
         } else {
             int[] choiceIds = getContext().getResources().getIntArray(choiceIdsRes);
-            int[] choiceValues = getContext().getResources().getIntArray(choiceValuesRes);
             String[] choiceNames = getContext().getResources().getStringArray(choiceNamesRes);
             mChoiceIdMap = createSparseArrayInEditMode(Lists.newArrayList(choiceIds), i -> i);
             mChoiceNameMap =
                   createSparseArrayInEditMode(Lists.newArrayList(choiceNames), keyAtFunc());
-            mChoiceValueMap =
-                  createSparseArrayInEditMode(Lists.newArrayList(choiceValues), keyAtFunc());
+            switch (choiceIdTypedValueType()) {
+                case TypedValue.TYPE_STRING:
+                    mChoiceValueMap =
+                          createSparseArrayInEditMode(Lists.newArrayList(
+                                getContext().getResources().getStringArray(choiceValuesRes)),
+                                                      keyAtFunc());
+                    break;
+                default:
+                    mChoiceValueMap =
+                          createSparseArrayInEditMode(Lists.newArrayList(
+                                getContext().getResources().getIntArray(choiceValuesRes)),
+                                                      keyAtFunc());
+                    break;
+            }
+
         }
     }
 
@@ -219,7 +231,7 @@ public abstract class ChoiceFieldWidget extends FrameLayout
         return mChoiceIdMap;
     }
 
-    @Override public SparseArray<Integer> choiceValues() {
+    @Override public SparseArray<V> choiceValues() {
         return mChoiceValueMap;
     }
 
@@ -227,7 +239,7 @@ public abstract class ChoiceFieldWidget extends FrameLayout
         return mChoiceNameMap;
     }
 
-    @Override public Integer valueByKey(final Integer key) {
+    @Override public V valueByKey(final Integer key) {
         return mChoiceValueMap.get(key);
     }
 
@@ -239,16 +251,20 @@ public abstract class ChoiceFieldWidget extends FrameLayout
         return mChoiceIdMap.indexOfKey(key);
     }
 
+    @Override public int indexByValue(final V value) {
+        return mChoiceValueMap.indexOfValue(value);
+    }
+
     @Override public Integer keyAt(final int index) {
         return mChoiceIdMap.get(index);
     }
 
-    @Override public Integer getValue() {
+    @Override public V getValue() {
         Log.d("getValue", getKey());
         return mValue;
     }
 
-    @Override public void setValue(final Integer value) {
+    @Override public void setValue(final V value) {
         Log.d("setValue", getKey(), value);
         mValue = value;
     }
@@ -277,7 +293,6 @@ public abstract class ChoiceFieldWidget extends FrameLayout
         if (mHelperView == null && mHelperViewId > 0) {
             mHelperView = (TextView) findViewById(mHelperViewId);
         }
-        ;
         WidgetUtils.setTextOf(mHelperView, mHelperText);
         if (colorRes > 0 && mHelperView != null) {
             mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
