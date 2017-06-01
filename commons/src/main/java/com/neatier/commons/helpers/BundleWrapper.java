@@ -50,7 +50,9 @@ public class BundleWrapper implements Parcelable {
     }
 
     public BundleWrapper copy() {
-        return BundleWrapper.wrap(new Bundle(mBundle));
+        Bundle bundle = new Bundle();
+        bundle.putAll(getBundle());
+        return BundleWrapper.wrap(bundle);
     }
 
     public boolean containsKey(final String key) {
