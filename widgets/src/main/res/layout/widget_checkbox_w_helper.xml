@@ -43,7 +43,7 @@
   </FrameLayout>
   <TextView
       android:id="@+id/helpText"
-      android:freezesText="true"
+      android:freezesText="false"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:gravity="left|center_vertical"

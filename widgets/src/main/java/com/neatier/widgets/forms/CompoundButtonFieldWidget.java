@@ -117,7 +117,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         }
         mButton.setImageDrawable(
               DrawableHelper.drawableForColorState(mButtonDrawable, mDrawableColor,
-                                                   getDrawableState(getDrawableState()),
+                                                   getDrawableState(),
                                                    defaultColor, getContext()
               )
         );
