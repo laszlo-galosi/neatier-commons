@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
- *  Unauthorized copying of this file, via any medium is strictly prohibited.
+ * Copyright (C) 2017 Extremenet Ltd., All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
  *  Proprietary and confidential.
- *
- * All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
- *  and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+ *  All information contained herein is, and remains the property of Extremenet Ltd.
+ *  The intellectual and technical concepts contained herein are proprietary to Extremenet Ltd.
+ *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
- *  Delight Solutions Kft.
+ *   Extremenet Ltd.
+ *
  */
 
 package com.neatier.commons.helpers;
@@ -23,6 +23,8 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 import org.jetbrains.annotations.NotNull;
 import trikita.log.Log;
+
+import static android.text.Html.fromHtml;
 
 /**
  * Created by László Gálosi on 19/06/16
@@ -98,5 +100,19 @@ public class CommonUtils {
             Log.e("Error at getMD5Hash", ignored);
             return null;
         }
+    }
+
+    public static String stripHtml(String html) {
+        if (html == null) {
+            return html;
+        }
+        String plainText = html;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            plainText = fromHtml(html).toString();
+        } else {
+            plainText = fromHtml(html).toString();
+        }
+        return plainText.replace('\n', (char) 32)
+                        .replace((char) 160, (char) 32).replace((char) 65532, (char) 32).trim();
     }
 }
