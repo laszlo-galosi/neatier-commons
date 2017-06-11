@@ -285,16 +285,14 @@ WidgetUtils {
           final ViewGroup scrollableContent,
           final View viewToScroll) {
         long delay = 100; //delay to let finish with possible modifications to ScrollView
-        scrollView.postDelayed(new Runnable() {
-            public void run() {
-                Rect viewToScrollRect = new Rect(); //coordinates to scroll to
-                viewToScroll.getHitRect(
-                      viewToScrollRect); //fills viewToScrollRect with coordinates of
-                // viewToScroll relative to its parent (LinearLayout)
-                scrollView.requestChildRectangleOnScreen(scrollableContent, viewToScrollRect,
-                                                         false); //ScrollView will make sure, the
-                // given viewToScrollRect is visible
-            }
+        scrollView.postDelayed(() -> {
+            Rect viewToScrollRect = new Rect(); //coordinates to scroll to
+            //fills viewToScrollRect with coordinates of viewToScroll relative to its parent
+            // (LinearLayout)
+            viewToScroll.getHitRect(viewToScrollRect);
+            //ScrollView will make sure, the given viewToScrollRect is visible
+            scrollView.requestChildRectangleOnScreen(scrollableContent, viewToScrollRect,
+                                                     false);
         }, delay);
     }
 
