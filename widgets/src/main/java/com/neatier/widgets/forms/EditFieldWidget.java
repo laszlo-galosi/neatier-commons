@@ -106,10 +106,10 @@ public class EditFieldWidget extends FrameLayout
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_LABEL_COLOR) && mLabelView != null) {
                 mLabelView.setTextColor(color);
             }
-            moveCursorToEnd();
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_SHOW_KEYBOARD) && hasFocus) {
                 getEditText().post(() -> showSoftInput());
             }
+            moveCursorToEnd();
         }
     };
     private boolean mMultiLine;
@@ -336,8 +336,25 @@ public class EditFieldWidget extends FrameLayout
         return mLabelViewId;
     }
 
+    public void setLayoutRes(final int layoutRes) {
+        mLayoutRes = layoutRes;
+        initView(getContext());
+    }
+
+    public void setFocusedFieldAlign(final int focusedFieldAlign) {
+        mFocusedFieldAlign = focusedFieldAlign;
+    }
+
+    public void setUnfocusedFieldAlign(final int unFocusedFieldAlign) {
+        mUnFocusedFieldAlign = unFocusedFieldAlign;
+    }
+
     @Override public String getKey() {
         return mKey;
+    }
+
+    public void setMultiLine(final boolean multiLine) {
+        mMultiLine = multiLine;
     }
 
     public boolean isMultiLine() {

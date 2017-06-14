@@ -89,6 +89,10 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         mOnClickListener = onClickListener;
     }
 
+    @Override public int getFieldPaddingRight() {
+        return getEditText().getPaddingRight();
+    }
+
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (mButton == null) {

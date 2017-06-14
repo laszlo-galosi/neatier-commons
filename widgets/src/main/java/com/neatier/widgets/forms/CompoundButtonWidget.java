@@ -56,21 +56,21 @@ public class CompoundButtonWidget extends FrameLayout
     public static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked };
     public static final int[] PRESSED_STATE_SET = { android.R.attr.state_pressed };
 
-    protected final Drawable mIconDrawable;
-    protected final ColorStateList mIconTintList;
-    private final @LayoutRes int mLayoutRes;
+    protected Drawable mIconDrawable;
+    protected ColorStateList mIconTintList;
+    private @LayoutRes int mLayoutRes;
     private String mLabelText;
-    private final @IdRes int mLabelViewId;
-    private final String mHelperText;
-    private final @IdRes int mHelperViewId;
-    private final boolean mShowLabel;
-    private final boolean mShowHelper;
-    private final String mLabelFormat;
-    private final @ColorInt int mLabelTextColor;
-    private final @ColorInt int mHelperTextColor;
-    private final @IdRes int mIconViewId;
-    private final Drawable mBackgroundDrawable;
-    private final ColorStateList mBackgroundTintList;
+    private @IdRes int mLabelViewId;
+    private String mHelperText;
+    private @IdRes int mHelperViewId;
+    private boolean mShowLabel;
+    private boolean mShowHelper;
+    private String mLabelFormat;
+    private @ColorInt int mLabelTextColor;
+    private @ColorInt int mHelperTextColor;
+    private @IdRes int mIconViewId;
+    private Drawable mBackgroundDrawable;
+    private ColorStateList mBackgroundTintList;
     private View mItemView;
     protected TextView mLabelView;
     protected ImageView mIconView;
@@ -231,6 +231,36 @@ public class CompoundButtonWidget extends FrameLayout
 
     @Override public String getLabel() {
         return null;
+    }
+
+    public void setIconDrawable(final Drawable iconDrawable) {
+        mIconDrawable = iconDrawable;
+        setDrawables();
+    }
+
+    public void setIconTintList(final ColorStateList iconTintList) {
+        mIconTintList = iconTintList;
+        setDrawables();
+    }
+
+    public void setLayoutRes(final int layoutRes) {
+        mLayoutRes = layoutRes;
+        initView(getContext());
+    }
+
+    public void setLabelFormat(final String labelFormat) {
+        mLabelFormat = labelFormat;
+        setLabel(mLabelText);
+    }
+
+    public void setBackgroundDrawable(final Drawable backgroundDrawable) {
+        mBackgroundDrawable = backgroundDrawable;
+        setDrawables();
+    }
+
+    @Override public void setBackgroundTintList(final ColorStateList backgroundTintList) {
+        mBackgroundTintList = backgroundTintList;
+        setDrawables();
     }
 
     @Override public void setHelper(final String textData, @ColorRes final int color) {
