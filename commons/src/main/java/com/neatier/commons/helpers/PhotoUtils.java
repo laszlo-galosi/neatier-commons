@@ -104,7 +104,7 @@ public class PhotoUtils {
 
     @Nullable
     public static File extractFileFromContentUri(final Uri contentUri, final String fileExtraPath,
-         final  Context context) {
+          final Context context) {
         Log.d("extractFileFromContentUri", contentUri, fileExtraPath);
         if (fileExtraPath != null) {
             return new File(fileExtraPath);
@@ -136,7 +136,7 @@ public class PhotoUtils {
     public static Observable<File> createImageFile(final Context context) {
         // Create an image file name
         String imageFileName = String.format(
-              "JPEG_%s",
+              "IMG_%s",
               DateTimeHelper.toStoreableDateString(DateTimeHelper.nowLocal(), "yyyy_MM_dd_HH_mm_ss")
         );
 
@@ -157,6 +157,37 @@ public class PhotoUtils {
         return Observable.just(mediaStorageDir)
                          .flatMap(storageDir -> Observable.just(
                                new File(String.format("%s%s%s.jpg",
+                                                      mediaStorageDir.getPath(),
+                                                      File.separator,
+                                                      imageFileName)
+                               )
+                         ));
+    }
+
+    public static Observable<File> createVideoFile(final Context context) {
+        // Create an image file name
+        String imageFileName = String.format(
+              "VID_%s",
+              DateTimeHelper.toStoreableDateString(DateTimeHelper.nowLocal(), "yyyy_MM_dd_HH_mm_ss")
+        );
+
+        final File mediaStorageDir = new File(
+              context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+              //Environment.getExternalStorageDirectory(),
+              context.getPackageName()
+        );
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return Observable.error(
+                      new InternalErrorException(String.format("Failed to create directory.%s",
+                                                               mediaStorageDir.getAbsolutePath())));
+            }
+        }
+
+        return Observable.just(mediaStorageDir)
+                         .flatMap(storageDir -> Observable.just(
+                               new File(String.format("%s%s%s.mp4",
                                                       mediaStorageDir.getPath(),
                                                       File.separator,
                                                       imageFileName)

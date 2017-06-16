@@ -394,6 +394,10 @@ public class EditFieldWidget extends FrameLayout
         return mLabelTextPaint;
     }
 
+    public void setKey(final String key) {
+        mKey = key;
+    }
+
     public static class TextChangeObserver implements Observer<TextViewTextChangeEvent> {
         @Override public void onCompleted() {
         }
