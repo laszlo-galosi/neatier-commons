@@ -177,6 +177,12 @@ public class CompoundButtonWidget extends FrameLayout
         }
     }
 
+    public void setLabelColor(@ColorRes int colorRes) {
+        if (mLabelView != null) {
+            mLabelView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
+        }
+    }
+
     private void setDrawables() {
         final Context context = getContext();
         int[] drawableState = getDrawableState(getDrawableState());

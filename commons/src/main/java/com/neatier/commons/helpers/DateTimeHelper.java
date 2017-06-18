@@ -29,6 +29,7 @@ package com.neatier.commons.helpers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -131,6 +132,9 @@ public class DateTimeHelper {
 
     public static DateTime parseDate(final String dateStr, String pattern, final DateTimeZone tz) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern).withZone(tz);
+        if (dateStr == null) {
+            return null;
+        }
         DateTime dateTime = null;
         try {
             dateTime = DateTime.parse(dateStr, dateTimeFormatter).toDateTime(tz);
@@ -262,7 +266,7 @@ public class DateTimeHelper {
     public static DateTime parseLocalDate(final String dateTimeStr, String pattern,
           String defaultDateTime) {
         String dateTimeToParse = dateTimeStr;
-        if (dateTimeToParse == null) {
+        if (TextUtils.isEmpty(dateTimeToParse)) {
             dateTimeToParse = defaultDateTime;
         }
         return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());
@@ -271,7 +275,7 @@ public class DateTimeHelper {
     public static DateTime parseLocalDate(final String dateTimeStr, String pattern,
           DateTime defaultDateTime) {
         String dateTimeToParse = dateTimeStr;
-        if (dateTimeToParse == null) {
+        if (TextUtils.isEmpty(dateTimeToParse)) {
             dateTimeToParse = DateTimeHelper.toStoreableTimeString(defaultDateTime, pattern);
         }
         return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());

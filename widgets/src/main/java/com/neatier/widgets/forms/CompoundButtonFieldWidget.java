@@ -103,11 +103,17 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
                 mOnClickListener.onClick(this);
             }
         });
+        mItemView.setOnClickListener(v -> {
+            if (mOnClickListener != null) {
+                mOnClickListener.onClick(this);
+            }
+        });
         //mLabelView.setTag(this.getId());
     }
 
     @Override protected void onDetachedFromWindow() {
         mButton.setOnClickListener(null);
+        mItemView.setOnClickListener(null);
         mOnClickListener = null;
         super.onDetachedFromWindow();
     }

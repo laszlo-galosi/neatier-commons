@@ -208,4 +208,8 @@ public class SwitchFieldWidget extends FrameLayout
     public Paint getLabelTextPaint() {
         return mLabelTextPaint;
     }
+
+    public void setKey(final String key) {
+        mKey = key;
+    }
 }
