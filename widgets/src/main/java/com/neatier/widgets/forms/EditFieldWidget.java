@@ -90,6 +90,7 @@ public class EditFieldWidget extends FrameLayout
     public static final int FOCUS_FLAG_LABEL_COLOR = 1 << 2;
     public static final int FOCUS_FLAG_EDIT_COLOR = 1 << 3;
     public static final int FOCUS_FLAG_SHOW_KEYBOARD = 1 << 4;
+    public static final int FOCUS_FLAG_HIDE_KEYBOARD = 1 << 5;
     private int mFocusFlags = FOCUS_FLAG_NONE;
     private OnFocusChangeListener mFocusChangeListener;
     OnFocusChangeListener mDefaultFocusChangeListener = new OnFocusChangeListener() {
@@ -106,10 +107,13 @@ public class EditFieldWidget extends FrameLayout
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_LABEL_COLOR) && mLabelView != null) {
                 mLabelView.setTextColor(color);
             }
-            moveCursorToEnd();
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_SHOW_KEYBOARD) && hasFocus) {
                 getEditText().post(() -> showSoftInput());
             }
+            if (Flags.isSet(mFocusFlags, FOCUS_FLAG_HIDE_KEYBOARD) && !hasFocus) {
+                getEditText().post(() -> hideSoftInput());
+            }
+            moveCursorToEnd();
         }
     };
     private boolean mMultiLine;
@@ -336,8 +340,25 @@ public class EditFieldWidget extends FrameLayout
         return mLabelViewId;
     }
 
+    public void setLayoutRes(final int layoutRes) {
+        mLayoutRes = layoutRes;
+        initView(getContext());
+    }
+
+    public void setFocusedFieldAlign(final int focusedFieldAlign) {
+        mFocusedFieldAlign = focusedFieldAlign;
+    }
+
+    public void setUnfocusedFieldAlign(final int unFocusedFieldAlign) {
+        mUnFocusedFieldAlign = unFocusedFieldAlign;
+    }
+
     @Override public String getKey() {
         return mKey;
+    }
+
+    public void setMultiLine(final boolean multiLine) {
+        mMultiLine = multiLine;
     }
 
     public boolean isMultiLine() {
@@ -377,6 +398,10 @@ public class EditFieldWidget extends FrameLayout
         return mLabelTextPaint;
     }
 
+    public void setKey(final String key) {
+        mKey = key;
+    }
+
     public static class TextChangeObserver implements Observer<TextViewTextChangeEvent> {
         @Override public void onCompleted() {
         }
@@ -390,9 +415,16 @@ public class EditFieldWidget extends FrameLayout
         }
     }
 
-    private void showSoftInput() {
+    public void showSoftInput() {
         InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
               Context.INPUT_METHOD_SERVICE);
         mgr.showSoftInput(getEditText(), InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public void hideSoftInput() {
+        InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
+              Context.INPUT_METHOD_SERVICE);
+        mgr.hideSoftInputFromInputMethod(getEditText().getWindowToken(),
+                                         InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 }

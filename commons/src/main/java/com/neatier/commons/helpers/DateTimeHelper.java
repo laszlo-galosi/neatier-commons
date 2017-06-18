@@ -1,10 +1,24 @@
 /*
+ * Copyright (C) 2017 Extremenet Ltd., All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited.
+ *  Proprietary and confidential.
+ *  All information contained herein is, and remains the property of Extremenet Ltd.
+ *  The intellectual and technical concepts contained herein are proprietary to Extremenet Ltd.
+ *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
+ *  by trade secret or copyright law. Dissemination of this information or reproduction of
+ *  this material is strictly forbidden unless prior written permission is obtained from
+ *   Extremenet Ltd.
+ *
+ */
+
+/*
  *  Copyright (C) 2016 Delight Solutions Ltd., All Rights Reserved
  *  Unauthorized copying of this file, via any medium is strictly prohibited.
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -15,6 +29,7 @@ package com.neatier.commons.helpers;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,21 +69,21 @@ public class DateTimeHelper {
     public static final String DISPLAYABLE_TIME_FORMAT = "HH:mm";
     //2015-09-16T23:31:48.413
 
-    static int[] sFormattingFlags = new int[]{
-            FORMAT_SHOW_TIME,
-            FORMAT_SHOW_WEEKDAY,
-            FORMAT_SHOW_YEAR,
-            FORMAT_NO_YEAR,
-            FORMAT_SHOW_DATE,
-            FORMAT_NO_MONTH_DAY,
-            FORMAT_NO_NOON,
-            FORMAT_NO_MIDNIGHT,
-            FORMAT_ABBREV_TIME,
-            FORMAT_ABBREV_WEEKDAY,
-            FORMAT_ABBREV_MONTH,
-            FORMAT_NUMERIC_DATE,
-            FORMAT_ABBREV_RELATIVE,
-            FORMAT_ABBREV_ALL,
+    static int[] sFormattingFlags = new int[] {
+          FORMAT_SHOW_TIME,
+          FORMAT_SHOW_WEEKDAY,
+          FORMAT_SHOW_YEAR,
+          FORMAT_NO_YEAR,
+          FORMAT_SHOW_DATE,
+          FORMAT_NO_MONTH_DAY,
+          FORMAT_NO_NOON,
+          FORMAT_NO_MIDNIGHT,
+          FORMAT_ABBREV_TIME,
+          FORMAT_ABBREV_WEEKDAY,
+          FORMAT_ABBREV_MONTH,
+          FORMAT_NUMERIC_DATE,
+          FORMAT_ABBREV_RELATIVE,
+          FORMAT_ABBREV_ALL,
     };
 
     public static String toSql(DateTime dateTime) {
@@ -103,7 +118,7 @@ public class DateTimeHelper {
     }
 
     public static DateTime parseDate(final String dateStr, String pattern,
-                                     String defaultDateTime) {
+          String defaultDateTime) {
         String dateToParse = dateStr;
         if (dateToParse == null) {
             dateToParse = defaultDateTime;
@@ -117,14 +132,17 @@ public class DateTimeHelper {
 
     public static DateTime parseDate(final String dateStr, String pattern, final DateTimeZone tz) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(pattern).withZone(tz);
+        if (dateStr == null) {
+            return null;
+        }
         DateTime dateTime = null;
         try {
             dateTime = DateTime.parse(dateStr, dateTimeFormatter).toDateTime(tz);
         } catch (Exception e) {
             int truncEnd = pattern.length() - (pattern.contains("'T'") ? 2 : 0);
             dateTime = DateTime.parse(
-                    dateStr.substring(0, Math.min(dateStr.length(), truncEnd)),
-                    dateTimeFormatter).toDateTime(DateTimeZone.UTC);
+                  dateStr.substring(0, Math.min(dateStr.length(), truncEnd)),
+                  dateTimeFormatter).toDateTime(DateTimeZone.UTC);
         }
         return dateTime;
     }
@@ -135,7 +153,7 @@ public class DateTimeHelper {
 
     public static String formatDate(final DateTime dateTime, final Context context) {
         return DateUtils.formatDateTime(context, dateTime, DateUtils.FORMAT_SHOW_DATE
-                | DateUtils.FORMAT_SHOW_YEAR);
+              | DateUtils.FORMAT_SHOW_YEAR);
     }
 
     public static String formatDateTime(final Calendar calendar, final Context context) {
@@ -146,7 +164,7 @@ public class DateTimeHelper {
     }
 
     public static String formatShortDateAndTime(final DateTime dateTime, boolean withTime,
-                                                final Context context) {
+          final Context context) {
         int flags = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_ALL;
         if (withTime) {
             flags |= DateUtils.FORMAT_SHOW_TIME;
@@ -161,7 +179,7 @@ public class DateTimeHelper {
     @NonNull
     public static DateTime dateTime(final Calendar calendar) {
         return new DateTime(calendar == null ? Calendar.getInstance() : calendar.getTime())
-                .withZone(DateTimeZone.getDefault());
+              .withZone(DateTimeZone.getDefault());
     }
 
     public static String formatLocalTime(final DateTime dateTime, String timePattern) {
@@ -177,7 +195,7 @@ public class DateTimeHelper {
         //                                                .withZone(DateTimeZone.getDefault());
         //return localTime.toString(timeFormatter);
         return formatTime(
-                DateTime.now().withTime(localTime).withZone(DateTimeZone.getDefault()), context);
+              DateTime.now().withTime(localTime).withZone(DateTimeZone.getDefault()), context);
     }
 
     public static String toStoreableDateString(final Object dateObject, String pattern) {
@@ -224,20 +242,20 @@ public class DateTimeHelper {
     }
 
     public static LocalTime parseLocalTime(final String timeStr, String pattern,
-                                           String defaultTime) {
+          String defaultTime) {
         String timeToParse = timeStr;
         if (timeToParse == null) {
             timeToParse = defaultTime;
         }
         DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(pattern)
-                .withZone(DateTimeZone.getDefault());
+                                                        .withZone(DateTimeZone.getDefault());
         return LocalTime.parse(timeToParse, timeFormatter);
     }
 
     public static LocalTime parseLocalTime(final String timeString) {
         //See http://stackoverflow.com/a/24643661
         DateTimeFormatter timeFormatter = DateTimeFormat.forPattern(STANDARD_TIME_PATTERN)
-                .withZone(DateTimeZone.getDefault());
+                                                        .withZone(DateTimeZone.getDefault());
         return LocalTime.parse(timeString, timeFormatter);
     }
 
@@ -246,10 +264,19 @@ public class DateTimeHelper {
     }
 
     public static DateTime parseLocalDate(final String dateTimeStr, String pattern,
-                                          String defaultDateTime) {
+          String defaultDateTime) {
         String dateTimeToParse = dateTimeStr;
-        if (dateTimeToParse == null) {
+        if (TextUtils.isEmpty(dateTimeToParse)) {
             dateTimeToParse = defaultDateTime;
+        }
+        return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());
+    }
+
+    public static DateTime parseLocalDate(final String dateTimeStr, String pattern,
+          DateTime defaultDateTime) {
+        String dateTimeToParse = dateTimeStr;
+        if (TextUtils.isEmpty(dateTimeToParse)) {
+            dateTimeToParse = DateTimeHelper.toStoreableTimeString(defaultDateTime, pattern);
         }
         return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());
     }
@@ -271,6 +298,6 @@ public class DateTimeHelper {
 
     public static DateTime nullDate() {
         return DateTimeHelper.parseDate(DateTimeHelper.NULL_DATE,
-                DateTimeHelper.SERVER_UTC_PATTERN);
+                                        DateTimeHelper.SERVER_UTC_PATTERN);
     }
 }

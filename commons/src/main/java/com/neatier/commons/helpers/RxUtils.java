@@ -54,16 +54,16 @@ public class RxUtils {
     /**
      * Returns an unmodifiable list from the source {@link Observable<T>}
      *
-     * @param source      the source Observable which emits the elements to be contained in the list
-     * @param capacity    the capacity of the returning List
+     * @param source the source Observable which emits the elements to be contained in the list
+     * @param capacity the capacity of the returning List
      * @param comparators comparators which sorts the list. All {@link Collections#sort(List)} will
-     *                    be
-     * @param <T>         the type of the returning elements
+     * be
+     * @param <T> the type of the returning elements
      * @return an unmodifiable list from the source Observable
      */
     @SuppressWarnings("unchecked")
     public static <T> List<T> toUnmutableList(final Observable<T> source, int capacity,
-                                              Comparator<T>... comparators) {
+          Comparator<T>... comparators) {
         Iterator<T> iterator = BlockingObservable.from(source).getIterator();
         List<T> list = new ArrayList<>(capacity);
         while (iterator.hasNext()) {
@@ -78,16 +78,16 @@ public class RxUtils {
     /**
      * Returns a modifiable list from the source {@link Observable<T>}
      *
-     * @param source      the source Observable which emits the elements to be contained in the list
-     * @param capacity    the capacity of the returning List
+     * @param source the source Observable which emits the elements to be contained in the list
+     * @param capacity the capacity of the returning List
      * @param comparators comparators which sorts the list. All {@link Collections#sort(List)} will
-     *                    be
-     * @param <T>         the type of the returning elements
+     * be
+     * @param <T> the type of the returning elements
      * @return an modifiable list from the source Observable
      */
     @SuppressWarnings("unchecked")
     public static <T> List<T> toMutableList(Observable<T> source, int capacity,
-                                            Comparator<T>... comparators) {
+          Comparator<T>... comparators) {
         List<T> list = new ArrayList<>(capacity);
         Iterator<T> iterator = BlockingObservable.from(source).getIterator();
         while (iterator.hasNext()) {
@@ -105,10 +105,10 @@ public class RxUtils {
             StackTraceElement[] stackTrace = checkpoint.getStackTrace();
             StackTraceElement element = stackTrace[1]; // First element after `crashOnError()`
             String msg = String.format("onError() crash from subscribe() in %s.%s(%s:%s)",
-                    element.getClassName(),
-                    element.getMethodName(),
-                    element.getFileName(),
-                    element.getLineNumber());
+                                       element.getClassName(),
+                                       element.getMethodName(),
+                                       element.getFileName(),
+                                       element.getLineNumber());
 
             //throw new OnErrorNotImplementedException(msg, throwable);
             Log.e("logRxError", new OnErrorNotImplementedException(msg, throwable));
@@ -152,4 +152,10 @@ public class RxUtils {
         return Observable.from(JsonSerializer.treeMapFromJson(jsonObject).values());
     }
 
+    public static String printObservable(Observable observable) {
+        return (String) observable
+              .reduce("", (a, b) -> String.format("%s, %s", a, b))
+              .toBlocking()
+              .firstOrDefault("");
+    }
 }
