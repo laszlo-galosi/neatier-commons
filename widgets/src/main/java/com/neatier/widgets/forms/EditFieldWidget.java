@@ -95,9 +95,7 @@ public class EditFieldWidget extends FrameLayout
     private OnFocusChangeListener mFocusChangeListener;
     OnFocusChangeListener mDefaultFocusChangeListener = new OnFocusChangeListener() {
         @Override public void onFocusChange(final View v, final boolean hasFocus) {
-            if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
-                mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
-            }
+            applyFocusFlags(hasFocus);
             int color = ContextCompat.getColor(getContext(), hasFocus ? R.color.colorAccent
                                                                       : R.color.colorTextPrimary);
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_EDIT_COLOR) && mEditText != null) {
@@ -116,6 +114,7 @@ public class EditFieldWidget extends FrameLayout
             moveCursorToEnd();
         }
     };
+
     private boolean mMultiLine;
     private CompositeSubscription mSubscriptions;
     private boolean mIgnoreTextChange;
@@ -427,4 +426,11 @@ public class EditFieldWidget extends FrameLayout
         mgr.hideSoftInputFromInputMethod(getEditText().getWindowToken(),
                                          InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
+
+    public void applyFocusFlags(final boolean hasFocus) {
+        if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
+            mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
+        }
+    }
+
 }

@@ -40,6 +40,7 @@ import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.DrawableHelper;
 import com.neatier.widgets.helpers.WidgetUtils;
 import rx.functions.Action1;
+import trikita.log.Log;
 
 /**
  * Created by László Gálosi on 27/02/17
@@ -290,11 +291,13 @@ public class CompoundButtonWidget extends FrameLayout
     }
 
     @Override public void setOnClickListener(final View.OnClickListener onClickListener) {
+        Log.d("setOnClickListener", getKey(), onClickListener);
         mOnClickListener = onClickListener;
     }
 
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        Log.d("onAttachedToWindow", getKey(), "onClick", mOnClickListener);
         if (mItemView == null) {
             return;
         }
@@ -309,11 +312,11 @@ public class CompoundButtonWidget extends FrameLayout
         //mLabelView.setTag(this.getId());
     }
 
-    @Override protected void onDetachedFromWindow() {
+   /* @Override protected void onDetachedFromWindow() {
         mLabelView.setOnClickListener(null);
-        mOnClickListener = null;
+        mItemView.setOnClickListener(null);
         super.onDetachedFromWindow();
-    }
+    }*/
 
     @Override public void refreshDrawableState() {
         super.refreshDrawableState();
@@ -359,5 +362,9 @@ public class CompoundButtonWidget extends FrameLayout
               baseColorStateList.getColorForState(CHECKED_STATE_SET, defaultColor),
               defaultColor
         });
+    }
+
+    public void setKey(final String key) {
+        mKey = key;
     }
 }
