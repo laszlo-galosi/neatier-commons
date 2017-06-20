@@ -54,8 +54,8 @@ import trikita.log.Log;
 public class EditFieldWidget extends FrameLayout
       implements HasInputField<String, String> {
     public static final int DEFAULT_TEXTEVENT_FREQ = 400;
-    protected final int mLabelTextColor;
-    protected final int mHelperTextColor;
+    protected int mLabelTextColor;
+    protected int mHelperTextColor;
     protected final int mFieldTextColor;
     protected String mLabelFormat = "%s";
     protected float mInputTextSize;
@@ -118,6 +118,7 @@ public class EditFieldWidget extends FrameLayout
     private boolean mMultiLine;
     private CompositeSubscription mSubscriptions;
     private boolean mIgnoreTextChange;
+    private @ColorRes int mHelperColorRes;
 
     public EditFieldWidget(final Context context) {
         this(context, null);
@@ -298,7 +299,7 @@ public class EditFieldWidget extends FrameLayout
         } else {
             leftPadding = mDefaultFieldPaddingStart
                   + mLabelView.getPaddingLeft()
-                  + textBounds.right
+                  + textBounds.width()
                   + ThemeUtil.dpToPx(getContext(), 2);
         }
         getEditText().setPadding(leftPadding,
@@ -311,16 +312,36 @@ public class EditFieldWidget extends FrameLayout
         return mLabelText;
     }
 
-    @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
+    public void setHelper(final String helperText) {
         mHelperText = helperText;
         if (mHelperView == null && mHelperViewId > 0) {
             mHelperView = (TextView) findViewById(mHelperViewId);
         }
-        ;
+        WidgetUtils.setTextOf(mHelperView, mHelperText);
+        if (mHelperView != null) {
+            mHelperView.setTextColor(mHelperTextColor);
+        }
+    }
+
+    @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
+        mHelperText = helperText;
+        mHelperColorRes = colorRes;
+        if (mHelperView == null && mHelperViewId > 0) {
+            mHelperView = (TextView) findViewById(mHelperViewId);
+        }
         WidgetUtils.setTextOf(mHelperView, mHelperText);
         if (colorRes > 0 && mHelperView != null) {
-            mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
+            int helperColor = ContextCompat.getColor(getContext(), colorRes);
+            mHelperView.setTextColor(helperColor);
         }
+    }
+
+    public void setHelperTextColor(@ColorInt int color) {
+        mHelperTextColor = color;
+    }
+
+    public int getHelperTextColor() {
+        return mHelperTextColor;
     }
 
     @Override public void showHideHelper(final boolean visible) {
@@ -432,5 +453,4 @@ public class EditFieldWidget extends FrameLayout
             mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
         }
     }
-
 }
