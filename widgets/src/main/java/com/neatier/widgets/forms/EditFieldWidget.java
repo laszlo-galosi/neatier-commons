@@ -300,7 +300,7 @@ public class EditFieldWidget extends FrameLayout
             leftPadding = mDefaultFieldPaddingStart
                   + mLabelView.getPaddingLeft()
                   + textBounds.width()
-                  + ThemeUtil.dpToPx(getContext(), 2);
+                  + ThemeUtil.dpToPx(getContext(), 4);
         }
         getEditText().setPadding(leftPadding,
                                  getEditText().getPaddingTop(),
@@ -420,6 +420,11 @@ public class EditFieldWidget extends FrameLayout
 
     public void setKey(final String key) {
         mKey = key;
+    }
+
+    public void setLabelFormat(final String labelFormat) {
+        mLabelFormat = labelFormat;
+        setLabel(mLabelText);
     }
 
     public static class TextChangeObserver implements Observer<TextViewTextChangeEvent> {
