@@ -95,6 +95,7 @@ public class EditFieldWidget extends FrameLayout
     private OnFocusChangeListener mFocusChangeListener;
     OnFocusChangeListener mDefaultFocusChangeListener = new OnFocusChangeListener() {
         @Override public void onFocusChange(final View v, final boolean hasFocus) {
+            applyFocusFlags(hasFocus);
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
                 mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
             }
@@ -119,6 +120,7 @@ public class EditFieldWidget extends FrameLayout
     private boolean mMultiLine;
     private CompositeSubscription mSubscriptions;
     private boolean mIgnoreTextChange;
+    private long mTextChangeFrequency = DEFAULT_TEXTEVENT_FREQ;
 
     public EditFieldWidget(final Context context) {
         this(context, null);
@@ -190,13 +192,13 @@ public class EditFieldWidget extends FrameLayout
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                                         LayoutParams.MATCH_PARENT);
             addView(mItemView);
+            mEditText = (EditText) mItemView.findViewById(R.id.inputField);
+            mEditText.setTextColor(mFieldTextColor);
             if (mHelperViewId > 0) {
                 mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
                 setHelper(mHelperText, 0);
                 mHelperView.setTextColor(mHelperTextColor);
             }
-            mEditText = (EditText) mItemView.findViewById(R.id.inputField);
-            mEditText.setTextColor(mFieldTextColor);
             if (mLabelViewId > 0) {
                 mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
                 mDefaultFieldPaddingStart = mEditText.getPaddingLeft();
@@ -236,7 +238,7 @@ public class EditFieldWidget extends FrameLayout
         mSubscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(mSubscriptions);
         Subscription sub = RxTextView.textChangeEvents(mEditText)
                                      .filter(event -> !mIgnoreTextChange)
-                                     .debounce(DEFAULT_TEXTEVENT_FREQ, TimeUnit.MILLISECONDS)
+                                     .debounce(mTextChangeFrequency, TimeUnit.MILLISECONDS)
                                      .observeOn(AndroidSchedulers.mainThread())
                                      .subscribe(textChangeObserver);
         mSubscriptions.add(sub);
@@ -254,8 +256,14 @@ public class EditFieldWidget extends FrameLayout
         super.onDetachedFromWindow();
     }
 
-    public void ignoreTextChange(final boolean ignore) {
+    public EditFieldWidget ignoreTextChange(final boolean ignore) {
         mIgnoreTextChange = ignore;
+        return this;
+    }
+
+    public EditFieldWidget textChangeFrequency(final long textChangeFrequency) {
+        mTextChangeFrequency = textChangeFrequency;
+        return this;
     }
 
     public void moveCursorToEnd() {
@@ -317,10 +325,18 @@ public class EditFieldWidget extends FrameLayout
         if (mHelperView == null && mHelperViewId > 0) {
             mHelperView = (TextView) findViewById(mHelperViewId);
         }
-        ;
+        int textColor = ContextCompat.getColor(getContext(), colorRes > 0
+                                                             ? colorRes
+                                                             : R.color.colorTextSecondary);
+        if (mHelperAsHint) {
+            getEditText().setHint(helperText);
+            if (colorRes > 0) {
+                getEditText().setHintTextColor(textColor);
+            }
+        }
         WidgetUtils.setTextOf(mHelperView, mHelperText);
         if (colorRes > 0 && mHelperView != null) {
-            mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
+            mHelperView.setTextColor(textColor);
         }
     }
 
@@ -426,5 +442,11 @@ public class EditFieldWidget extends FrameLayout
               Context.INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromInputMethod(getEditText().getWindowToken(),
                                          InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    public void applyFocusFlags(final boolean hasFocus) {
+        if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
+            mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
+        }
     }
 }

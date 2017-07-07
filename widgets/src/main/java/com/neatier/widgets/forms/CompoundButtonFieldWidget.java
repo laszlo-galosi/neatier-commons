@@ -26,17 +26,18 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.DrawableHelper;
 
 /**
  * Created by László Gálosi on 27/02/17
  */
-@BindingMethods(
-      @BindingMethod(type = CompoundButtonFieldWidget.class, attribute = "cbfw_onClick",
-                     method = "setOnClickListener")
-)
+@BindingMethods({
+                      @BindingMethod(type = CompoundButtonFieldWidget.class,
+                                     attribute = "cbfw_onClick", method = "setOnClickListener"),
+
+                })
 public class CompoundButtonFieldWidget extends EditFieldWidget {
 
     public static final int[] EXPANDED_STATE_SET = { android.R.attr.state_expanded };
@@ -45,7 +46,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
 
     protected final Drawable mButtonDrawable;
     protected final ColorStateList mDrawableColor;
-    protected ImageButton mButton;
+    protected ImageView mButton;
 
     View.OnClickListener mOnClickListener;
     protected boolean mExpanded;
@@ -81,7 +82,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
 
     @Override public void initView(final Context context) {
         super.initView(context);
-        mButton = (ImageButton) mItemView.findViewById(R.id.btn_action);
+        mButton = (ImageView) mItemView.findViewById(R.id.btn_action);
         getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
     }
 

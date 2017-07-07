@@ -148,9 +148,12 @@ public class CheckboxFieldWidget extends FrameLayout
 
     @Override public void setLabel(final String labelText) {
         mLabelText = labelText;
-        if (mLabelView == null && mLabelViewId > 0) {
-            mLabelView = (TextView) findViewById(mLabelViewId);
+        if (mLabelViewId > 0) {
+            if (mLabelView == null) {
+                mLabelView = (TextView) findViewById(mLabelViewId);
+            }
             WidgetUtils.setTextOf(mLabelView, String.format(mLabelFormat, mLabelText));
+            mCheckBox.setText("");
         } else {
             mCheckBox.setText(String.format(mLabelFormat, mLabelText));
         }
