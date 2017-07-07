@@ -456,6 +456,7 @@ public class EditFieldWidget extends FrameLayout
     public void applyFocusFlags(final boolean hasFocus) {
         if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
             mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
+            updatePaddings();
         }
     }
 }
