@@ -33,7 +33,7 @@
         android:textColorHint="@color/colorTextSecondary"
         style="@style/WidgetTextView.input"
         android:layout_gravity="end|center_vertical"
-        android:gravity="left"
+        tools:gravity="left"
         android:paddingRight="10dp"
         android:ems="10"/>
     <TextView
