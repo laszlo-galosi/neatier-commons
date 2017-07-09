@@ -252,7 +252,12 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
     }
 
     @Override public int indexByValue(final V value) {
-        return mChoiceValueMap.indexOfValue(value);
+        for (int i = 0, len = mChoiceValueMap.size(); i < len; i++) {
+            if (valueByKey(keyAt(i)).equals(value)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override public Integer keyAt(final int index) {
