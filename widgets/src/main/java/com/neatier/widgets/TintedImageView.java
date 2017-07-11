@@ -49,8 +49,7 @@ public class TintedImageView extends AppCompatImageView {
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TintTypedArray a = TintTypedArray.obtainStyledAttributes(context, attrs,
-                                                                 R.styleable
-                                                                       .TintedImageView,
+                                                                 R.styleable.TintedImageView,
                                                                  defStyleAttr, 0);
         mDrawableColor =
               createDefaultColorStateList(a, R.styleable.TintedImageView_tiv_drawableTintList,

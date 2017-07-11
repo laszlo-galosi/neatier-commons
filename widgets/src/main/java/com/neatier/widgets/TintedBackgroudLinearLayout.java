@@ -31,8 +31,8 @@ import com.neatier.widgets.helpers.DrawableHelper;
  * Created by László Gálosi on 14/05/17
  */
 @BindingMethods(
-      @BindingMethod(type = TintedBackgroudLinearLayout.class, attribute = "tbvg_drawableTintList",
-                     method = "setBackgroundDrawableColor")
+      @BindingMethod(type = TintedBackgroudLinearLayout.class, attribute =
+            "tbvg_drawableTintList", method = "setBackgroundDrawableColor")
 )
 public class TintedBackgroudLinearLayout extends LinearLayout {
 
@@ -53,7 +53,9 @@ public class TintedBackgroudLinearLayout extends LinearLayout {
         TintTypedArray a = TintTypedArray.obtainStyledAttributes(
               context, attrs, R.styleable.TintedBackgroundViewGroup, defStyleAttr, 0);
         mDrawableColor =
-              createDefaultColorStateList(a, R.styleable.TintedBackgroundViewGroup_tbvg_drawableTintList,
+              createDefaultColorStateList(a,
+                                          R.styleable
+                                                .TintedBackgroundViewGroup_tbvg_drawableTintList,
                                           android.R.attr.textColorPrimary,
                                           R.color.colorTextPrimary);
         a.recycle();
@@ -94,11 +96,12 @@ public class TintedBackgroudLinearLayout extends LinearLayout {
         });
     }
 
-    public ColorStateList getBacgroundDrawableColor() {
+    public ColorStateList getBackgroundDrawableColor() {
         return mDrawableColor;
     }
 
-    public void setBacgroundDrawableColor(final ColorStateList drawableColor) {
+    public void setBackgroundDrawableColor(final ColorStateList drawableColor) {
         mDrawableColor = drawableColor;
+        refreshDrawableState();
     }
 }

@@ -14,7 +14,7 @@
 apply from: '../dependencies.gradle'
 apply plugin: 'com.android.library'
 //Dagger 2 annotation processor
-apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'com.neenbedankt.android-apt'
 //RxJava debugging
 apply plugin: 'com.fernandocejas.frodo'
 apply plugin: 'me.tatarka.retrolambda'
@@ -68,9 +68,9 @@ dependencies {
   //Optional, Collections, Guava like but lightweight on method count library
   compile appBuildingDependencies.arrow
   compile appBuildingDependencies.rxJava
-  apt appBuildingDependencies.autoValue
+  annotationProcessor appBuildingDependencies.autoValue
   provided 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
-  apt 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
+  annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
 
   //Dagger 2 related
   compile appBuildingDependencies.daggerCompiler

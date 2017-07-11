@@ -94,11 +94,11 @@ public class TintedBackgroudFrameLayout extends FrameLayout {
         });
     }
 
-    public ColorStateList getBacgroundDrawableColor() {
+    public ColorStateList getBackgroundDrawableColor() {
         return mDrawableColor;
     }
 
-    public void setBacgroundDrawableColor(final ColorStateList drawableColor) {
+    public void setBackgroundDrawableColor(final ColorStateList drawableColor) {
         mDrawableColor = drawableColor;
     }
 }
