@@ -65,9 +65,9 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
     private TextView mHelperView;
     private Paint mLabelTextPaint;
 
-    SparseArray<Integer> mChoiceIdMap = new SparseArray<>(5);
-    SparseArray<V> mChoiceValueMap = new SparseArray<>(5);
-    SparseArray<String> mChoiceNameMap = new SparseArray<>(5);
+    protected SparseArray<Integer> mChoiceIdMap = new SparseArray<>(5);
+    protected SparseArray<V> mChoiceValueMap = new SparseArray<>(5);
+    protected SparseArray<String> mChoiceNameMap = new SparseArray<>(5);
 
     public ChoiceFieldWidget(final Context context) {
         this(context, null);
@@ -120,6 +120,9 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
         int choiceIdsRes = attr.getResourceId(R.styleable.ChoiceWidget_cw_choiceIds, 0);
         int choiceNamesRes = attr.getResourceId(R.styleable.ChoiceWidget_cw_choiceNames, 0);
         int choiceValuesRes = attr.getResourceId(R.styleable.ChoiceWidget_cw_choiceValues, 0);
+        if (choiceIdsRes <= 0) {
+            return;
+        }
         if (!isInEditMode()) {
             TypedArray choiceIds = getContext().getResources().obtainTypedArray(choiceIdsRes);
             TypedArray choiceNames = getContext().getResources().obtainTypedArray(choiceNamesRes);

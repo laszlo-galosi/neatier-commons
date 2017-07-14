@@ -23,9 +23,13 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.neatier.widgets.R;
+import rx.Observable;
 import rx.functions.Func1;
+import trikita.log.Log;
 
 /**
  * Created by László Gálosi on 26/04/17
@@ -81,6 +85,25 @@ public class RadioButtonChoiceWidget extends ChoiceFieldWidget<Integer> {
             mRadioGroup.addView(radioButton);
         }
         setValue(mValue);
+    }
+
+    @Override public void setValue(final Integer value) {
+        Log.d("setValue", getKey(), value);
+        mValue = value;
+        if (mRadioGroup != null) {
+            updateSelection();
+        }
+    }
+
+    private void updateSelection() {
+        Observable.range(0, mRadioGroup.getChildCount())
+                  .subscribe(i -> {
+                      Integer key = keyAtFunc().call(i);
+                      View childAt = mRadioGroup.getChildAt(i);
+                      if (childAt != null && childAt instanceof AppCompatRadioButton) {
+                          ((RadioButton) childAt).setChecked(valueByKey(key).equals(mValue));
+                      }
+                  });
     }
 
     @Override public int choiceIdTypedValueType() {
