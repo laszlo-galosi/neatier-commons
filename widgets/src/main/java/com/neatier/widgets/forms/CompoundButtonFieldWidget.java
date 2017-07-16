@@ -149,6 +149,10 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         return mExpanded;
     }
 
+    public ImageView getButtonView() {
+        return mButton;
+    }
+
     @Override
     protected int[] onCreateDrawableState(int extraSpace) {
         int[] state = super.onCreateDrawableState(extraSpace + 2);
