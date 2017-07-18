@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import com.neatier.widgets.R;
-import rx.Observable;
 import rx.functions.Func1;
 import trikita.log.Log;
 
@@ -96,14 +95,13 @@ public class RadioButtonChoiceWidget extends ChoiceFieldWidget<Integer> {
     }
 
     private void updateSelection() {
-        Observable.range(0, mRadioGroup.getChildCount())
-                  .subscribe(i -> {
-                      Integer key = keyAtFunc().call(i);
-                      View childAt = mRadioGroup.getChildAt(i);
-                      if (childAt != null && childAt instanceof AppCompatRadioButton) {
-                          ((RadioButton) childAt).setChecked(valueByKey(key).equals(mValue));
-                      }
-                  });
+        for (int i = 0, len = mRadioGroup.getChildCount(); i < len; i++) {
+            Integer key = keyAtFunc().call(i);
+            View childAt = mRadioGroup.getChildAt(i);
+            if (childAt != null && childAt instanceof AppCompatRadioButton) {
+                ((RadioButton) childAt).setChecked(valueByKey(key).equals(mValue));
+            }
+        }
     }
 
     @Override public int choiceIdTypedValueType() {
