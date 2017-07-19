@@ -276,7 +276,7 @@ public class DateTimeHelper {
           DateTime defaultDateTime) {
         String dateTimeToParse = dateTimeStr;
         if (TextUtils.isEmpty(dateTimeToParse)) {
-            dateTimeToParse = DateTimeHelper.toStoreableTimeString(defaultDateTime, pattern);
+            dateTimeToParse = DateTimeHelper.toStoreableDateString(defaultDateTime, pattern);
         }
         return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());
     }
