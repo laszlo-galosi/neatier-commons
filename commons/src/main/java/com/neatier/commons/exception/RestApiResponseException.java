@@ -47,13 +47,13 @@ public class RestApiResponseException extends ErrorBundleException {
     public static final String TIMEOUT_ERROR = "timeout";
     static final String RAW_ERROR_RESPONSE = "raw";
 
-    private KeyValuePairs<String, Object> mResponseInfo;
-    private JsonSerializer<ErrorResponse> mJsonSerializer;
+    protected KeyValuePairs<String, Object> mResponseInfo;
+    protected JsonSerializer<ErrorResponse> mJsonSerializer;
     private ErrorResponse mErrorResponse;
-    private String mRawErrorResponse;
-    private LongTaskScheduler mSerializeOn;
-    private int mStatusCode;
-    private String mRemoteAddress;
+    protected String mRawErrorResponse;
+    protected LongTaskScheduler mSerializeOn;
+    protected int mStatusCode;
+    protected String mRemoteAddress;
 
     public RestApiResponseException(final KeyValuePairs<String, Object> params) {
         this(params, null);

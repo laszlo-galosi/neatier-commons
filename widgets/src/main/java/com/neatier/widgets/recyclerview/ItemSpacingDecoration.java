@@ -24,6 +24,10 @@ public class ItemSpacingDecoration extends RecyclerView.ItemDecoration {
 
     protected int mItemSpacing;
 
+    public static ItemSpacingDecoration withDp(int dp, Context context) {
+        return new ItemSpacingDecoration(context, dp);
+    }
+
     public ItemSpacingDecoration(@NonNull Context context, int itemSpacingInDp) {
         mItemSpacing = ThemeUtil.dpToPx(context, itemSpacingInDp);
     }

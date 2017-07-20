@@ -231,7 +231,12 @@ WidgetUtils {
     }
 
     public static void setHtmlTextOf(TextView textView, String htmlText) {
-        textView.setText(TextUtils.isEmpty(htmlText) ? null : trim(Html.fromHtml(htmlText)));
+        textView.setText(
+              TextUtils.isEmpty(htmlText) ? null : trim(Html.fromHtml(replaceNewLines(htmlText))));
+    }
+
+    public static String replaceNewLines(String text) {
+        return text.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
     }
 
     private static CharSequence trim(CharSequence charSequence) {
