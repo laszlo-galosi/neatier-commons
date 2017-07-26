@@ -320,6 +320,10 @@ public class EditFieldWidget extends FrameLayout
         return mLabelText;
     }
 
+    public void setHelper(final String helperText) {
+        setHelper(helperText, mHelperTextColor);
+    }
+
     @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
         mHelperText = helperText;
         if (mHelperView == null && mHelperViewId > 0) {
@@ -354,6 +358,10 @@ public class EditFieldWidget extends FrameLayout
 
     @Override public int getLabelViewId() {
         return mLabelViewId;
+    }
+
+    public int getHelperTextColor() {
+        return mHelperTextColor;
     }
 
     public void setLayoutRes(final int layoutRes) {
@@ -416,6 +424,11 @@ public class EditFieldWidget extends FrameLayout
 
     public void setKey(final String key) {
         mKey = key;
+    }
+
+    public void setLabelFormat(final String labelFormat) {
+        mLabelFormat = labelFormat;
+        setLabel(mLabelText);
     }
 
     public static class TextChangeObserver implements Observer<TextViewTextChangeEvent> {

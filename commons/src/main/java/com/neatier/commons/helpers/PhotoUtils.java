@@ -37,6 +37,8 @@ import static android.app.Activity.RESULT_OK;
 public class PhotoUtils {
     public static final String EXTRA_OUTPUT_PATH = "CameraOutputPath";
 
+    public static final String INTENT_ACTION_HW_CHOOSER = "android.intent.action.hwCHOOSER";
+
     /**
      * Returns the result {@link Uri} from the specified {@link Intent} as a result for
      * {@link Intent#ACTION_CHOOSER} or {@link Intent#ACTION_PICK} or {@link
