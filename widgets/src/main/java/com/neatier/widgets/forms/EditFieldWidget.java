@@ -261,6 +261,10 @@ public class EditFieldWidget extends FrameLayout
         return this;
     }
 
+    public boolean isIgnoreTextChange() {
+        return mIgnoreTextChange;
+    }
+
     public EditFieldWidget textChangeFrequency(final long textChangeFrequency) {
         mTextChangeFrequency = textChangeFrequency;
         return this;

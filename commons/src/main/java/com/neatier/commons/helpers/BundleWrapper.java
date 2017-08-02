@@ -142,7 +142,7 @@ public class BundleWrapper implements Parcelable {
     public <T> T getAs(final String key, final Class<T> returnClass, final T... defaultValue)
           throws ClassCastException{
         if (!mBundle.containsKey(key)) {
-            return defaultValue.length > 0 ? defaultValue[0] : null;
+            return defaultValue != null && defaultValue.length > 0 ? defaultValue[0] : null;
         }
         if (returnClass == String.class) {
             return (T) mBundle.getString(key);
