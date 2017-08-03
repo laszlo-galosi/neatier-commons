@@ -19,6 +19,7 @@ import android.databinding.BindingMethod;
 import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.TintTypedArray;
@@ -47,9 +48,11 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
     protected final Drawable mButtonDrawable;
     protected final ColorStateList mDrawableColor;
     protected ImageView mButton;
-
     View.OnClickListener mOnClickListener;
+
     protected boolean mExpanded;
+    private @IdRes int mClickableViewId;
+    private View mClickableView;
 
     public CompoundButtonFieldWidget(final Context context) {
         this(context, null);
@@ -70,6 +73,8 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
                           ? a.getDrawable(R.styleable.CompoundButtonFieldWidget_cbfw_buttonDrawable)
                           :
                           ContextCompat.getDrawable(getContext(), R.drawable.ic_eye_24dp);
+        mClickableViewId =
+              a.getResourceId(R.styleable.CompoundButtonFieldWidget_cbfw_clickableViewId, 0);
         mDrawableColor =
               createDefaultColorStateList(a,
                                           R.styleable
@@ -78,12 +83,16 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
                                           R.color.colorTextPrimary);
         setExpanded(mExpanded);
         a.recycle();
+        initView(context);
     }
 
     @Override public void initView(final Context context) {
         super.initView(context);
         mButton = (ImageView) mItemView.findViewById(R.id.btn_action);
         getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
+        if (mClickableViewId > 0) {
+            mClickableView = mItemView.findViewById(mClickableViewId);
+        }
     }
 
     @Override public void setOnClickListener(final View.OnClickListener onClickListener) {
@@ -96,25 +105,28 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
 
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (mButton == null) {
-            return;
+        if (mButton != null) {
+            mButton.setOnClickListener(v -> {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(this);
+                }
+            });
         }
-        mButton.setOnClickListener(v -> {
-            if (mOnClickListener != null) {
-                mOnClickListener.onClick(this);
-            }
-        });
-        mItemView.setOnClickListener(v -> {
-            if (mOnClickListener != null) {
-                mOnClickListener.onClick(this);
-            }
-        });
-        //mLabelView.setTag(this.getId());
+        if (mClickableView != null) {
+            mClickableView.setOnClickListener(v -> {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onClick(this);
+                }
+            });
+        }
     }
 
     @Override protected void onDetachedFromWindow() {
         mButton.setOnClickListener(null);
         mItemView.setOnClickListener(null);
+        if (mClickableView != null) {
+            mClickableView.setOnClickListener(null);
+        }
         mOnClickListener = null;
         super.onDetachedFromWindow();
     }
