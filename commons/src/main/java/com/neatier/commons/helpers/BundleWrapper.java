@@ -29,22 +29,6 @@ public class BundleWrapper implements Parcelable {
 
     final Bundle mBundle;
 
-    public BundleWrapper(Parcel in) {
-        mBundle = in.readBundle();
-    }
-
-    public static final Creator<BundleWrapper> CREATOR = new Creator<BundleWrapper>() {
-        @Override
-        public BundleWrapper createFromParcel(Parcel in) {
-            return new BundleWrapper(in);
-        }
-
-        @Override
-        public BundleWrapper[] newArray(int size) {
-            return new BundleWrapper[size];
-        }
-    };
-
     public static BundleWrapper wrap(final Bundle bundle) {
         return new BundleWrapper(bundle);
     }
@@ -61,14 +45,6 @@ public class BundleWrapper implements Parcelable {
 
     public int getInt(final String itemId) {
         return mBundle.getInt(itemId);
-    }
-
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeBundle(mBundle);
     }
 
     protected BundleWrapper() {
@@ -247,4 +223,26 @@ public class BundleWrapper implements Parcelable {
         sb.append("\n}");
         return sb.toString();
     }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        dest.writeBundle(this.mBundle);
+    }
+
+    public BundleWrapper(Parcel in) {
+        this.mBundle = in.readBundle(getClass().getClassLoader());
+    }
+
+    public static final Creator<BundleWrapper> CREATOR = new Creator<BundleWrapper>() {
+        @Override public BundleWrapper createFromParcel(Parcel source) {
+            return new BundleWrapper(source);
+        }
+
+        @Override public BundleWrapper[] newArray(int size) {
+            return new BundleWrapper[size];
+        }
+    };
 }

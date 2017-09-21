@@ -44,8 +44,7 @@ import trikita.log.Log;
 /**
  * Created by László Gálosi on 06/04/16
  */
-public class
-WidgetUtils {
+public class WidgetUtils {
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;
