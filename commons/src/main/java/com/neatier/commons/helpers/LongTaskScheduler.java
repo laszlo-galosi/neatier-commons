@@ -13,12 +13,14 @@
 
 package com.neatier.commons.helpers;
 
+import rx.Observable;
 import rx.Scheduler;
 
 /**
- * Interface for {@link rx.Observable#subscribeOn(Scheduler)} and {@link
- * rx.Observable#observeOn(Scheduler)} scheduler pair to execute and
+ * Interface for {@link Observable#subscribeOn(Scheduler)} and {@link
+ * Observable#observeOn(Scheduler)} scheduler pair to execute a
  * long running tasks and observe execution results on different Threads.
+ *
  * @author László Gálosi
  * @since 24/07/15
  */

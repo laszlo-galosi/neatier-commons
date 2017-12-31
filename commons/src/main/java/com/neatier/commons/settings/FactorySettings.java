@@ -14,6 +14,7 @@
 package com.neatier.commons.settings;
 
 /**
+ * Contains static constants for the application.
  * @author Krisztian
  * @since 4/12/2015.
  */

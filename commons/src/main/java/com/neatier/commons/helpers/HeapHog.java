@@ -16,8 +16,8 @@ package com.neatier.commons.helpers;
 
 /**
  * Interface designating that the implementation class must free up some memory, when it's no
- * longer
- * use.
+ * longer use.
+ *
  * @author László Gálosi
  * @since 26/09/15
  */

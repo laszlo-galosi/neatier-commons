@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -13,6 +14,8 @@
 
 package com.neatier.commons.helpers;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -25,27 +28,118 @@ import android.util.SparseLongArray;
 import com.neatier.commons.exception.ErrorBundleException;
 import com.neatier.commons.exception.InternalErrorException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import rx.Observable;
-import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
- * Helper class to build key value pairs which uses {@link Map<K,V>} interface.
- * If {@link Build.VERSION#SDK_INT} is greater then API level 19 {@link Build.VERSION_CODES#KITKAT}
- * internally it uses the more android friendly
- * {@link ArrayMap} then {@link HashMap}
+ * Helper class to build key value pairs with keys of K and values of V type which uses {@link Map}
+ * interface.
+ * Internally it uses the more android friendly {@link ArrayMap}.
+ *
  * @author László Gálosi
  * @since 30/07/15
  */
 public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
 
+    /**
+     * The internal map containing the key-value pairs of type K and V.
+     */
     final private Map<K, V> internalMap;
 
     private V mErrorIfAnyIsThisValue;
+
+    /**
+     * Returns a {@link KeyValuePairs} from the given {@link SharedPreferences}
+     *
+     * @param preferences the preferences.
+     */
+    public static KeyValuePairs<String, String> from(final SharedPreferences preferences) {
+        final KeyValuePairs<String, String> stringKeyValuePairs = new KeyValuePairs<>();
+        Observable.from(preferences.getAll().keySet())
+                  .doOnNext(
+                        prefKey ->
+                              stringKeyValuePairs.put(prefKey,
+                                                      preferences.getString(prefKey, "")))
+                  .subscribe();
+        return stringKeyValuePairs;
+    }
+
+    /**
+     * @see Map#put(Object, Object)
+     */
+    public KeyValuePairs put(final K key, final V value) {
+        this.internalMap.put(key, value);
+        return this;
+    }
+
+    /**
+     * Returns a {@link KeyValuePairs} from the given {@link LongSparseArray}
+     *
+     * @param sparseArray the preferences.
+     */
+    public static KeyValuePairs<Integer, Object> from(final SparseArray sparseArray) {
+        final KeyValuePairs<Integer, Object> keyValuePairs = new KeyValuePairs<>();
+        int len = sparseArray.size();
+        for (int i = 0; i < len; i++) {
+            int key = sparseArray.keyAt(i);
+            keyValuePairs.put(key, sparseArray.get(key));
+        }
+        return keyValuePairs;
+    }
+
+    /**
+     * Returns a {@link KeyValuePairs} from the given {@link LongSparseArray}
+     *
+     * @param sparseArray the preferences.
+     */
+    public static KeyValuePairs<Integer, Boolean> from(final SparseBooleanArray sparseArray) {
+        final KeyValuePairs<Integer, Boolean> keyValuePairs = new KeyValuePairs<>();
+        int len = sparseArray.size();
+        for (int i = 0; i < len; i++) {
+            int key = sparseArray.keyAt(i);
+            keyValuePairs.put(key, sparseArray.get(key));
+        }
+        return keyValuePairs;
+    }
+
+    /**
+     * Returns a {@link KeyValuePairs} from the given {@link LongSparseArray}
+     *
+     * @param sparseArray the preferences.
+     */
+    public static KeyValuePairs<Integer, Integer> from(final SparseIntArray sparseArray) {
+        final KeyValuePairs<Integer, Integer> keyValuePairs = new KeyValuePairs<>();
+        int len = sparseArray.size();
+        for (int i = 0; i < len; i++) {
+            int key = sparseArray.keyAt(i);
+            keyValuePairs.put(key, sparseArray.get(key));
+        }
+        return keyValuePairs;
+    }
+
+    /**
+     * Returns a {@link KeyValuePairs} from the given {@link LongSparseArray}
+     *
+     * @param sparseArray the preferences.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2) public static KeyValuePairs<Integer, Long> from(
+          final SparseLongArray sparseArray) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            throw new UnsupportedOperationException(
+                  String.format("Not supported android version %s < %s", Build.VERSION.SDK_INT,
+                                Build.VERSION_CODES.JELLY_BEAN_MR2));
+        }
+        final KeyValuePairs<Integer, Long> keyValuePairs = new KeyValuePairs<>();
+        int len = sparseArray.size();
+        for (int i = 0; i < len; i++) {
+            int key = sparseArray.keyAt(i);
+            keyValuePairs.put(key, sparseArray.get(key));
+        }
+        return keyValuePairs;
+    }
 
     public KeyValuePairs() {
         this(5);
@@ -63,235 +157,32 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
         this.internalMap = map;
     }
 
-    /**
-     * Returns a {@link KeyValuePairs<String, String>} from the specified {@link SharedPreferences}
-     *
-     * @param preferences the preferences.
-     */
-    public static KeyValuePairs<String, String> from(final SharedPreferences preferences) {
-        final KeyValuePairs<String, String> stringKeyValuePairs = new KeyValuePairs<>();
-        Observable.from(preferences.getAll().keySet()).doOnNext(new Action1<String>() {
-            @Override
-            public void call(final String prefKey) {
-                stringKeyValuePairs.put(prefKey, preferences.getString(prefKey, ""));
-            }
-        }).subscribe();
-        return stringKeyValuePairs;
+    @Override
+    public int hashCode() {
+        return internalMap != null
+               ? internalMap.hashCode()
+               : 0;
     }
 
-    /**
-     * @see Map#put(Object, Object)
-     */
-    public KeyValuePairs put(final K key, final V value) {
-        this.internalMap.put(key, value);
-        return this;
-    }
-
-    /**
-     * Returns a {@link KeyValuePairs<Integer, Object>} from the specified {@link LongSparseArray}
-     *
-     * @param sparseArray the preferences.
-     */
-    public static KeyValuePairs<Integer, Object> from(final SparseArray sparseArray) {
-        final KeyValuePairs<Integer, Object> keyValuePairs = new KeyValuePairs<>();
-        int len = sparseArray.size();
-        for (int i = 0; i < len; i++) {
-            int key = sparseArray.keyAt(i);
-            keyValuePairs.put(key, sparseArray.get(key));
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
         }
-        return keyValuePairs;
-    }
-
-    /**
-     * Returns a {@link KeyValuePairs<Integer, Object>} from the specified {@link LongSparseArray}
-     *
-     * @param sparseArray the preferences.
-     */
-    public static KeyValuePairs<Integer, Boolean> from(final SparseBooleanArray sparseArray) {
-        final KeyValuePairs<Integer, Boolean> keyValuePairs = new KeyValuePairs<>();
-        int len = sparseArray.size();
-        for (int i = 0; i < len; i++) {
-            int key = sparseArray.keyAt(i);
-            keyValuePairs.put(key, sparseArray.get(key));
+        if (o == null || getClass() != o.getClass()) {
+            return false;
         }
-        return keyValuePairs;
+
+        KeyValuePairs<?, ?> that = (KeyValuePairs<?, ?>) o;
+
+        return !(internalMap != null
+                 ? !internalMap.equals(that.internalMap)
+                 : that.internalMap != null);
     }
 
-    /**
-     * Returns a {@link KeyValuePairs<Integer, Object>} from the specified {@link LongSparseArray}
-     *
-     * @param sparseArray the preferences.
-     */
-    public static KeyValuePairs<Integer, Integer> from(final SparseIntArray sparseArray) {
-        final KeyValuePairs<Integer, Integer> keyValuePairs = new KeyValuePairs<>();
-        int len = sparseArray.size();
-        for (int i = 0; i < len; i++) {
-            int key = sparseArray.keyAt(i);
-            keyValuePairs.put(key, sparseArray.get(key));
-        }
-        return keyValuePairs;
-    }
-
-    /**
-     * Returns a {@link KeyValuePairs<Integer, Object>} from the specified {@link LongSparseArray}
-     *
-     * @param sparseArray the preferences.
-     */
-    public static KeyValuePairs<Integer, Long> from(
-            final SparseLongArray sparseArray) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            throw new UnsupportedOperationException(
-                    String.format("Not supported android version %s < %s", Build.VERSION.SDK_INT,
-                            Build.VERSION_CODES.JELLY_BEAN_MR2));
-        }
-        final KeyValuePairs<Integer, Long> keyValuePairs = new KeyValuePairs<>();
-        int len = sparseArray.size();
-        for (int i = 0; i < len; i++) {
-            int key = sparseArray.keyAt(i);
-            keyValuePairs.put(key, sparseArray.get(key));
-        }
-        return keyValuePairs;
-    }
-
-    /**
-     * Returns a {@link KeyValuePairs<String, String>} from the specified {@link SharedPreferences}
-     *
-     * @param sharedKeyValueStore the preferences.
-     */
-    public Observable<Boolean> fromAsync(final SharedKeyValueStore<String, V> sharedKeyValueStore) {
-        return sharedKeyValueStore.keysAsStream().doOnNext(new Action1<String>() {
-            @Override
-            public void call(final String key) {
-                put((K) key, sharedKeyValueStore.get(key));
-            }
-        }).flatMap(new Func1<String, Observable<Boolean>>() {
-            @Override
-            public Observable<Boolean> call(final String key) {
-                return Observable.just(Boolean.TRUE);
-            }
-        }).takeLast(1);
-    }
-
-    /**
-     * Sets a value which any of the value in this map is equals an error is thrown in {@link
-     * #getOrError(Object, ErrorBundleException)} or {@link #getOrThrows(Object,
-     * ErrorBundleException)}
-     */
-    public KeyValuePairs setErrorValue(final V errorIfAnyIsThisValue) {
-        mErrorIfAnyIsThisValue = errorIfAnyIsThisValue;
-        return this;
-    }
-
-    /**
-     * Maps only if the value is not null.
-     *
-     * @see Map#put(Object, Object)
-     */
-    public KeyValuePairs putChecked(final K key, final V value) {
-        if (key != null && value != null) {
-            this.internalMap.put(key, value);
-        }
-        return this;
-    }
-
-    /**
-     * @see Map#putAll(Map)
-     */
-    public KeyValuePairs putAll(final Map<K, V> otherMap) {
-        this.internalMap.putAll(otherMap);
-        return this;
-    }
-
-    /**
-     * @see Map#putAll(Map)
-     */
-    public KeyValuePairs copy(final KeyValuePairs<K, V> otherMap) {
-        this.internalMap.putAll(otherMap.internalMap);
-        return this;
-    }
-
-    /**
-     * Pairs the keys with the values. The keys and values size must be equal.
-     *
-     * @param keys   the array containing the keys.
-     * @param values the array containing the values.
-     * @return this object for api chaining.
-     */
-    public KeyValuePairs putAll(K[] keys, V[] values) {
-        if (keys.length != values.length) {
-            throw new IllegalArgumentException(
-                    String.format("Keys and values length mismatch: %d <> %d", keys.length,
-                            values.length));
-        }
-        int len = keys.length;
-        for (int i = 0; i < len; i++) {
-            internalMap.put(keys[i], values[i]);
-        }
-        return this;
-    }
-
-    /**
-     * Pairs the keys with the values. The keys and values size must be equal.
-     *
-     * @param keys   the list containing the keys.
-     * @param values the list containing the values.
-     * @return this object for api chaining.
-     */
-    public KeyValuePairs putAll(final List<K> keys, final List<V> values) {
-        if (keys.size() != values.size()) {
-            throw new IllegalArgumentException(
-                    String.format("Keys and values length mismatch: %d <> %d", keys.size(),
-                            values.size()));
-        }
-        int len = keys.size();
-        for (int i = 0; i < len; i++) {
-            put(keys.get(i), values.get(i));
-        }
-        return this;
-    }
-
-    /**
-     * @see Map#size()
-     */
-    public int size() {
-        return internalMap.size();
-    }
-
-    /**
-     * @see Map#clear()
-     */
-    public KeyValuePairs clear() {
-        this.internalMap.clear();
-        return this;
-    }
-
-    /**
-     * @see Map#containsKey(Object)
-     */
-    public boolean containsKey(final Object key) {
-        return internalMap.containsKey(key);
-    }
-
-    /**
-     * @see Map#containsValue(Object)
-     */
-    public boolean containsValue(final Object value) {
-        return internalMap.containsValue(value);
-    }
-
-    /**
-     * @see Map#isEmpty()
-     */
-    public boolean isEmpty() {
-        return internalMap.isEmpty();
-    }
-
-    /**
-     * @see Map#remove(Object)
-     */
-    public KeyValuePairs remove(K key) {
-        this.internalMap.remove(key);
-        return this;
+    @Override
+    public String toString() {
+        return "KeyValuePairs" + internalMap;
     }
 
     /**
@@ -359,19 +250,20 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
     }
 
     /**
-     * @see Map#keySet()
-     */
-    @NonNull
-    public Set<K> keySet() {
-        return internalMap.keySet();
-    }
-
-    /**
-     * @return an {@link Observable} emitting a list of stored keys.
+     * Returns an {@link Observable} emitting a  objects with type V stored within the
+     * internal map.
      */
     @Override
     public Observable<V> valuesAsStream() {
         return Observable.from(values());
+    }
+
+    /**
+     * Returns an {@link Observable} emitting a list of objects with type V stored within the
+     * internal map.
+     */
+    @Override public Observable valuesAsListStream() {
+        return Observable.from(values()).toList();
     }
 
     /**
@@ -383,16 +275,140 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
     }
 
     /**
-     * @return an {@link Observable} emitting a list of stored values.
+     * Constructor which creates and stores key-value pairs from the given map
      */
-    @Override
-    public Observable<List<V>> valuesAsListStream() {
-        return Observable.from(values()).toList();
+    @SuppressWarnings("unchecked")
+    public Observable<Boolean> fromAsync(final SharedKeyValueStore<String, V> sharedKeyValueStore) {
+        return sharedKeyValueStore.keysAsStream().doOnNext(
+              key -> put((K) key, sharedKeyValueStore.get((String) key)))
+                                  .flatMap(key -> Observable.just(Boolean.TRUE)).takeLast(1);
     }
 
     /**
-     * @return an {@link Observable} emitting the required value if found, or an {@link
-     * Observable#empty()}
+     * Maps only if the value is not null.
+     *
+     * @see Map#put(Object, Object)
+     */
+    public KeyValuePairs putChecked(final K key, final V value) {
+        if (key != null && value != null) {
+            this.internalMap.put(key, value);
+        }
+        return this;
+    }
+
+    /**
+     * @see Map#putAll(Map)
+     */
+    public KeyValuePairs putAll(final Map<K, V> otherMap) {
+        this.internalMap.putAll(otherMap);
+        return this;
+    }
+
+    /**
+     * @see #putAll(Map)
+     */
+    public KeyValuePairs copy(final KeyValuePairs<K, V> otherMap) {
+        this.internalMap.putAll(otherMap.internalMap);
+        return this;
+    }
+
+    /**
+     * Pairs the keys with the values. The keys and values size must be equal.
+     *
+     * @param keys the array containing the keys.
+     * @param values the array containing the values.
+     * Returns this object for api chaining.
+     */
+    @SuppressLint("DefaultLocale") public KeyValuePairs putAll(K[] keys, V[] values) {
+        if (keys.length != values.length) {
+            throw new IllegalArgumentException(
+                  String.format("Keys and values length mismatch: %d <> %d", keys.length,
+                                values.length));
+        }
+        int len = keys.length;
+        for (int i = 0; i < len; i++) {
+            internalMap.put(keys[i], values[i]);
+        }
+        return this;
+    }
+
+    /**
+     * Pairs the keys with the values. The keys and values size must be equal.
+     *
+     * @param keys the list containing the keys.
+     * @param values the list containing the values.
+     * Returns this object for api chaining.
+     */
+    @SuppressLint("DefaultLocale") public KeyValuePairs putAll(final List<K> keys,
+          final List<V> values) {
+        if (keys.size() != values.size()) {
+            throw new IllegalArgumentException(
+                  String.format("Keys and values length mismatch: %d <> %d", keys.size(),
+                                values.size()));
+        }
+        int len = keys.size();
+        for (int i = 0; i < len; i++) {
+            put(keys.get(i), values.get(i));
+        }
+        return this;
+    }
+
+    /**
+     * @see Map#size()
+     */
+    public int size() {
+        return internalMap.size();
+    }
+
+    /**
+     * @see Map#clear()
+     */
+    public KeyValuePairs clear() {
+        this.internalMap.clear();
+        return this;
+    }
+
+    public KeyValuePairs<K, V> remove(Func1<K, Boolean> keyFilter) {
+        keysAsStream()
+              .filter(keyFilter)
+              .flatMap(k -> Observable.defer(() -> Observable.just(k)))
+              .subscribe(this::remove);
+        return this;
+    }
+
+    /**
+     * @see Map#keySet()
+     */
+    @NonNull
+    public Set<K> keySet() {
+        return internalMap.keySet();
+    }
+
+    /**
+     * @see Map#remove(Object)
+     */
+    public KeyValuePairs remove(K key) {
+        this.internalMap.remove(key);
+        return this;
+    }
+
+    /**
+     * @see Map#containsKey(Object)
+     */
+    public boolean containsKey(final K key) {
+        return internalMap.containsKey(key);
+    }
+
+    /**
+     * @see Map#containsValue(Object)
+     */
+    public boolean containsValue(final V value) {
+        return internalMap.containsValue(value);
+    }
+
+    /**
+     * Returns an {@link Observable} emitting the stored value with the given key if found, or the
+     * given default value otherwise.
      */
     public V getOrDefault(K key, V defaultValue) {
         if (internalMap.containsKey(key)) {
@@ -401,6 +417,10 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
         return defaultValue;
     }
 
+    /**
+     * Returns the the stored with the given key if found, or the given default
+     * value otherwise.
+     */
     public V getOrDefaultChecked(K key, V defaultValue) {
         if (internalMap.containsKey(key)) {
             V value = internalMap.get(key);
@@ -409,21 +429,18 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
         return defaultValue;
     }
 
+    /**
+     * Returns an Observable emitting deserialized objects with the given type T of the given key.
+     */
     public <T> Observable<T> getJsonSerializedAsync(K key, final Class<T> clazz,
-                                                    final JsonSerializer<T> jsonSerializer) {
+          final JsonSerializer<T> jsonSerializer) {
         return getOrError(key, new InternalErrorException(String.format("Cannot find %s", key)))
-                .flatMap(new Func1<V, Observable<T>>() {
-                    @Override
-                    public Observable<T> call(final V value) {
-                        return Observable.just(
-                                jsonSerializer.deserialize(String.valueOf(value), clazz));
-                    }
-                });
+              .flatMap(v -> Observable.just(jsonSerializer.deserialize(String.valueOf(v), clazz)));
     }
 
     /**
-     * @return an  the required value if found, or an {@link
-     * Observable#error(Throwable)}
+     * Returns the value stored with the given key if found, or an throws the given exception
+     * otherwise.
      */
     public V getOrThrows(K key, ErrorBundleException t) throws ErrorBundleException {
         if (internalMap.containsKey(key)) {
@@ -437,17 +454,17 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
     }
 
     /**
-     * @return an  the required value if found, or an {@link
+     * Returns an  the required value if found, or an {@link
      * Observable#error(Throwable)}
      */
     public V getOrThrows(K key, V throwIfEquals, ErrorBundleException t)
-            throws ErrorBundleException {
+          throws ErrorBundleException {
         if (internalMap.containsKey(key)) {
             V val = internalMap.get(key);
             if (val == null) {
                 throw t;
             }
-            if (val != null && val.equals(throwIfEquals)) {
+            if (val.equals(throwIfEquals)) {
                 throw t;
             }
             return internalMap.get(key);
@@ -461,28 +478,25 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
      *
      * @param preferences the preferences to write the key-value pairs.
      */
-    public void to(final SharedPreferences preferences) {
-        keysAsStream().doOnNext(new Action1<K>() {
-            @Override
-            public void call(final K key) {
-                V value = get(key);
-                if (value instanceof String) {
-                    preferences.edit()
-                            .putString(String.valueOf(key), String.valueOf(value)).commit();
-                } else if (value instanceof Integer) {
-                    preferences.edit().putInt(String.valueOf(key), (Integer) value).commit();
-                }
-                if (value instanceof Long) {
-                    preferences.edit().putLong(String.valueOf(key), (Long) value).commit();
-                }
-                if (value instanceof Boolean) {
-                    preferences.edit().putBoolean(String.valueOf(key), (Boolean) value).commit();
-                }
-                if (value instanceof Float) {
-                    preferences.edit().putFloat(String.valueOf(key), (Float) value).commit();
-                }
+    @SuppressLint("ApplySharedPref") public void to(final SharedPreferences preferences) {
+        keysAsStream().subscribe(key -> {
+            V value = get(key);
+            if (value instanceof String) {
+                preferences.edit()
+                           .putString(String.valueOf(key), String.valueOf(value)).commit();
+            } else if (value instanceof Integer) {
+                preferences.edit().putInt(String.valueOf(key), (Integer) value).commit();
             }
-        }).subscribe();
+            if (value instanceof Long) {
+                preferences.edit().putLong(String.valueOf(key), (Long) value).commit();
+            }
+            if (value instanceof Boolean) {
+                preferences.edit().putBoolean(String.valueOf(key), (Boolean) value).commit();
+            }
+            if (value instanceof Float) {
+                preferences.edit().putFloat(String.valueOf(key), (Float) value).commit();
+            }
+        });
     }
 
     /**
@@ -492,33 +506,10 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
         return internalMap.get(key);
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        KeyValuePairs<?, ?> that = (KeyValuePairs<?, ?>) o;
-
-        return !(internalMap != null
-                ? !internalMap.equals(that.internalMap)
-                : that.internalMap != null);
-    }
-
-    @Override
-    public int hashCode() {
-        return internalMap != null
-                ? internalMap.hashCode()
-                : 0;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("KeyValuePairs");
-        sb.append(internalMap);
-        return sb.toString();
+    /**
+     * @see Map#isEmpty()
+     */
+    public boolean isEmpty() {
+        return internalMap.isEmpty();
     }
 }

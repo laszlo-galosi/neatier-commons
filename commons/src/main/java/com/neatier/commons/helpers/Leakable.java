@@ -14,9 +14,16 @@
 package com.neatier.commons.helpers;
 
 /**
+ * Interface denoting that the implementing class is suspected to memory leak, so it should
+ * clear the leak suspects.
  * @author László Gálosi
  * @since 23/03/16
  */
 public interface Leakable {
+
+    /**
+     * Call this when you suspects that the implementing class may leak memory, when it is
+     * destroyed.
+     */
     void clearLeakables();
 }

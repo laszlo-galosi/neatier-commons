@@ -23,44 +23,77 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
+ * A Wapper around {@link Bundle} with builder like assembling methods.
+ *
  * @author László Gálosi
  * @since 27/03/16
  */
 public class BundleWrapper implements Parcelable {
 
-    final Bundle mBundle;
+    /**
+     * The internal wrapped bundle
+     */
+    private final Bundle mBundle;
 
+    /**
+     * Static instance creator method with the given bundle to wrap.
+     */
     public static BundleWrapper wrap(final Bundle bundle) {
         return new BundleWrapper(bundle);
     }
 
+    /**
+     * Creates a new instance of the wrapped bundle by copying all the values from this bundle
+     * Modifying this instance has no effect on the original bundle.
+     *
+     * @see Bundle#putAll(Bundle)
+     */
     public BundleWrapper copy() {
         Bundle bundle = new Bundle();
         bundle.putAll(getBundle());
         return BundleWrapper.wrap(bundle);
     }
 
+    /**
+     * @see Bundle#containsKey(String)
+     */
     public boolean containsKey(final String key) {
         return mBundle.containsKey(key);
     }
 
+    /**
+     * @see Bundle#containsKey(String)
+     */
     public int getInt(final String itemId) {
         return mBundle.getInt(itemId);
     }
 
+    /**
+     * Constructor creates a new instance with an empty internal bundle.
+     */
     protected BundleWrapper() {
         mBundle = new Bundle();
     }
 
+    /**
+     * Constructor creates a new instance with the given bundle as the wrapped bundle.
+     * Mutating this instance also mutates th given bundle.
+     */
     protected BundleWrapper(final Bundle bundle) {
         mBundle = bundle;
     }
 
+    /**
+     * @see Bundle#putString(String, String)
+     */
     public BundleWrapper putString(String key, String value) {
         mBundle.putString(key, value);
         return this;
     }
 
+    /**
+     * @see Bundle#putInt(String, int)
+     */
     public BundleWrapper putInt(String key, int value) {
         mBundle.putInt(key, value);
         return this;
@@ -71,16 +104,26 @@ public class BundleWrapper implements Parcelable {
         return this;
     }
 
+    /**
+     * @see Bundle#putAll(Bundle)
+     */
     public BundleWrapper putAll(final Bundle bundle) {
         mBundle.putAll(bundle);
         return this;
     }
 
+    /**
+     * @see Bundle#putParcelable(String, Parcelable)
+     */
     public BundleWrapper putParcelable(final String key, final Parcelable parcelable) {
         mBundle.putParcelable(key, parcelable);
         return this;
     }
 
+    /**
+     * Put the given value into the wrapped bundle, by calling
+     * any  of {@code Bundle#putXXX} method depending on the given value instance.
+     */
     public BundleWrapper put(final String key, final Object value) {
         if (value instanceof String) {
             mBundle.putString(key, (String) value);
@@ -107,6 +150,15 @@ public class BundleWrapper implements Parcelable {
         return this;
     }
 
+    /**
+     * Returns the stored value with type T if found, or throws the given exception.
+     *
+     * @param key the key to lookup for.
+     * @param returnClass the class of the value
+     * @param t the Exception to be thrown if the not found
+     * @param <T> the type of the stored value
+     */
+    @SuppressWarnings("unchecked")
     public <T> T getAsOrThrows(final String key, final Class<T> returnClass, final Exception t)
           throws Exception {
         T result = getAs(key, returnClass);
@@ -116,8 +168,18 @@ public class BundleWrapper implements Parcelable {
         return result;
     }
 
+    /**
+     * Returns the stored value with type T if found, or the given default value if provided
+     * as a fallback
+     *
+     * @param key the key to lookup for.
+     * @param returnClass the class of the value
+     * @param defaultValue vararg to return s a fallback.
+     * @param <T> the type of the stored value
+     */
+    @SuppressWarnings("unchecked")
     public <T> T getAs(final String key, final Class<T> returnClass, final T... defaultValue)
-          throws ClassCastException{
+          throws ClassCastException {
         if (!mBundle.containsKey(key)) {
             return defaultValue != null && defaultValue.length > 0 ? defaultValue[0] : null;
         }
@@ -144,11 +206,17 @@ public class BundleWrapper implements Parcelable {
               String.format("Invalid returnClass type: %s", returnClass.getSimpleName()));
     }
 
+    /**
+     * @see Bundle#putBoolean(String, boolean)
+     */
     public BundleWrapper putBoolean(String key, final boolean b) {
         mBundle.putBoolean(key, b);
         return this;
     }
 
+    /**
+     * @see Bundle#getString(String) (String, boolean)
+     */
     public String getString(final String key, final String... defaultValues) {
         if (containsKey(key)) {
             return getBundle().getString(key);
@@ -156,6 +224,9 @@ public class BundleWrapper implements Parcelable {
         return defaultValues.length > 0 ? defaultValues[0] : null;
     }
 
+    /**
+     * @see Bundle#getInt(String)
+     */
     public int getInt(final String key, final int... defaultValues) {
         if (containsKey(key)) {
             return getBundle().getInt(key);
@@ -163,6 +234,9 @@ public class BundleWrapper implements Parcelable {
         return defaultValues.length > 0 ? defaultValues[0] : 0;
     }
 
+    /**
+     * Returns the wrapped internal bundle instance.
+     */
     public Bundle getBundle() {
         return mBundle;
     }
@@ -176,14 +250,17 @@ public class BundleWrapper implements Parcelable {
     public BundleWrapper clear(String... retainParams) {
         removeKeys(key -> {
             boolean shouldFilter = true;
-            for (int i = 0, len = retainParams.length; i < len; i++) {
-                shouldFilter &= (!key.equals(retainParams[i]));
+            for (final String retainParam : retainParams) {
+                shouldFilter &= (!key.equals(retainParam));
             }
             return shouldFilter;
         });
         return this;
     }
 
+    /**
+     * @see Bundle#remove(String)
+     */
     public BundleWrapper remove(String key) {
         mBundle.remove(key);
         return this;
@@ -203,7 +280,7 @@ public class BundleWrapper implements Parcelable {
     }
 
     /**
-     * Returns an {@lin Observable<String>} emitting all
+     * Returns an {@link Observable<String>} emitting all
      * the keys in this bundle of which the filterFunction applies.
      *
      * @param keyFilterFunction filter function
@@ -217,10 +294,11 @@ public class BundleWrapper implements Parcelable {
     @Override public String toString() {
         final StringBuilder sb = new StringBuilder("BundleWrapper{");
         Observable.from(getBundle().keySet())
-                  .subscribe(key -> {
-                      sb.append("\n" + key)
-                        .append(" : '" + getBundle().get(key) + "', ");
-                  });
+                  .subscribe(key -> sb.append("\n")
+                                      .append(key)
+                                      .append(" : '")
+                                      .append(getBundle().get(key))
+                                      .append("', "));
         sb.append("\n}");
         return sb.toString();
     }

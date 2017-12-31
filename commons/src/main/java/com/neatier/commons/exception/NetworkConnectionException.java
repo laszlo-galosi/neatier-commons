@@ -14,21 +14,40 @@
 package com.neatier.commons.exception;
 
 /**
- * Exception throw by the application when a there is a network connection exception.
+ * An {@link ErrorBundleException} subclass for presenting an error message when network connection
+ * related errors occurs.
+ *
+ * @author László Gálosi
+ * @since 21/09/17
  */
 public class NetworkConnectionException extends ErrorBundleException {
     public NetworkConnectionException() {
         super();
     }
 
+    /**
+     * Constructor with the given error message.
+     *
+     * @see Exception#Exception(String)
+     */
     public NetworkConnectionException(final String message) {
         super(message);
     }
 
+    /**
+     * Construction with the given error message and error cause.
+     *
+     * @see Exception#Exception(String, Throwable)
+     */
     public NetworkConnectionException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructor with the given error cause.
+     *
+     * @see Exception#Exception(Throwable)
+     */
     public NetworkConnectionException(final Throwable cause) {
         super(cause);
     }

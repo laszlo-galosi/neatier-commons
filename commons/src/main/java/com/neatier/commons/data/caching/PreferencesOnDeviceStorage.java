@@ -14,6 +14,7 @@
 
 package com.neatier.commons.data.caching;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import com.google.gson.JsonElement;
@@ -70,18 +71,25 @@ public abstract class PreferencesOnDeviceStorage<K, V>
         return mSharedKeyValueStore.getOrDefault(getStoreableKey(key), null);
     }
 
+    /**
+     *
+     * Returns a  key with type K from the given key and the key prefix.
+     * @see #getKeyClass()
+     */
+    @SuppressLint("DefaultLocale")
+    @SuppressWarnings({ "unchecked", "MalformedFormatString" })
     protected K getStoreableKey(final K key) {
         Class keyClass = getKeyClass();
         if (keyClass == Long.class) {
-            return (K) String.format("%d%s", this.keyPrefix, key);
+            return (K) String.format("%s%d", this.keyPrefix, key);
         } else if (keyClass == Integer.class) {
-            return (K) String.format("%d%s", this.keyPrefix, key.toString());
+            return (K) String.format("%s%d", this.keyPrefix, key);
         }
         return (K) String.format("%s%s", this.keyPrefix, key);
     }
 
     @Override
-    public Observable<Object> readAll() {
+    public Observable readAll() {
         return mSharedKeyValueStore.valuesAsStream();
     }
 
@@ -102,14 +110,16 @@ public abstract class PreferencesOnDeviceStorage<K, V>
     }
 
     @Override
-    public Observable<Object> keys() {
+    @SuppressWarnings("unchecked")
+    public Observable keys() {
         return mSharedKeyValueStore.keysAsStream().map(o -> {
+            String key = (String) o;
             if (getKeyClass() == Long.class) {
-                return Long.parseLong(((String) o).substring(keyPrefix.length()));
+                return Long.parseLong(key.substring(keyPrefix.length()));
             } else if (getKeyClass() == Integer.class) {
-                return Integer.parseInt(((String) o).substring(keyPrefix.length()));
+                return Integer.parseInt(key.substring(keyPrefix.length()));
             } else {
-                return (((String) o).substring(keyPrefix.length()));
+                return (key.substring(keyPrefix.length()));
             }
         });
     }

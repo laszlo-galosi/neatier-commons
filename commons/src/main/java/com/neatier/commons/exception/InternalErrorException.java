@@ -14,6 +14,9 @@
 package com.neatier.commons.exception;
 
 /**
+ * An {@link ErrorBundleException} subclass for presenting an error message when something
+ * unexpected happens.
+ *
  * @author László Gálosi
  * @since 30/07/15
  */
@@ -22,14 +25,29 @@ public class InternalErrorException extends ErrorBundleException {
         super();
     }
 
+    /**
+     * Constructor with the given error message.
+     *
+     * @see Exception#Exception(String)
+     */
     public InternalErrorException(final String message) {
         super(message);
     }
 
+    /**
+     * Construction with the given error message and error cause.
+     *
+     * @see Exception#Exception(String, Throwable)
+     */
     public InternalErrorException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructor with the given error cause.
+     *
+     * @see Exception#Exception(Throwable)
+     */
     public InternalErrorException(final Throwable cause) {
         super(cause);
     }
