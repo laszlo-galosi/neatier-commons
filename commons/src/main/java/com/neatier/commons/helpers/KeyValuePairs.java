@@ -38,7 +38,8 @@ import rx.functions.Func1;
  * If {@link Build.VERSION#SDK_INT} is greater then API level 19 {@link Build.VERSION_CODES#KITKAT}
  * internally it uses the more android friendly
  * {@link ArrayMap} then {@link HashMap}
- * Created by László Gálosi on 30/07/15
+ * @author László Gálosi
+ * @since 30/07/15
  */
 public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
 

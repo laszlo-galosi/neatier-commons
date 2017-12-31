@@ -21,7 +21,8 @@ import rx.schedulers.Schedulers;
  * {@link LongTaskScheduler} implementation, which performs the long running operation on the
  * {@link
  * Schedulers#io()} thread, and returns on the {@link AndroidSchedulers#mainThread()}
- * Created by László Gálosi on 03/08/15
+ * @author László Gálosi
+ * @since 03/08/15
  */
 public class LongTaskOnIOScheduler implements LongTaskScheduler {
     @Override

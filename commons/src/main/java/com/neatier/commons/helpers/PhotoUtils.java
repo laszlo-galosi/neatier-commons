@@ -32,7 +32,8 @@ import trikita.log.Log;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by László Gálosi on 22/03/17
+ * @author László Gálosi
+ * @since 22/03/17
  */
 public class PhotoUtils {
     public static final String EXTRA_OUTPUT_PATH = "CameraOutputPath";

@@ -28,7 +28,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 15/04/16
+ * @author László Gálosi
+ * @since 15/04/16
  */
 public class BundleWrapperTest extends CommonsTestCase {
 

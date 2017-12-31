@@ -22,7 +22,8 @@ import rx.Observable;
 /**
  * * Helper abstract class to build and retrieve key value associations which uses {@link Map<K,V>}
  * interface.
- * Created by László Gálosi on 04/08/15
+ * @author László Gálosi
+ * @since 04/08/15
  */
 public interface KeyValueStreamer<K, V> {
 

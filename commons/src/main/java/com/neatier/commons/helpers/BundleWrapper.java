@@ -23,7 +23,8 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Created by László Gálosi on 27/03/16
+ * @author László Gálosi
+ * @since 27/03/16
  */
 public class BundleWrapper implements Parcelable {
 

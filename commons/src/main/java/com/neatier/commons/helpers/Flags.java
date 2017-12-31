@@ -14,7 +14,8 @@
 package com.neatier.commons.helpers;
 
 /**
- * Created by László Gálosi on 17/04/16
+ * @author László Gálosi
+ * @since 17/04/16
  */
 public class Flags {
     public static boolean isSet(int flags, int flag) {

@@ -29,7 +29,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by László Gálosi on 17/09/15
+ * @author László Gálosi
+ * @since 17/09/15
  */
 public class DateTimeHelperTest extends CommonsTestCase {
 

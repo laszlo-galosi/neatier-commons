@@ -14,7 +14,8 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by László Gálosi on 29/07/15
+ * @author László Gálosi
+ * @since 29/07/15
  */
 public class AuthorizationException extends ErrorBundleException {
 

@@ -28,7 +28,8 @@ import java.util.Arrays;
 import rx.functions.Func1;
 
 /**
- * Created by László Gálosi on 25/11/15
+ * @author László Gálosi
+ * @since 25/11/15
  */
 public class ObjectListTransformerStreamTest extends CommonsTestCase {
 

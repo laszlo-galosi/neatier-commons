@@ -28,7 +28,8 @@ import java.lang.annotation.RetentionPolicy;
 import rx.Subscriber;
 
 /**
- * Created by László Gálosi on 31/07/15
+ * @author László Gálosi
+ * @since 31/07/15
  */
 public class RestApiResponseException extends ErrorBundleException {
 

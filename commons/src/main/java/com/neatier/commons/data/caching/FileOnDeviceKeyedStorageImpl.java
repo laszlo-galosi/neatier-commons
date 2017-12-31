@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -13,6 +14,7 @@
 
 package com.neatier.commons.data.caching;
 
+import android.support.annotation.NonNull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,14 +23,17 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import javax.inject.Singleton;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
- * Created by László Gálosi on 24/07/15
+ * FileOnDeviceKeyStorage implementation to store key-value pairs in a {@link File}
+ * locally on the device.
+ *
+ * @author László Gálosi
+ * @since 24/07/15
  */
 @Singleton
 public abstract class FileOnDeviceKeyedStorageImpl<K, V>
-        implements OnDeviceKeyedStorage.FileOnDeviceKeyStorage<K, V> {
+      implements OnDeviceKeyedStorage.FileOnDeviceKeyStorage<K, V> {
 
     private final File directory;
     private final String fileNamePrefix;
@@ -36,10 +41,10 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
     private FilenameFilter mFileNameFilter;
 
     /**
-     * Constructor width a specific file in a specific directory on the device.
+     * Constructor width the given file in the given directory on the device.
      *
      * @param directory the directory containing the specific file.
-     * @param prefix    the file name prefix appended by the key will be the file name.
+     * @param prefix the file name prefix appended by the key will be the file name.
      */
     public FileOnDeviceKeyedStorageImpl(final File directory, final String prefix) {
         this.directory = directory;
@@ -47,16 +52,14 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
     }
 
     /**
-     * Overwrites a particular keyed file named with prefix appended by the key, if the
-     * file not
-     * exists first creates.
+     * Overwrites a particular keyed file named with prefix appended by the key. It creates the file
+     * if it is not exists.
      *
-     * @param key     the int key or id of the content
+     * @param key the int key or id of the content
      * @param content the content value
-     * @throws IOException
      */
     @Override
-    public void writeKeyedContent(final K key, final V content) {
+    public void writeKeyedContent(final K key, @NonNull final V content) {
         setKeyedFile(key);
         try {
             FileWriter writer = new FileWriter(mKeyedFile, false);
@@ -64,11 +67,10 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public V readOneByKey(final K key) {
         StringBuilder fileContentBuilder = new StringBuilder();
@@ -82,14 +84,12 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
             stringLine = bufferedReader.readLine();
             fileContentBuilder.append(stringLine.trim());
             while ((stringLine = bufferedReader.readLine()) != null) {
-                fileContentBuilder.append("\n" + stringLine.trim());
+                fileContentBuilder.append("\n").append(stringLine.trim());
             }
             bufferedReader.close();
             fileReader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-
         }
         return (V) fileContentBuilder.toString();
     }
@@ -97,23 +97,15 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
     @Override
     public Observable<String> readAll() {
         if (directory.exists()) {
-            File[] files = directory.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(final File dir, final String filename) {
-                    return !fileNamePrefix.isEmpty() && filename.contains(fileNamePrefix);
-                }
-            });
-            return Observable.from(files).map(new Func1<File, String>() {
-                @Override
-                public String call(final File f) {
-                    return FileManager.getInstance().readFileContent(f);
-                }
-            });
+            File[] files = directory.listFiles(
+                  (dir, filename) -> !fileNamePrefix.isEmpty() && filename.contains(
+                        fileNamePrefix));
+            return Observable.from(files).map(f -> FileManager.getInstance().readFileContent(f));
         }
         return Observable.empty();
     }
 
-    @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored") @Override
     public void removeOneByKey(final K key) {
         setKeyedFile(key);
         if (containsKey(key)) {
@@ -128,40 +120,31 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
         return resultFiles != null && resultFiles.length == 1;
     }
 
-    @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored") @Override
     public void clear() {
         if (directory.exists()) {
-            File[] files = directory.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(final File dir, final String filename) {
-                    return !fileNamePrefix.isEmpty() && filename.contains(fileNamePrefix);
-                }
-            });
-            for (int i = 0; i < files.length; i++) {
-                files[i].delete();
+            File[] files = directory.listFiles(
+                  (dir, filename) -> !fileNamePrefix.isEmpty() && filename.contains(
+                        fileNamePrefix));
+            for (final File file : files) {
+                file.delete();
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Observable keys() {
         if (directory.exists()) {
-            String[] fileNames = directory.list(new FilenameFilter() {
-                @Override
-                public boolean accept(final File dir, final String filename) {
-                    return !fileNamePrefix.isEmpty() && filename.contains(fileNamePrefix);
-                }
-            });
-            return Observable.from(fileNames).map(new Func1<String, K>() {
-                @Override
-                public K call(final String fileName) {
-                    return (K) extractKeyFromFileName(fileName);
-                }
-            });
+            String[] fileNames = directory.list(
+                  (dir, filename) -> !fileNamePrefix.isEmpty() && filename.contains(
+                        fileNamePrefix));
+            return Observable.from(fileNames).map(fileName -> (K) extractKeyFromFileName(fileName));
         }
         return Observable.empty();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Object extractKeyFromFileName(final String fileName) {
         String keyPart = fileName.substring(fileNamePrefix.length());
@@ -180,21 +163,15 @@ public abstract class FileOnDeviceKeyedStorageImpl<K, V>
     public abstract Class<K> getKeyClass();
 
     private void setKeyedFile(final K key) {
-        final StringBuilder fileNameBuilder = new StringBuilder();
-        fileNameBuilder.append(directory.getPath());
-        fileNameBuilder.append(File.separator);
-        fileNameBuilder.append(this.fileNamePrefix);
-        fileNameBuilder.append(String.format("%d", key));
-        mKeyedFile = new File(fileNameBuilder.toString());
+        final String fileNameBuilder = directory.getPath() +
+              File.separator +
+              this.fileNamePrefix +
+              String.format("%s", key.toString());
+        mKeyedFile = new File(fileNameBuilder);
     }
 
     private void setKeyedFileNameFilter(final K key) {
-        mFileNameFilter = new FilenameFilter() {
-            @Override
-            public boolean accept(final File dir, final String filename) {
-                return dir.equals(directory) && filename.equals(
-                        String.format("%s%d", fileNamePrefix, key));
-            }
-        };
+        mFileNameFilter = (dir, filename) -> dir.equals(directory) && filename.equals(
+              String.format("%s%s", fileNamePrefix, key.toString()));
     }
 }

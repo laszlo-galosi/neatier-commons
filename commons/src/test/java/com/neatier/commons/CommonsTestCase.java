@@ -40,7 +40,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Base class for Robolectric data layer tests.
  * Inherit from this class to create a test.
  * <p/>
- * Created by vandekr on 11/02/14.
+ * @author vandekr
+ * @since 11/02/14.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(sdk = 21, constants = BuildConfig.class, application = ApplicationStub.class, manifest =

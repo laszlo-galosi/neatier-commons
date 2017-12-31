@@ -24,13 +24,13 @@ public abstract class PreferencesTypedValueKeyStorage<K, V> extends PreferencesO
     }
 
     @Override public void writeKeyedContent(final K key, final V content) {
-        mSharedKeyValueStore.put((String) getStorableKey(key),
+        mSharedKeyValueStore.put((String) getStoreableKey(key),
                                  getTypeAdapter().toJson(content)).commit();
     }
 
     @Override public V readOneByKey(final K key) {
         V emptyValue = (V) "{}";
-        Object result = mSharedKeyValueStore.getOrDefault(getStorableKey(key), emptyValue);
+        Object result = mSharedKeyValueStore.getOrDefault(getStoreableKey(key), emptyValue);
         try {
             return getTypeAdapter().fromJson((String) result);
         } catch (IOException e) {

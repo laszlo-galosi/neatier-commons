@@ -14,7 +14,8 @@
 package com.neatier.commons.helpers;
 
 /**
- * Created by László Gálosi on 23/03/16
+ * @author László Gálosi
+ * @since 23/03/16
  */
 public interface Leakable {
     void clearLeakables();

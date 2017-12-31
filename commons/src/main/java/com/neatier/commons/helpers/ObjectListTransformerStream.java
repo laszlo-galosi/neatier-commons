@@ -19,7 +19,8 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Created by László Gálosi on 25/11/15
+ * @author László Gálosi
+ * @since 25/11/15
  */
 public class ObjectListTransformerStream<O extends Object, T extends Object> {
     private List<O> mObjectList;

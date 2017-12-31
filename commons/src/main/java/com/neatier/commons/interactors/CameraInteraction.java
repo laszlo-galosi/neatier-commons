@@ -19,7 +19,8 @@ import com.neatier.commons.helpers.Leakable;
 import rx.Observable;
 
 /**
- * Created by LargerLife on 02/02/17.
+ * @author LargerLife
+ * @since 02/02/17.
  */
 
 public interface CameraInteraction extends Leakable {

@@ -33,7 +33,8 @@ import rx.functions.Func1;
  * Helper class to build key value pairs which uses {@link SharedPreferences} internally.
  * You must explicitly call {@link #apply()} or {@link #commit()} jusr like in the case of {@link
  * SharedPreferences.Editor}
- * Created by László Gálosi on 04/08/15
+ * @author László Gálosi
+ * @since 04/08/15
  */
 
 public class SharedKeyValueStore<K, V> implements KeyValueStreamer<K, V>, SharedPreferences.Editor {

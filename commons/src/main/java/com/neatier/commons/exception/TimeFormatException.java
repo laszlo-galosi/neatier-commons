@@ -14,7 +14,8 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by Krisztian on 4/9/2015.
+ * @author Krisztian
+ * @since 4/9/2015.
  */
 public class TimeFormatException extends IllegalArgumentException {
     public TimeFormatException() {

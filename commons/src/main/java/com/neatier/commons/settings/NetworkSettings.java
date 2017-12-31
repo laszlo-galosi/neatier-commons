@@ -16,7 +16,8 @@ package com.neatier.commons.settings;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by László Gálosi on 08/08/15
+ * @author László Gálosi
+ * @since 08/08/15
  */
 public class NetworkSettings {
     //Networking related constants

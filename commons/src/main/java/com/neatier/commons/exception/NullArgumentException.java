@@ -14,7 +14,8 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by Krisztian on 11/9/15.
+ * @author Krisztian
+ * @since 11/9/15.
  */
 public class NullArgumentException extends IllegalArgumentException {
     public NullArgumentException() {

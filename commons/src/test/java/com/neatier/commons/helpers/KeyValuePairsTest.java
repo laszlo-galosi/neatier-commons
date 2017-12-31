@@ -41,7 +41,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 30/07/15
+ * @author László Gálosi
+ * @since 30/07/15
  */
 @Config(sdk = 16, constants = BuildConfig.class, application = ApplicationStub.class, manifest =
         Config.NONE)

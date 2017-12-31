@@ -14,7 +14,8 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by László Gálosi on 30/07/15
+ * @author László Gálosi
+ * @since 30/07/15
  */
 public class InternalErrorException extends ErrorBundleException {
     public InternalErrorException() {

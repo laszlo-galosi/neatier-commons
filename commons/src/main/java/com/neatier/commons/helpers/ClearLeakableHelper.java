@@ -17,7 +17,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 /**
- * Created by László Gálosi on 09/11/15
+ * @author László Gálosi
+ * @since 09/11/15
  */
 public class ClearLeakableHelper {
     private static final Field TEXT_LINE_CACHED;

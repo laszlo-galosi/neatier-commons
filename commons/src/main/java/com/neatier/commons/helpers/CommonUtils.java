@@ -33,7 +33,8 @@ import trikita.log.Log;
 import static android.text.Html.fromHtml;
 
 /**
- * Created by László Gálosi on 19/06/16
+ * @author László Gálosi
+ * @since 19/06/16
  */
 public class CommonUtils {
     public static String cleanNewLine(final String text) {

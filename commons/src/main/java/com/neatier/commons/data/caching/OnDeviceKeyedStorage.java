@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -13,32 +14,33 @@
 
 package com.neatier.commons.data.caching;
 
-import android.support.annotation.NonNull;
 import rx.Observable;
 
 /**
- * Interface for different storage options which stores  a key-content pair on the device.
- * The key is ajn integer f.ex.: an uid, the content is a string f.ex: ajson string.
- * Created by László Gálosi on 24/07/15
+ * Interface for different storage options which stores  a key-value pair on the device.
+ * The key is type K, the value is type V.
+ *
+ * @author László Gálosi
+ * @since 24/07/15
  */
 public interface OnDeviceKeyedStorage<K, V> {
     /**
-     * write operation for a key-value pair
+     * Write operation for a key-value pair
      *
-     * @param key     the int key or id of the content
-     * @param content the content value
-     * @throws if a writing error occurs.
+     * @param key the  key with type K
+     * @param content the content with type V value
      */
-    void writeKeyedContent(K key, @NonNull V content);
+    void writeKeyedContent(K key, V content);
 
     /**
-     * @param key the key id
-     * @return the stored content identified by the key.
+     * Returns the stored content identified by the key.
+     *
+     * @param key the key
      */
     V readOneByKey(K key);
 
     /**
-     * @return an Observable from all the stored individual contents.
+     * Returns an Observable emitting all the stored contents.
      */
     Observable readAll();
 
@@ -46,28 +48,42 @@ public interface OnDeviceKeyedStorage<K, V> {
      * Removes a keyed content from the storage.
      *
      * @param key the key
-     * @throws Exception if error occured upon removing.
      */
     void removeOneByKey(K key);
 
     /**
-     * Checks whether the specifed key is exist in the storage.
-     *
-     * @return true if the key is stored on the device.
+     * Returns true if the given key is exist in the storage.
      */
     boolean containsKey(K key);
 
     /**
-     * @return a int array to iterate over.
+     * Removes all stored keys.
      */
     void clear();
 
+    /**
+     * Returns an Observable emitting all the stored keys.
+     */
     Observable keys();
 
+    /**
+     * OnDeviceKeyedStorage sub interface which stores the key value pairs in a File on the
+     * device
+     *
+     * @param <K> the type of the key
+     * @param <V> tje type of the value
+     */
     interface FileOnDeviceKeyStorage<K, V> extends OnDeviceKeyedStorage<K, V> {
+        /**
+         * Returns a key object with type K from the given fileName.
+         *
+         * @see #getKeyClass()
+         */
         Object extractKeyFromFileName(final String fileName);
 
+        /**
+         * Returns the class of the keys.
+         */
         Class<K> getKeyClass();
-
     }
 }

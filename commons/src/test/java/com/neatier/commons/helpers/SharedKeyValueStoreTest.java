@@ -35,7 +35,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Created by László Gálosi on 04/08/15
+ * @author László Gálosi
+ * @since 04/08/15
  */
 public class SharedKeyValueStoreTest extends CommonsTestCase {
 

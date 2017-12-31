@@ -56,7 +56,8 @@ import static net.danlew.android.joda.DateUtils.FORMAT_SHOW_WEEKDAY;
 import static net.danlew.android.joda.DateUtils.FORMAT_SHOW_YEAR;
 
 /**
- * Created by László Gálosi on 13/09/15
+ * @author László Gálosi
+ * @since 13/09/15
  */
 public class DateTimeHelper {
 
