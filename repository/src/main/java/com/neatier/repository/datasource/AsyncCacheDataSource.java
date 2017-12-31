@@ -56,7 +56,7 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
      * if any Exception occurred.
      */
     @SuppressWarnings("unchecked")
-    public Observable getAllAsync() {
+    public Observable<V> getAllAsync() {
         return onDeviceKeyedStorage.keys().flatMap(key -> {
             try {
                 V value = onDeviceKeyedStorage.readOneByKey((K) key);

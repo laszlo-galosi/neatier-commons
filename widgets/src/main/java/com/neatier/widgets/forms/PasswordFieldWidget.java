@@ -24,9 +24,11 @@ import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.TintTypedArray;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import com.neatier.commons.helpers.Preconditions;
 import com.neatier.widgets.R;
@@ -37,7 +39,19 @@ import com.neatier.widgets.helpers.WidgetUtils;
 import static android.R.attr.inputType;
 
 /**
- * Created by László Gálosi on 27/02/17
+ * An {@link EditFieldWidget} sub class of a widget with password transformation type type,
+ * and a reveal compound button.
+ * <p>Custom style attributes includes {@link EditFieldWidget}'s attributes:
+ * <ul>
+ * <li>app:pf_buttonDrawable - drawable resource of the reveal password button</li>
+ * <li>app:pf_buttonTintList - {@link ColorStateList} of the reveal password button</li>
+ * <li>app:pf_autoHide - true if the password should be revealed when the field gets the focus</li>
+ * </ul>
+ *
+ * @author László Gálosi
+ * @see EditText#setTransformationMethod(TransformationMethod)
+ * @see PasswordTransformationMethod#getInstance()
+ * @since 27/02/17
  */
 public class PasswordFieldWidget extends EditFieldWidget {
 
@@ -94,7 +108,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
 
     public PasswordFieldWidget setPasswordRevealed(final boolean passwordRevealed) {
         isPasswordRevealed = passwordRevealed;
-        WidgetUtils.setVisibilityOf(mBtnReveal, mAutoHide ? getEditText().hasFocus() : true);
+        WidgetUtils.setVisibilityOf(mBtnReveal,     mAutoHide ? getEditText().hasFocus() : true);
         int defaultColor = mFieldTextColor;
         mBtnReveal.setImageDrawable(
               /*DrawableHelper.drawableForColorState*/

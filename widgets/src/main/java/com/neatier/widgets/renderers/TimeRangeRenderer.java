@@ -25,7 +25,11 @@ import com.neatier.widgets.helpers.DisplayableValue;
 import org.joda.time.DateTime;
 
 /**
- * Created by László Gálosi on 29/04/16
+ * {@link Renderable} implementation for rendering date time range with a starting and ending {@link
+ * DateTime}s.
+ *
+ * @author László Gálosi
+ * @since 29/04/16
  */
 public class TimeRangeRenderer implements Renderable<DateTime> {
 

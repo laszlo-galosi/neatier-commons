@@ -20,7 +20,10 @@ import android.view.View;
 import com.neatier.widgets.Bindable;
 
 /**
- * Created by László Gálosi on 25/08/15
+ * An {@link ItemViewHolderBase} sub class implementing {@link Bindable} interface.
+ *
+ * @author László Gálosi
+ * @since 25/08/15
  */
 public class ListItemViewHolder extends ItemViewHolderBase implements Bindable {
 

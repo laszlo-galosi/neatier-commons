@@ -25,7 +25,13 @@ import java.util.List;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 18/07/17
+ * An abstract class on {@link ItemAdapter} which implement an infinite loading {@link
+ * RecyclerView.Adapter} meaning when the user scrolls near the last X items, it displays
+ * a progress view, and try to load the next n item by overriding {@link
+ * OnLoadMoreListener#onLoadMore()}
+ *
+ * @author László Gálosi
+ * @since 18/07/17
  */
 public abstract class InfiniteItemAdapter<T> extends ItemAdapter<T> {
 

@@ -16,6 +16,7 @@ package com.neatier.widgets.forms;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
@@ -28,7 +29,10 @@ import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.fernandocejas.arrow.collections.Lists;
 import com.neatier.widgets.R;
@@ -39,7 +43,30 @@ import rx.functions.Func1;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 12/05/16
+ * Abstract class defining custom widget for multiple choice selection like a {@link Spinner} or
+ * {@link RadioButton}.
+ * <p>Custom style attributes:
+ * <ul>
+ * <li>app:layout - the widgets layout resource</li>
+ * <li>app:if_fieldKey - string identifier of the key </li>
+ * <li>app:if_labelViewId - the label view </li>
+ * <li>app:if_helperViewId - the helper text view id </li>
+ * <li>app:if_widgetLayout the custom widget layout to be inflated</li>
+ * <li>app:if_showLabel - true if the label should be visible</li>
+ * <li>app:if_showHelper - true if the helper text should be visible</li>
+ * <li>app:if_label - label text</li>
+ * <li>app:if_helper - helper text</li>
+ * <li>app:if_labelFormat -label {@link String#format(String, Object...)}</li>
+ * <li>app:if_labelTextColor - label text color resource</li>
+ * <li>app:if_helperTextColor helper text color resource</li>
+ * <li>app:cw_choiceIds - array resource of the choice id-s</li>
+ * <li>app:cw_choiceNames - string array resource of the choice titles</li>
+ * <li>app:cw_choiceValues - array resource of the choice values</li>
+ * </ul>
+ * </p>
+ *
+ * @author László Gálosi
+ * @since 12/05/16
  */
 public abstract class ChoiceFieldWidget<V> extends FrameLayout
       implements HasInputField<String, V>, HasChoiceValue<Integer, V> {
@@ -151,7 +178,6 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
                                                       keyAtFunc());
                     break;
             }
-
         }
     }
 

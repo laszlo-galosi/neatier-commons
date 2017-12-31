@@ -18,6 +18,7 @@ import android.content.res.ColorStateList;
 import android.databinding.BindingMethod;
 import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
@@ -27,12 +28,45 @@ import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.DrawableHelper;
 
 /**
- * Created by László Gálosi on 27/02/17
+ * Custom widget for a input field widget with compound Drawables button.
+ * <p>Custom style attributes:
+ * <ul>
+ * <li>app:layout - the widgets layout resource</li>
+ * <li>app:if_fieldKey - string identifier of the key </li>
+ * <li>app:if_labelViewId - the label view </li>
+ * <li>app:if_helperViewId - the helper text view id </li>
+ * <li>app:if_widgetLayout the custom widget layout to be inflated</li>
+ * <li>app:if_showLabel - true if the label should be visible</li>
+ * <li>app:if_showHelper - true if the helper text should be visible</li>
+ * <li>app:if_label - label text</li>
+ * <li>app:if_helper - helper text</li>
+ * <li>app:if_labelFormat -label {@link String#format(String, Object...)}</li>
+ * <li>app:if_labelTextColor - label text color resource</li>
+ * <li>app:if_helperTextColor helper text color resource</li>
+ * <li>app:ew_labelAsHint - true if the label should be shown as the {@link EditText} hint</li>
+ * <li>app:ew_helperAsHint - true if the helper text should be shown as the {@link EditText}
+ * hint</li>
+ * <li>app:ew_multiLine" true if the {@link EditText} can be multiline</li>
+ * <li>app:ew_unfocusedFieldAlign - text alignment of the {@link EditText#setGravity(int)} in
+ * unfocused mode </li>
+ * <li>app:ew_focusedFieldAlign - text alignment of the {@link EditText#setGravity(int)} in focused
+ * mode </li>
+ * <li>app:value - the {@link EditText} initial value./>
+ * <li>app:cbfw_clickableViewId - the view id of the button which is clickable</li>
+ * <li>app:cbfw_buttonDrawable- the icon drawable resource of the button </li>
+ * <li>app:cbfw_drawableTintList - {@link StateListDrawable} resource of the button</li>
+ * <li>app:cbfw_onClick - OnClickListener for the button</li>
+ * </ul>
+ * </p>
+ *
+ * @author László Gálosi
+ * @since 27/02/17
  */
 @BindingMethods({
                       @BindingMethod(type = CompoundButtonFieldWidget.class,

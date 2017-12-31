@@ -13,6 +13,7 @@
 
 package com.neatier.widgets.forms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
@@ -30,6 +31,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -49,7 +51,37 @@ import rx.subscriptions.CompositeSubscription;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 12/05/16
+ * A custom {@link EditText} widget with label and helper and error text (similar to one defined in
+ * Material Design).
+ *
+ * <p>Custom style attributes:
+ * <ul>
+ * <li>app:layout - the widgets layout resource</li>
+ * <li>app:if_fieldKey - string identifier of the key </li>
+ * <li>app:if_labelViewId - the label view </li>
+ * <li>app:if_helperViewId - the helper text view id </li>
+ * <li>app:if_widgetLayout the custom widget layout to be inflated</li>
+ * <li>app:if_showLabel - true if the label should be visible</li>
+ * <li>app:if_showHelper - true if the helper text should be visible</li>
+ * <li>app:if_label - label text</li>
+ * <li>app:if_helper - helper text</li>
+ * <li>app:if_labelFormat -label {@link String#format(String, Object...)}</li>
+ * <li>app:if_labelTextColor - label text color resource</li>
+ * <li>app:if_helperTextColor helper text color resource</li>
+ * <li>app:ew_labelAsHint - true if the label should be shown as the {@link EditText} hint</li>
+ * <li>app:ew_helperAsHint - true if the helper text should be shown as the {@link EditText}
+ * hint</li>
+ * <li>app:ew_multiLine" true if the {@link EditText} can be multiline</li>
+ * <li>app:ew_unfocusedFieldAlign - text alignment of the {@link EditText#setGravity(int)} in
+ * unfocused mode </li>
+ * <li>app:ew_focusedFieldAlign - text alignment of the {@link EditText#setGravity(int)} in focused
+ * mode </li>
+ * <li>app:value - the {@link EditText} initial value./>
+ * </ul>
+ * </p>
+ *
+ * @author László Gálosi
+ * @since 12/05/16
  */
 public class EditFieldWidget extends FrameLayout
       implements HasInputField<String, String> {
@@ -63,8 +95,8 @@ public class EditFieldWidget extends FrameLayout
     protected String mLabelText;
     protected String mHelperText;
 
-    protected int mFocusedFieldAlign = Gravity.LEFT;
-    protected int mUnFocusedFieldAlign = Gravity.LEFT;
+    @SuppressLint("RtlHardcoded") protected int mFocusedFieldAlign = Gravity.LEFT;
+    @SuppressLint("RtlHardcoded") protected int mUnFocusedFieldAlign = Gravity.LEFT;
 
     protected boolean mShowHelper;
     protected boolean mShowLabel;
@@ -130,6 +162,7 @@ public class EditFieldWidget extends FrameLayout
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RtlHardcoded")
     public EditFieldWidget(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -247,7 +280,6 @@ public class EditFieldWidget extends FrameLayout
 
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        //mEditText.setOnFocusChangeListener(mFocusChangeListener);
     }
 
     @Override protected void onDetachedFromWindow() {
@@ -451,12 +483,14 @@ public class EditFieldWidget extends FrameLayout
     public void showSoftInput() {
         InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
               Context.INPUT_METHOD_SERVICE);
+        assert mgr != null;
         mgr.showSoftInput(getEditText(), InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void hideSoftInput() {
         InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
               Context.INPUT_METHOD_SERVICE);
+        assert mgr != null;
         mgr.hideSoftInputFromInputMethod(getEditText().getWindowToken(),
                                          InputMethodManager.HIDE_IMPLICIT_ONLY);
     }

@@ -25,14 +25,36 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+/**
+ * A recyclerView ItemDecoration subclass which draws a drawable around the recycler view
+ * items with the specified orientation.
+ */
 public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
 
+    /**
+     * Constant for horizontal recycler view orientation.
+     */
     public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+    /**
+     * Constant for vertical recycler view orientation.
+     */
     public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
+
+    /**
+     * Constant attribute set for the {@link android.R.attr#listDivider} attribute.
+     */
     private static final int[] ATTRS = new int[] {
           android.R.attr.listDivider
     };
+
+    /**
+     * The divider drawable.
+     */
     private Drawable mDivider;
+
+    /**
+     * The orientation of the recycler view items.
+     */
     private int mOrientation = VERTICAL_LIST;
 
     public DrawableItemDecoration(Context context) {
@@ -46,6 +68,10 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
         setOrientation(VERTICAL_LIST);
     }
 
+    /**
+     * Set the orientation of the recycler view items to the given orientation {@link
+     * #HORIZONTAL_LIST} or {@link #VERTICAL_LIST}
+     */
     public DrawableItemDecoration setOrientation(int orientation) {
         if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
             throw new IllegalArgumentException("invalid orientation");
@@ -54,15 +80,32 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
         return this;
     }
 
+    /**
+     * Constructor with the given drawable resource and context and {@link #VERTICAL_LIST} default
+     * orientation.
+     */
     public DrawableItemDecoration(@DrawableRes int drawableRes, Context context) {
         this(drawableRes, context, VERTICAL_LIST);
     }
 
+    /**
+     * Constructor with the given drawable resource and context and orientation.
+     */
     public DrawableItemDecoration(@DrawableRes int drawableRes, Context context, int orientation) {
         mDivider = ContextCompat.getDrawable(context, drawableRes);
         setOrientation(orientation);
     }
 
+    /**
+     * Draw any appropriate decorations into the Canvas according to the orientation  supplied to
+     * the RecyclerView.
+     * Any content drawn by this method will be drawn after the item views are drawn
+     * and will thus appear over the views.
+     *
+     * @param c Canvas to draw into
+     * @param parent RecyclerView this ItemDecoration is drawing into
+     * @param state The current state of RecyclerView.
+     */
     @Override
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         if (mOrientation == VERTICAL_LIST) {
@@ -72,6 +115,9 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
+    /**
+     * Draws the decoration vertically into th given canvas supplied to the given RecyclerView.
+     */
     private void drawVertical(Canvas c, RecyclerView parent) {
         final int left = parent.getPaddingLeft();
         final int right = parent.getWidth() - parent.getPaddingRight();
@@ -90,6 +136,9 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
+    /**
+     * Draws the decoration horizontally  into th given canvas supplied to the given RecyclerView.
+     */
     private void drawHorizontal(Canvas c, RecyclerView parent) {
         final int top = parent.getPaddingTop();
         final int bottom = parent.getHeight() - parent.getPaddingBottom();
@@ -108,10 +157,23 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
+    /**
+     * Returns true whether the given child of the given parent RecyclerView should be decorated or
+     * not.
+     */
     public boolean isDecorated(View view, RecyclerView parent) {
         return true;
     }
 
+    /**
+     * Can be  overridden to control the decoration drawing for the given outer rectangle
+     * of the given RecyclerView child view depending on the given RecyclerView state.
+     *
+     * @param outRect the outer rectangle of the child view
+     * @param view the child view on which the item decoration should be drawn
+     * @param parent the pRecyclerView parent of the child iew.
+     * @param state the RecyclerView's state.
+     */
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
           RecyclerView.State state) {

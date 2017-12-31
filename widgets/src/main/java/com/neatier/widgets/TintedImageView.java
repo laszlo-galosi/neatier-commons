@@ -13,10 +13,12 @@
 
 package com.neatier.widgets;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.databinding.BindingMethod;
 import android.databinding.BindingMethods;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.content.res.AppCompatResources;
@@ -24,10 +26,14 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.TintTypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import com.neatier.widgets.helpers.ColorStates;
 import com.neatier.widgets.helpers.DrawableHelper;
 
 /**
- * Created by László Gálosi on 27/02/17
+ * A {@link AppCompatImageView} sub class with tinted drawable.
+ *
+ * @author László Gálosi
+ * @since 27/02/17
  */
 @BindingMethods(
       @BindingMethod(type = TintedImageView.class, attribute = "tiv_drawableTintList",
@@ -35,6 +41,9 @@ import com.neatier.widgets.helpers.DrawableHelper;
 )
 public class TintedImageView extends AppCompatImageView {
 
+    /**
+     * The color of the image drawable.
+     */
     private ColorStateList mDrawableColor;
 
     public TintedImageView(final Context context) {
@@ -45,6 +54,20 @@ public class TintedImageView extends AppCompatImageView {
         this(context, attrs, 0);
     }
 
+    /**
+     * Constructor performing inflation from XML and apply a class-specific base style from the
+     * given theme attribute or style resource.
+     *
+     * @param context The Context the view is running in, through which it can
+     * access the current theme, resources, etc.
+     * @param attrs The attributes of the XML tag that is inflating the view.
+     * @param defStyleAttr An attribute in the current theme that contains a
+     * reference to a style resource that supplies default values for
+     * the view. Can be 0 to not look for defaults.
+     * @see super#AppCompatImageView(Context)  (Context, AttributeSet, int)
+     * @see R.styleable#TintedImageView_tiv_drawableTintList
+     */
+    @SuppressLint("RestrictedApi")
     public TintedImageView(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -52,12 +75,20 @@ public class TintedImageView extends AppCompatImageView {
                                                                  R.styleable.TintedImageView,
                                                                  defStyleAttr, 0);
         mDrawableColor =
-              createDefaultColorStateList(a, R.styleable.TintedImageView_tiv_drawableTintList,
-                                          android.R.attr.textColorPrimary,
-                                          R.color.colorTextPrimary);
+              ColorStates.with(a, context)
+                         .styleable(R.styleable.TintedImageView_tiv_drawableTintList, 0)
+                         .defaultColorRes(R.color.colorPrimary)
+                         .stateSet(EMPTY_STATE_SET)
+                         .create();
         a.recycle();
     }
 
+    /**
+     * This function is called whenever the state of the view changes in such
+     * a way that it impacts the state of drawables being shown.
+     *
+     * @see Drawable#setState(int[])
+     */
     @Override protected void drawableStateChanged() {
         super.drawableStateChanged();
         int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
@@ -69,34 +100,16 @@ public class TintedImageView extends AppCompatImageView {
         );
     }
 
-    private ColorStateList createDefaultColorStateList(TintTypedArray a, int attr,
-          int baseColorThemeAttr,
-          @ColorRes int... defaultColorRes) {
-        final TypedValue value = new TypedValue();
-        if (!getContext().getTheme().resolveAttribute(baseColorThemeAttr, value, true)) {
-            return null;
-        }
-        ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
-              getContext(), value.resourceId);
-        if (!getContext().getTheme().resolveAttribute(
-              android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
-            return null;
-        }
-        int baseColor = baseColorStateList.getDefaultColor();
-        int defaultColor =
-              defaultColorRes.length > 0 ? ContextCompat.getColor(getContext(), defaultColorRes[0])
-                                         : baseColor;
-        return new ColorStateList(new int[][] {
-              EMPTY_STATE_SET
-        }, new int[] {
-              a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
-        });
-    }
-
+    /**
+     * Returns the drawable color as a ColorStateList
+     */
     public ColorStateList getDrawableColor() {
         return mDrawableColor;
     }
 
+    /**
+     * Sets the image drawable color to the given color state list.
+     */
     public void setDrawableColor(final ColorStateList drawableColor) {
         mDrawableColor = drawableColor;
     }

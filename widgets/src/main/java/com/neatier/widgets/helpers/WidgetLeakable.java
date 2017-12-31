@@ -21,11 +21,12 @@ import com.neatier.commons.helpers.Leakable;
 import java.util.EventListener;
 
 /**
- * Created by László Gálosi on 03/09/15
+ * @author László Gálosi
+ * @since 03/09/15
  */
 public interface WidgetLeakable extends Leakable {
     /**
-     * Method to free up all potentional leak suspects, e.g. {@link EventListener}s, or anonymous,
+     * Method to free up all leak suspects, e.g. {@link EventListener}s, or anonymous,
      * inner classes which can leak {@link Activity} by preserving a reference for a {@link
      * View} or the {@link Context}
      * This method should be called on {@link Fragment#onDestroyView()}

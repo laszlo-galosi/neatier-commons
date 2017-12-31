@@ -18,6 +18,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.neatier.widgets.R;
 
+/**
+ * ItemClickSupport for {@link RecyclerView} items with custom {@link OnItemClickListener} and
+ * {@link OnItemLongClickListener}. attached by {@link #addTo(RecyclerView)} to RecyclerView.
+ *
+ * @see #setOnItemClickListener(OnItemClickListener)
+ * @see #setOnItemLongClickListener(OnItemLongClickListener)
+ */
 public class ItemClickSupport {
     private final RecyclerView mRecyclerView;
     private OnItemClickListener mOnItemClickListener;

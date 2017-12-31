@@ -14,24 +14,56 @@
 package com.neatier.widgets.forms;
 
 import android.util.SparseArray;
+import android.widget.RadioButton;
+import android.widget.Spinner;
 
 /**
- * Created by László Gálosi on 29/11/16
+ * Interface defining a widget with multiple selectable options.
+ * Options has an id of type K, and a value of type V.
+ *
+ * @author László Gálosi
+ * @see Spinner
+ * @see RadioButton
+ * @since 29/11/16
  */
 public interface HasChoiceValue<K, V> {
+    /**
+     * Returns the array of selectable option id-s with type K.
+     */
     SparseArray<K> choiceIds();
 
+    /**
+     * Returns the array of selectable option values with type V.
+     */
     SparseArray<V> choiceValues();
 
+    /**
+     * Returns the string array of selectable option names
+     */
     SparseArray<String> choiceNames();
 
+    /**
+     * Returns the option value by the given key.
+     */
     V valueByKey(K key);
 
+    /**
+     * Returns the option name by the given key.
+     */
     String nameByKey(K key);
 
+    /**
+     * Returns the option index  by the given key.
+     */
     int indexByKey(K key);
 
+    /**
+     * Returns the option's index in the options array by the given value.
+     */
     int indexByValue(V value);
 
+    /**
+     * Returns the id of the option by the given index in the options array.
+     */
     K keyAt(int index);
 }

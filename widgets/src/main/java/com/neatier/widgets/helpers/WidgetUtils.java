@@ -21,16 +21,21 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,18 +43,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.fernandocejas.arrow.optional.Optional;
+import com.neatier.widgets.R;
 import com.squareup.picasso.Transformation;
+import java.util.Locale;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 06/04/16
+ * Helper class containing {@link View} related helper methods.
+ *
+ * @author László Gálosi
+ * @since 06/04/16
  */
 public class WidgetUtils {
 
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
-    private static final int COLORDRAWABLE_DIMENSION = 2;
+    private static final int COLOR_DRAWABLE_DIMENSION = 2;
 
     /**
+     * Returns and creates a StateFul drawable from the given arguments.
+     *
      * @param stateDrawables map containing states and corresponding drawables.
      * @param defaultDrawableRes the default drawable resource if the mapped one not found.
      * @param context the application context
@@ -75,13 +87,18 @@ public class WidgetUtils {
         return stateListDrawable;
     }
 
+    /**
+     * Returns true if the given view's visibility is equal to the given optional visibilityDef or
+     * if omitted if the view visibility is {@link View#VISIBLE}
+     */
     public static boolean isVisible(final View view, int... visibilityDef) {
         return view.getVisibility() == (visibilityDef.length > 0 ? visibilityDef[0] : View.VISIBLE);
     }
 
     /**
-     * Set the view text, abd set the  visibility based on the srtingRes value if it's > 0, you can
-     * överride this rule wuth forceVisible vararg parameter, if provided.
+     * Set the view text, abd set the  visibility based on the stringRes value if it's > 0, you can
+     * override this rule with forceVisible vararg parameter, if provided.
+     * <p>The view nullability and instance of {@link TextView} is checked.</p>
      */
     public static void setTextAndVisibilityOf(@Nullable View view, @StringRes int stringRes,
           boolean... forceVisible) {
@@ -94,9 +111,31 @@ public class WidgetUtils {
     }
 
     /**
-     * Set the view text, abd set the  visibility based on the text value if it's not null and not
-     * empty, you can
-     * överride this rule wuth forceVisible vararg parameter, if provided.
+     * Set the text of the given view to the given text resource.
+     * <p>The view nullability and instance of {@link TextView} is checked.</p>
+     */
+    public static void setTextOf(View view, @StringRes int textRes) {
+        if (view != null && textRes > 0) {
+            ((TextView) view).setText(textRes);
+        }
+    }
+
+    /**
+     * Set the visibility of the given view to {@link View#VISIBLE} if the given visible value is
+     * true or {@link View#INVISIBLE} otherwise.
+     * <p>The view nullability is checked.</p>
+     */
+    public static void setVisibilityOf(@Nullable View view, boolean visible) {
+        if (view != null) {
+            view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    /**
+     * Set the text  of the given view to the given text string. It also set the visibility of the
+     * given view to {@link View#VISIBLE} if the given vararg boolean argument is provided and is
+     * true or {@link View#INVISIBLE} otherwise.
+     * <p>The view nullability and instance of {@link TextView} is checked.</p>
      */
     public static void setTextAndVisibilityOf(@Nullable View view, String text,
           boolean... forceVisible) {
@@ -108,30 +147,59 @@ public class WidgetUtils {
         }
     }
 
-    public static void setVisibilityOf(@Nullable View view, boolean visible) {
-        if (view != null) {
-            view.setVisibility(visible ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    public static void setVisibilityOf(@Nullable View view, int visibility) {
-        if (view != null) {
-            view.setVisibility(visibility);
-        }
-    }
-
+    /**
+     * Set the text of the given view to the given text string.
+     * <p>The view nullability and instance of {@link TextView} is checked.</p>
+     */
     public static void setTextOf(@Nullable View view, String text) {
         if (view != null) {
             ((TextView) view).setText(cleanNewLine(text));
         }
     }
 
+    /**
+     * Removes  any newLine characters of the given string and returns a new string.
+     */
+    @Nullable private static String cleanNewLine(final String text) {
+        if (text == null) {
+            return null;
+        }
+        String newLine = System.getProperty("line.separator");
+        //Log.v("cleanNewLine", text, s);
+        return text.replaceAll("\\r\\n", newLine).replaceAll("\\t", " ");
+    }
+
+    /**
+     * Set the visibility of the given view to the given value.
+     *
+     * @param view the view to change visibility.
+     * @param visibility the visibility {@link View#VISIBLE}, {@link View#INVISIBLE} or {@link
+     * View#GONE}.
+     */
+    public static void setVisibilityOf(@Nullable View view, int visibility) {
+        if (view != null) {
+            view.setVisibility(visibility);
+        }
+    }
+
+    /**
+     * Set the text color of the given view to the given color.
+     * <p>The view nullability and instance of {@link TextView} is checked.</p>
+     */
     public static void setTextColorOf(@Nullable View view, @ColorInt int color) {
         if (view != null) {
             ((TextView) view).setTextColor(color);
         }
     }
 
+    /**
+     * Set the image  drawable of the given view to the given image object.
+     * <p>The view nullability and instance of {@link ImageView} is checked.</p>
+     *
+     * @param view the {@link ImageView}instance to set the image of.
+     * @param imageObject can be instance of {@link Integer} as a drawable resource, {@link Bitmap}
+     * or {@link Drawable}
+     */
     public static void setImageOf(@Nullable View view, Object imageObject, Context context) {
         if (view != null && view instanceof ImageView) {
             if (imageObject instanceof Integer) {
@@ -144,22 +212,10 @@ public class WidgetUtils {
         }
     }
 
-    private static String cleanNewLine(final String text) {
-        if (text == null) {
-            return text;
-        }
-        String newLine = System.getProperty("line.separator");
-        String s = text.replaceAll("\\r\\n", newLine).replaceAll("\\t", " ");
-        //Log.v("cleanNewLine", text, s);
-        return s;
-    }
-
-    public static void setTextOf(View view, @StringRes int textRes) {
-        if (view != null && textRes > 0) {
-            ((TextView) view).setText(textRes);
-        }
-    }
-
+    /**
+     * Set the layout size of the given view to the give with and height in pixels.
+     * <p>The given view {@link ViewGroup.LayoutParams} is checked.</p>
+     */
     public static void setLayoutSizeOf(final View view, int width, int height) {
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
         if (layoutParams == null) {
@@ -175,6 +231,14 @@ public class WidgetUtils {
         }
     }
 
+    /**
+     * Change the padding of the given view to the given vararg paddings.
+     *
+     * @param view the view of which paddings is to be set.
+     * @param paddings contains left, top, right, bottom padding values in pixels,if any padding is
+     * omitted that padding is not changed.
+     * @see View#setPadding(int, int, int, int)
+     */
     public static void setPaddingOf(final View view, int... paddings) {
         final int len = paddings.length;
         if (view == null || len == 0) {
@@ -187,12 +251,16 @@ public class WidgetUtils {
         );
     }
 
+    /**
+     * Creates a clickable {@link TextView} from the given TextView by creating a html text with
+     * link for the given htmlText.
+     */
+    @SuppressLint("ClickableViewAccessibility")
     public static void setTextWithLinksOf(TextView textView, String htmlText) {
         setHtmlTextOf(textView, htmlText);
         // TODO https://code.google.com/p/android/issues/detail?id=191430
         //noinspection Convert2Lambda
         textView.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 int action = event.getAction();
@@ -229,15 +297,23 @@ public class WidgetUtils {
         });
     }
 
+    /**
+     * Set the text of the given TextView tot the given html text.
+     * <p>The view nullability and instance of {@link ImageView} is checked.</p>
+     *
+     * @see Html#fromHtml(String)
+     */
     public static void setHtmlTextOf(TextView textView, String htmlText) {
-        textView.setText(
-              TextUtils.isEmpty(htmlText) ? null : trim(Html.fromHtml(replaceNewLines(htmlText))));
+        if (textView != null) {
+            textView.setText(TextUtils.isEmpty(htmlText) ? null : trim(Html.fromHtml(htmlText)));
+        }
     }
 
-    public static String replaceNewLines(String text) {
-        return text.replaceAll("(\r\n|\n\r|\r|\n)", "<br />");
-    }
-
+    /**
+     * Removes all starting and trailing white spaces from the given CharSequence and returns a
+     * trimmed
+     * CharSequence.
+     */
     private static CharSequence trim(CharSequence charSequence) {
         if (TextUtils.isEmpty(charSequence)) {
             return charSequence;
@@ -249,9 +325,19 @@ public class WidgetUtils {
         return charSequence.subSequence(0, end + 1);
     }
 
+    /**
+     * Returns a String from the given text data object according to its class or returns the given
+     * fallback
+     * if no match for the text data.
+     *
+     * @param data the text object instance of {@link Integer} as a string resource, a {@link
+     * String} or calls {@link Object#toString()}
+     * @param fallback vararg as a fallback, if the data is null.
+     */
     @Nullable
-    public static String getTextData(Object data, @Nullable Context context, String... fallback) {
-        Optional<String> textData = Optional.absent();
+    public static String getTextData(@Nullable Object data, @Nullable Context context,
+          String... fallback) {
+        Optional<String> textData;
         if (data == null) {
             if (fallback.length > 0) {
                 return fallback[0];
@@ -276,36 +362,45 @@ public class WidgetUtils {
     }
 
     /**
-     * Will scroll the {@code scrollView} to make {@code viewToScroll} visible
+     * Will scroll the given scroll view to make the given  child view visible.
      *
      * @param scrollView parent of {@code scrollableContent}
      * @param scrollableContent a child of {@code scrollView} which holds the scrollable content
      * (fills the viewport).
-     * @param viewToScroll a child of {@code scrollableContent} to whitch will scroll the the
+     * @param viewToScroll a child of {@code scrollableContent} to which will scroll the the
      * {@code
      * scrollView}
      */
     public static void scrollToView(final NestedScrollView scrollView,
-          final ViewGroup scrollableContent, final View viewToScroll) {
-        long delay = 300; //delay to let finish with possible modifications to ScrollView
+          final ViewGroup scrollableContent,
+          final View viewToScroll) {
+        long delay = 100; //delay to let finish with possible modifications to ScrollView
         scrollView.postDelayed(() -> {
-            Rect rectToScroll = new Rect(); //coordinates to scroll to
-            //fills viewToScrollRect with coordinates of viewToScroll relative to its parent
-            // (LinearLayout)
-            viewToScroll.getHitRect(rectToScroll);
-            //rectToScroll.top = 0;
-            //rectToScroll.left = 0;
-            //ScrollView will make sure, the given viewToScrollRect is visible
-            scrollView.requestChildRectangleOnScreen(scrollableContent, rectToScroll, false);
-            //scrollView.requestChildRectangleOnScreen(viewToScroll, rectToScroll, false);
+            Rect viewToScrollRect = new Rect(); //coordinates to scroll to
+            viewToScroll.getHitRect(
+                  viewToScrollRect); //fills viewToScrollRect with coordinates of
+            // viewToScroll relative to its parent (LinearLayout)
+            scrollView.requestChildRectangleOnScreen(scrollableContent, viewToScrollRect,
+                                                     false); //ScrollView will make sure, the
+            // given viewToScrollRect is visible
         }, delay);
     }
 
+    /**
+     * Creates and returns a {@link Bitmap} from the given drawable with the given width and height.
+     */
+    @Nullable
+    public static Bitmap drawableToBitmap(@NonNull Drawable drawable, int width, int height) {
+        Bitmap bitmap = drawableToBitmap(drawable);
+        assert bitmap != null;
+        return Bitmap.createScaledBitmap(bitmap, width, height, false);
+    }
+
+    /**
+     * Creates and returns a {@link Bitmap} from the given drawable.
+     */
     @Nullable public static Bitmap drawableToBitmap(@NonNull Drawable drawable) {
-        if (drawable == null) {
-            return null;
-        }
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable.getBitmap() != null) {
@@ -331,13 +426,66 @@ public class WidgetUtils {
         }
     }
 
+    /**
+     * Creates a {@link ClickableSpan} with the given foreground color, click listener and the given
+     * span range of the text.
+     *
+     * @param view the TextView to create the ClickableSpan
+     * @param fgColor the foreground color of the ClickableSpan
+     * @param cbClick the OnClickListener of the ClickableSpan
+     * @param range the start and end position of the Span
+     * @see SpannableString#setSpan(Object, int, int, int)
+     */
+    public static void setClickableSpanOf(TextView view, @ColorRes int fgColor,
+          View.OnClickListener cbClick, int... range) {
+        String label = (String) view.getText();
+        view.setClickable(true);
+        view.setOnClickListener(cbClick);
+        SpannableString ss = new SpannableString(label);
+        ClickableSpan span = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                cbClick.onClick(textView);
+            }
+        };
+        ss.setSpan(span, 0, label.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        int color = ContextCompat.getColor(view.getContext(),
+                                           fgColor > 0 ? fgColor : R.color.colorAccent);
+        int start = range.length > 0 ? range[0] : 0;
+        int end = range.length > 1 ? range[1] : label.length();
+        ss.setSpan(new ForegroundColorSpan(color),
+                   start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        view.setText(ss);
+    }
+
+    /**
+     * {@link Transformation} sub class to set the image width to the specified target width
+     * and its height is resized to preserve its aspect rations.
+     */
     public static class FixedWidthResizeTransform implements Transformation {
         final int mTargetWidth;
 
-        public FixedWidthResizeTransform(final int mtargetWidth) {
-            this.mTargetWidth = mtargetWidth;
+        /**
+         * Constructor with the give fixed target width.
+         */
+        public FixedWidthResizeTransform(final int targetWidth) {
+            this.mTargetWidth = targetWidth;
         }
 
+        /**
+         * Transform the source bitmap into a new bitmap. If you create a new bitmap instance, you
+         * must
+         * call {@link android.graphics.Bitmap#recycle()} on {@code source}. You may return the
+         * original
+         * if no transformation is required.
+         */
+        @Override public Bitmap transform(final Bitmap source) {
+            return getTransformedBitmap(source);
+        }
+
+        /**
+         * Returns resized bitmap from the given bitmap.
+         */
         public Bitmap getTransformedBitmap(Bitmap bitmap) {
             float aspectRatio = (float) bitmap.getHeight() / (float) bitmap.getWidth();
             int targetHeight = (int) (mTargetWidth * aspectRatio);
@@ -349,12 +497,15 @@ public class WidgetUtils {
             return output;
         }
 
-        @Override public Bitmap transform(final Bitmap source) {
-            return getTransformedBitmap(source);
-        }
-
+        /**
+         * Returns a unique key for the transformation, used for caching purposes. If the
+         * transformation
+         * has parameters (e.g. size, scale factor, etc) then these should be part of the key.
+         */
         @Override public String key() {
-            return String.format("%s_%d", getClass().getSimpleName(), mTargetWidth);
+            return String.format(Locale.getDefault(), "%s_%d", getClass().getSimpleName(),
+                                 mTargetWidth);
         }
     }
 }
+

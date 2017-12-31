@@ -21,7 +21,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by László Gálosi on 23/05/16
+ * A {@link ViewPager} subclass for which swiping paging can be enabled or disabled.
+ *
+ * @author László Gálosi
+ * @since 23/05/16
  */
 public class LockableViewPager extends ViewPager {
 

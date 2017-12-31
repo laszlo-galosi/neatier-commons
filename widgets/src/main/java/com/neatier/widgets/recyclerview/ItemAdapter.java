@@ -25,7 +25,11 @@ import com.neatier.widgets.Bindable;
 import java.util.List;
 
 /**
- * Created by László Gálosi on 18/03/16
+ * A {@link RecyclerView.Adapter} sub class with custom item layout, inflated
+ * at {@link #onCreateViewHolder(ViewGroup, int)}
+ *
+ * @author László Gálosi
+ * @since 18/03/16
  */
 public class ItemAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     protected final Context mContext;

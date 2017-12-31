@@ -28,6 +28,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.neatier.commons.helpers.Preconditions;
@@ -36,7 +37,28 @@ import com.neatier.widgets.helpers.WidgetUtils;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 12/05/16
+ * A custom {@link CheckBox} widget with label and helper and error text (similar to one defined in
+ * Material Design).
+ *
+ * <p>Custom style attributes:
+ * <ul>
+ * <li>app:layout - the widgets layout resource</li>
+ * <li>app:if_fieldKey - string identifier of the key </li>
+ * <li>app:if_labelViewId - the label view </li>
+ * <li>app:if_helperViewId - the helper text view id </li>
+ * <li>app:if_widgetLayout the custom widget layout to be inflated</li>
+ * <li>app:if_showLabel - true if the label should be visible</li>
+ * <li>app:if_showHelper - true if the helper text should be visible</li>
+ * <li>app:if_label - label text</li>
+ * <li>app:if_helper - helper text</li>
+ * <li>app:if_labelFormat -label {@link String#format(String, Object...)}</li>
+ * <li>app:if_labelTextColor - label text color resource</li>
+ * <li>app:if_helperTextColor helper text color resource</li>
+ * </ul>
+ * </p>
+ *
+ * @author László Gálosi
+ * @since 12/05/16
  */
 public class CheckboxFieldWidget extends FrameLayout
       implements HasInputField<String, Boolean> {
@@ -49,7 +71,6 @@ public class CheckboxFieldWidget extends FrameLayout
     private boolean mShowLabel;
 
     private AppCompatCheckBox mCheckBox;
-    private View mItemView;
 
     private Boolean mValue = Boolean.FALSE;
     private @LayoutRes int mLayoutRes;
@@ -101,17 +122,18 @@ public class CheckboxFieldWidget extends FrameLayout
     public void initView(Context context) {
         if (mLayoutRes > 0) {
             removeAllViews();
-            mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
-            WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
+            final View itemView =
+                  LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
+            WidgetUtils.setLayoutSizeOf(itemView, LayoutParams.MATCH_PARENT,
                                         LayoutParams.MATCH_PARENT);
-            addView(mItemView);
+            addView(itemView);
             if (mHelperViewId > 0) {
-                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
+                mHelperView = (TextView) itemView.findViewById(mHelperViewId);
                 setHelper(mHelperText, 0);
             }
-            mCheckBox = (AppCompatCheckBox) mItemView.findViewById(R.id.checkbox);
+            mCheckBox = (AppCompatCheckBox) itemView.findViewById(R.id.checkbox);
             if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+                mLabelView = (TextView) itemView.findViewById(mLabelViewId);
                 initLabelPaint();
             }
             setLabel(mLabelText);
@@ -169,7 +191,6 @@ public class CheckboxFieldWidget extends FrameLayout
         if (mHelperView == null && mHelperViewId > 0) {
             mHelperView = (TextView) findViewById(mHelperViewId);
         }
-        ;
         WidgetUtils.setTextOf(mHelperView, mHelperText);
         if (colorRes > 0 && mHelperView != null) {
             mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));

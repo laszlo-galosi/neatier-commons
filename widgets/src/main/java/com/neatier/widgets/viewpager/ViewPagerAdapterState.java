@@ -5,6 +5,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
 
+/**
+ * Parcelable implementation for saving and restoring {@link ViewPagerAdapter}
+ * views state.
+ */
 public class ViewPagerAdapterState implements Parcelable {
 
     public static final Creator<ViewPagerAdapterState> CREATOR =

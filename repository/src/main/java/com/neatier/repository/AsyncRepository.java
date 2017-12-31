@@ -271,7 +271,7 @@ public class AsyncRepository<K, V extends Identifiable<K>>
         final List<V> resultList = new ArrayList<>();
         return Observable.from(cacheDataSources)
                          .flatMap(cacheDataSource -> cacheDataSource.getAllAsync())
-                         .collect(() -> resultList, (vs, v) -> vs.add((V) v));
+                         .collect(() -> resultList, (vs, v) -> vs.add(v));
     }
 
     /**

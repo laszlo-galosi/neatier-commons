@@ -19,6 +19,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.AnimRes;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
@@ -34,8 +35,12 @@ import com.neatier.widgets.R;
 import rx.functions.Action1;
 
 /**
- * Created by László Gálosi on 26/08/15
+ * Helper class containing Animation related helper functions.
+ *
+ * @author László Gálosi
+ * @since 26/08/15
  */
+@SuppressLint("ObsoleteSdkInt")
 public class AnimationUtils {
 
     private static final boolean HONEYCOMB_AND_ABOVE =
@@ -47,6 +52,14 @@ public class AnimationUtils {
           new FastOutLinearInInterpolator();
     public static final Interpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
 
+    /**
+     * Performs a fade animation for the target view, for {@link Build.VERSION#SDK_INT} >= 14.
+     *
+     * @param targetView the animated view
+     * @param endAlphaValue the ending alpha of the fade animation
+     * @param interpolator the animation interpolator.
+     * @param listener the animation listener
+     */
     public static ViewPropertyAnimatorCompat fadeCompat(View targetView, float endAlphaValue,
           Interpolator interpolator, ViewPropertyAnimatorListener listener) {
         return ViewCompat.animate(targetView)
@@ -56,6 +69,15 @@ public class AnimationUtils {
                          .setListener(listener);
     }
 
+    /**
+     * Performs a fade animation for the target view, for {@link Build.VERSION#SDK_INT} < 14.
+     *
+     * @param targetView the animated view
+     * @param animResId the animation resource to load
+     * @param interpolator the animation interpolator.
+     * @param listener the animation listener
+     * @link duration the duration of the fade animation
+     */
     public static Animation fadeLegacy(View targetView, @AnimRes int animResId, long duration,
           Interpolator interpolator, Animation.AnimationListener listener) {
         Animation animation =
@@ -67,6 +89,15 @@ public class AnimationUtils {
         return animation;
     }
 
+    /**
+     * Performs a rotation animation for the target view, for {@link Build.VERSION#SDK_INT} >= 14.
+     *
+     * @param targetView the animated view
+     * @param endDegree the ending angle in degrees of the animation
+     * @param duration the duration of the animation.
+     * @param interpolator the animation interpolator.
+     * @param listener the animation listener
+     */
     public static ViewPropertyAnimatorCompat rotateCompat(View targetView, float endDegree,
           long duration,
           Interpolator interpolator, ViewPropertyAnimatorListener listener) {
@@ -78,6 +109,15 @@ public class AnimationUtils {
                          .setListener(listener);
     }
 
+    /**
+     * Performs a rotation animation for the target view, for {@link Build.VERSION#SDK_INT} < 14.
+     *
+     * @param targetView the animated view
+     * @param toDegree the ending angle in degrees of the animation
+     * @param duration the duration of the animation.
+     * @param interpolator the animation interpolator.
+     * @param listener the animation listener
+     */
     public static Animation rotateLegacy(View targetView, float toDegree, long duration,
           Interpolator interpolator, Animation.AnimationListener listener) {
         RotateAnimation animation = new RotateAnimation(targetView.getRotation(), toDegree);
@@ -87,6 +127,11 @@ public class AnimationUtils {
         return animation;
     }
 
+    /**
+     * Loads the given animation resource.
+     *
+     * @see AnimationUtils#loadAnimation(Context, int)
+     */
     public static Animation loadAnimation(final Context context, final int animResId) {
         return android.view.animation.AnimationUtils.loadAnimation(context, animResId);
     }
@@ -102,6 +147,9 @@ public class AnimationUtils {
         return startValue + Math.round(fraction * (float) (endValue - startValue));
     }
 
+    /**
+     * {@link Animation.AnimationListener} adapter.
+     */
     public static class AnimationListenerAdapter implements Animation.AnimationListener {
         public AnimationListenerAdapter() {
         }
@@ -116,6 +164,11 @@ public class AnimationUtils {
         }
     }
 
+    /**
+     * Performs animation which performs a scale x and y up or down and simoultanosly fades in or
+     * out. Same animation that FloatingActionButton.Behavior uses to show the FAB when the
+     * {@link AppBarLayout} enters or exits.
+     */
     @SuppressLint("PrivateResource")
     public static class GrowShrinkAnimator<V extends View> {
 
@@ -128,6 +181,7 @@ public class AnimationUtils {
         public GrowShrinkAnimator() {
         }
 
+        @SuppressLint("ObsoleteSdkInt")
         public void animateOut(final V view) {
             if (Build.VERSION.SDK_INT >= 14) {
                 ViewCompat.animate(view)
@@ -179,8 +233,10 @@ public class AnimationUtils {
             }
         }
 
-        // Same animation that FloatingActionButton.Behavior uses to show the FAB when the
-        // AppBarLayout enters
+        /**
+         * Same animation that FloatingActionButton.Behavior uses to show the FAB when the {@link
+         * AppBarLayout} enters.
+         */
         public void animateIn(final V view) {
             view.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= 14) {
@@ -244,6 +300,12 @@ public class AnimationUtils {
         }
     }
 
+    /**
+     * Performs a rotation animation for the target view
+     *
+     * @see #rotateCompat(View, float, long, Interpolator, ViewPropertyAnimatorListener)
+     * @see #rotateLegacy(View, float, long, Interpolator, Animation.AnimationListener)
+     */
     public static class RotateAnimator<V extends View> {
 
         private Interpolator mInterpolator = FAST_OUT_SLOW_IN_INTERPOLATOR;
@@ -343,6 +405,19 @@ public class AnimationUtils {
         }
     }
 
+    /**
+     * A call back for animations which defines {@link Animation.AnimationListener}
+     * like callback with {@link Action1}
+     * <ul>
+     * <li>ActionOnAnimationStart - called when the animation starts</li>
+     * <li>ActionOnAnimationEnd - called when the animation finishes</li>
+     * <li>ActionOnAnimationCancel - called when the animation canceled</li>
+     * <li>ActionOnAnimationRepeat - called when the animation repeats</li>
+     * </ul>
+     *
+     * @see Animation.AnimationListener#onAnimationStart(Animation)
+     * @see Animation.AnimationListener#onAnimationEnd(Animation)
+     */
     public static class AnimationCompatCallback<V extends View> {
         @Nullable Action1<V> mActionOnAnimationStart;
         @Nullable Action1<V> mActionOnAnimationEnd;
@@ -359,7 +434,7 @@ public class AnimationUtils {
         }
 
         public AnimationCompatCallback setActionOnAnimationEnd(
-              final Action1<V> actionOnAnimationEnd) {
+              @Nullable final Action1<V> actionOnAnimationEnd) {
             mActionOnAnimationEnd = actionOnAnimationEnd;
             return this;
         }
@@ -371,19 +446,26 @@ public class AnimationUtils {
         }
 
         public AnimationCompatCallback setActionOnAnimationRepeat(
-              final Action1<V> actionOnAnimationRepeat) {
+              @Nullable final Action1<V> actionOnAnimationRepeat) {
             mActionOnAnimationRepeat = actionOnAnimationRepeat;
             return this;
         }
     }
 
+    /**
+     * Sets the given {@link AnimationCompatCallback} for the given view, called when the animation
+     * starts.
+     */
     @SuppressWarnings("unchecked")
     public static void callBackOnAnimationStart(final View view, AnimationCompatCallback callback) {
         if (callback != null && callback.mActionOnAnimationStart != null) {
             callback.mActionOnAnimationStart.call(view);
         }
     }
-
+    /**
+     * Sets the given {@link AnimationCompatCallback} for the given view, called when the animation
+     * finishes.
+     */
     @SuppressWarnings("unchecked")
     public static void callBackOnAnimationEnd(final View view, AnimationCompatCallback callback) {
         if (callback != null && callback.mActionOnAnimationEnd != null) {
@@ -391,6 +473,10 @@ public class AnimationUtils {
         }
     }
 
+    /**
+     * Sets the given {@link AnimationCompatCallback} for the given view, called when the animation
+     * canceled.
+     */
     @SuppressWarnings("unchecked")
     public static void callBackOnAnimationCancel(final View view,
           AnimationCompatCallback callback) {
@@ -399,6 +485,10 @@ public class AnimationUtils {
         }
     }
 
+    /**
+     * Sets the given {@link AnimationCompatCallback} for the given view, called when the animation
+     * repeats.
+     */
     @SuppressWarnings("unchecked")
     public static void callBackOnAnimationRepeat(final View view,
           AnimationCompatCallback callback) {

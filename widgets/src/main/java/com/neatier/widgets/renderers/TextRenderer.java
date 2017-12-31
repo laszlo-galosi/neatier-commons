@@ -15,12 +15,17 @@
 package com.neatier.widgets.renderers;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.view.View;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.helpers.WidgetUtils;
 
 /**
- * Created by László Gálosi on 29/04/16
+ * * {@link Renderable} implementation for rendering Text Data  objects.
+ * The text data can be a {@link StringRes @StringRes} integer, a String or it renders
+ * the {@link Object#toString()}.
+ * @author László Gálosi
+ * @since 29/04/16
  */
 public class TextRenderer<T> implements Renderable<Object> {
 

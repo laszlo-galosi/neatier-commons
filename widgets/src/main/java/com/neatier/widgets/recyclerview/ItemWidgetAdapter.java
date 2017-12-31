@@ -27,6 +27,12 @@ import com.neatier.widgets.Bindable;
 import com.neatier.widgets.R;
 import java.util.List;
 
+/**
+ * {@link RecyclerView.Adapter} with {@link ItemWidget} ViewHolder
+ * containing data items with type T.
+ * It has a custom {@link View.OnClickListener} attached by
+ * {@link ItemWidget#setOnClickListener(View.OnClickListener)}
+ */
 public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
       implements Leakable {
     protected final Context mContext;
