@@ -28,7 +28,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 08/06/16
+ * @author László Gálosi
+ * @since 08/06/16
  */
 public class AutoValueAdapterFactoryTest extends DataTestCase {
 

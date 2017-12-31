@@ -14,10 +14,24 @@
 
 package com.neatier.repository;
 
+import com.neatier.repository.datasource.AsyncDataSources;
+
 /**
- * Created by László Gálosi on 13/06/16
+ * /**
+ * Enum class for defining Write policies for data
+ * {@link AsyncDataSources.WriteableAsyncDataSource}s
+ *
+ * @author László Gálosi
+ * @since 13/06/16
  */
 public enum WritePolicy {
+    /**
+     * Write into only one data source.
+     */
     WRITE_ONCE,
+
+    /**
+     * Write into all available data source.
+     */
     WRITE_ALL
 }

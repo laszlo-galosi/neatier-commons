@@ -28,6 +28,9 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
+/**
+ * A Dagger {@link Module @Module} class providing the {@link OkHttpClient} Singleton instance.
+ */
 @Module
 public class NetworkModule {
 

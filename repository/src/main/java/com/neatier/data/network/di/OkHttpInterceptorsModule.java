@@ -23,9 +23,15 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Singleton;
 import okhttp3.Interceptor;
+import okhttp3.internal.http.HttpEngine;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
 import trikita.log.Log;
 
+/**
+ * A Dagger {@link Module @Module} class providing the {@link HttpLoggingInterceptor} and
+ * NetworkInterceptors Singleton instances to us with {@link }.
+ */
 @Module
 public class OkHttpInterceptorsModule {
 

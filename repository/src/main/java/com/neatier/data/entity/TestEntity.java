@@ -20,7 +20,9 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by László Gálosi on 08/06/16
+ * Test entity annotated with {@link AutoValue @AutoValue} for testing purpose.
+ * @author László Gálosi
+ * @since 08/06/16
  */
 @AutoValue
 @AutoGson

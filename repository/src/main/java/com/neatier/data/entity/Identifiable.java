@@ -15,8 +15,14 @@
 package com.neatier.data.entity;
 
 /**
- * Created by László Gálosi on 13/06/16
+ * Interface for identifying any implementing class with a unique key of type T.
+ *
+ * @author László Gálosi
  */
-public interface Identifiable<K> {
-    K getKey();
+public interface Identifiable<T> {
+
+    /**
+     * Returns the unique key of the implementing class.
+     */
+    T getKey();
 }

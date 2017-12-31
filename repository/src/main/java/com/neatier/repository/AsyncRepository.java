@@ -33,16 +33,34 @@ import rx.Observable;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 10/06/16
+ * A repository implementing a {@link ReadableAsyncDataSource} for reading, and a {@link
+ * WriteableAsyncDataSource} for mutating the stored key-value pair entries.
+ *
+ * @author László Gálosi
+ * @since 10/06/16
  */
 public class AsyncRepository<K, V extends Identifiable<K>>
       implements ReadableAsyncDataSource<K, V>,
                  WriteableAsyncDataSource<K, V> {
 
+    /**
+     * A {@link LinkedList} of {@link ReadableAsyncDataSource}s to lookup the key or value
+     * sequentially.
+     */
     private final Collection<ReadableAsyncDataSource<K, V>> readableDataSources =
           new LinkedList<>();
+
+    /**
+     * A {@link LinkedList} of {@link WriteableAsyncDataSource}s to write the entries into each one
+     * sequentially.
+     */
     private final Collection<WriteableAsyncDataSource<K, V>> writeableDataSources =
           new LinkedList<>();
+
+    /**
+     * A {@link LinkedList} of {@link AsyncCacheDataSource}s to lookup the key or value
+     * in multiple caches sequentially.
+     */
     private final Collection<AsyncCacheDataSource<K, V>> cacheDataSources = new LinkedList<>();
 
     private ReadPolicy mReadPolicy = ReadPolicy.READ_ALL;
@@ -233,20 +251,34 @@ public class AsyncRepository<K, V extends Identifiable<K>>
         return this;
     }
 
+    /**
+     * Lookup for the given key in any of the registered {@link AsyncCacheDataSource}s
+     * and returns an Observable emitting the value. It can produce multiple values, depending
+     * on whether which cache contains the given key.
+     */
     private Observable<V> getValueFromCaches(final K key) {
         Log.d("getValueFromCaches", key);
         return Observable.from(cacheDataSources).flatMap(
               cacheDataSource -> cacheDataSource.getByKeyAsync(key));
     }
 
+    /**
+     * Lookup for all the values in any of the registered {@link AsyncCacheDataSource}s
+     * and returns an Observable emitting a lis of values.
+     */
     private Observable<List<V>> getValuesFromCaches() {
         Log.d("getValuesFromCaches");
         final List<V> resultList = new ArrayList<>();
         return Observable.from(cacheDataSources)
                          .flatMap(cacheDataSource -> cacheDataSource.getAllAsync())
-                         .collect(() -> resultList, (vs, v) -> vs.add(v));
+                         .collect(() -> resultList, (vs, v) -> vs.add((V) v));
     }
 
+    /**
+     * Lookup for the given key in any of the registered {@link ReadableAsyncDataSource}s
+     * and returns an Observable emitting the value. It can produce multiple values, depending
+     * on whether which cache contains the given key.
+     */
     private Observable<V> getValueFromReadables(K key,
           final KeyValuePairs<String, Object> requestParams) {
         Log.d("getValueFromReadables", key);
@@ -254,13 +286,17 @@ public class AsyncRepository<K, V extends Identifiable<K>>
               readableDataSource -> readableDataSource.getByKey(key, requestParams));
     }
 
+    /**
+     * Lookup all the keyy in any of the registered {@link ReadableAsyncDataSource}s
+     * and returns an Observable emitting a list of values.
+     */
     private Observable<List<V>> getValuesFromReadables(
           final KeyValuePairs<String, Object> requestPatams) {
         final List<V> resultList = new ArrayList<>();
         Log.d("getValuesFromReadables");
         return Observable.from(readableDataSources)
                          .flatMap(readableDataSource -> readableDataSource.getAll(requestPatams))
-                         .collect(() -> resultList, (vs, vs2) -> vs.addAll(vs2));
+                         .collect(() -> resultList, List::addAll);
     }
 
     private void populateCaches(V value) throws Exception {
@@ -278,7 +314,8 @@ public class AsyncRepository<K, V extends Identifiable<K>>
     private Observable<Boolean> clearCaches() {
         Log.d("clearCaches");
         return getCacheDataSourceObservable()
-              .flatMap(cacheDataSource -> cacheDataSource.deleteAllAsync()).takeLast(1);
+              .flatMap(AsyncCacheDataSource::deleteAllAsync)
+              .takeLast(1);
     }
 
     @NonNull private Observable<AsyncCacheDataSource<K, V>> getCacheDataSourceObservable() {
@@ -305,6 +342,12 @@ public class AsyncRepository<K, V extends Identifiable<K>>
               cacheDataSource -> cacheDataSource.addOrUpdateAllAsync(values)).subscribe();
     }
 
+    /**
+     * Returns an Observable emitting Boolean.TRUE if all the values in the given list
+     * are contained in any of of the cache data sources.
+     *
+     * @see AsyncCacheDataSource#isValid(Identifiable)
+     */
     public Observable<Boolean> areCached(final List<V> values) {
         AtomicBoolean validValues = new AtomicBoolean(Boolean.FALSE);
         return getCacheDataSourceObservable()
@@ -319,6 +362,12 @@ public class AsyncRepository<K, V extends Identifiable<K>>
               .flatMap(result -> Observable.just(result.get()));
     }
 
+    /**
+     * Returns an Observable emitting Boolean.TRUE if the given value
+     * is found in any of of the cache data sources.
+     *
+     * @see AsyncCacheDataSource#isValid(Identifiable)
+     */
     public Observable<Boolean> isCached(V value) {
         AtomicBoolean validValues = new AtomicBoolean(Boolean.FALSE);
         return getCacheDataSourceObservable()

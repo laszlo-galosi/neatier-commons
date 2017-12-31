@@ -10,7 +10,10 @@ import java.io.IOException;
 import rx.Observable;
 
 /**
- * Created by László Gálosi on 16/06/16
+ * A {@link PreferencesOnDeviceStorage} abstract class implementing the {@link OnDeviceKeyTypedValueStorage}
+ * interface for using {@link TypeAdapter} when storing the values.
+ * @author László Gálosi
+ * @since 16/06/16
  */
 public abstract class PreferencesTypedValueKeyStorage<K, V> extends PreferencesOnDeviceStorage<K, V>
       implements OnDeviceKeyTypedValueStorage<K, V> {

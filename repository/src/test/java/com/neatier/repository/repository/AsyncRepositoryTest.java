@@ -24,7 +24,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
- * Created by László Gálosi on 12/06/16
+ * @author László Gálosi
+ * @since 12/06/16
  */
 public class AsyncRepositoryTest extends DataTestCase {
     @Mock AsyncCacheDataSource<Integer, TestEntity> mockCacheDataSource;

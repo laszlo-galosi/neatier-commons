@@ -20,7 +20,12 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Created by László Gálosi on 08/06/16
+ * A conditional function with the specified retry condition to be met.
+ * (a function taking a throwable and returning true if this throwable should trigger
+ * the retry and false if not).
+ *
+ * @author László Gálosi
+ * @since 08/06/16
  */
 public class RetryWithDelayCondition implements
                                      Func1<Observable<? extends Throwable>, Observable<?>> {

@@ -19,7 +19,8 @@ import org.mockito.MockitoAnnotations;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by LargerLife on 12/06/16.
+ * @author LargerLife
+ * @since 12/06/16.
  */
 public class AsyncCacheDataSourceTest extends DataTestCase {
 

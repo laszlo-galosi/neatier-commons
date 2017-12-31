@@ -38,7 +38,8 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Base class for objects which main class is to interact with the data layer via
  * {@link AsyncRepository}
- * Created by László Gálosi on 14/06/16
+ * @author László Gálosi
+ * @since 14/06/16
  */
 public class RepositoryInteractor implements Leakable {
 

@@ -14,11 +14,24 @@
 
 package com.neatier.data.entity;
 
+import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * TypeAdapter implementation to use with
+ * {@link GsonBuilder#registerTypeAdapterFactory(TypeAdapterFactory)}
+ * which creates type adapters for set of {@link AutoValue @AutoValue}-annotated types
+ *
+ * <p>Type adapter factories select which types they provide type adapters
+ * for. If a factory cannot support a given type, it must return null when
+ * that type is passed to {@link #create}. Factories should expect {@code
+ * create()} to be called on them for many types and should return null for
+ * most of those types.
+ */
 public final class AutoValueAdapterFactory implements TypeAdapterFactory {
     @SuppressWarnings("unchecked")
     @Override public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {

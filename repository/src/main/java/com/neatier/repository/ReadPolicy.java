@@ -14,12 +14,27 @@
 
 package com.neatier.repository;
 
+import com.neatier.repository.datasource.AsyncDataSources;
+
 /**
- * Created by László Gálosi on 13/06/16
+ * Enum class for defining Read policies for data {@link AsyncDataSources}
+ * @author László Gálosi
+ * @since 13/06/16
  */
 public enum ReadPolicy {
+    /**
+     * Lookup entry only from cache.
+     */
     CACHE_ONLY,
+
+    /**
+     * Lookup entry only from {@link AsyncDataSources.ReadableAsyncDataSource}.
+     */
     READABLE_ONLY,
+
+    /**
+     * Lookup any data sources.
+     */
     READ_ALL;
 
     public boolean useCache() {

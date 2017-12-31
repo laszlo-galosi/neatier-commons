@@ -19,10 +19,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import okhttp3.HttpUrl;
 
 /**
- * Such implementation allows us easily change base url in the integration and functional tests!
+ * A server end point url implementation allows us easily change base url.
+ * Useful for ex. in the integration and functional tests.
  */
 public class ChangeableBaseUrl {
 
+    /**
+     * The mutable base url of the server.
+     */
     @NonNull
     private final AtomicReference<HttpUrl> baseUrl;
 
@@ -30,10 +34,16 @@ public class ChangeableBaseUrl {
         this.baseUrl = new AtomicReference<>(HttpUrl.parse(baseUrl));
     }
 
+    /**
+     * Sets the baseUrl to the given value.
+     */
     public void setBaseUrl(@NonNull String baseUrl) {
         this.baseUrl.set(HttpUrl.parse(baseUrl));
     }
 
+    /**
+     * Returns the current base url.
+     */
     public HttpUrl getUrl() {
         return baseUrl.get();
     }
