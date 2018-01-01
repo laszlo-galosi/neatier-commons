@@ -74,8 +74,7 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
 
     /**
      * Returns an Observable emitting the value stored by the given key, or if not
-     * found an {@link Observable#empty()} or {@link Observable#error(Throwable)} if any
-     * Exception occurred.
+     * found an {@link Observable#empty()} or {@link Obsergit
      */
     public Observable<V> getByKeyAsync(final K key) {
         return just(key).flatMap(k -> {
