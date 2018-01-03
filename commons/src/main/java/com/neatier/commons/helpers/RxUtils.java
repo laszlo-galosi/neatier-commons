@@ -63,7 +63,7 @@ public class RxUtils {
      * subscription.
      */
     public static CompositeSubscription getNewCompositeSubIfUnsubscribed(
-          @Nullable CompositeSubscription subscription) {
+            @Nullable CompositeSubscription subscription) {
         if (subscription == null || subscription.isUnsubscribed()) {
             return new CompositeSubscription();
         }
@@ -81,9 +81,8 @@ public class RxUtils {
      * @param <T> the type of the returning elements
      * @return an unmodifiable list from the source Observable
      */
-    @SuppressWarnings("unchecked")
-    public static <T> List<T> toUnmutableList(final Observable<T> source, int capacity,
-          Comparator<T>... comparators) {
+    @SuppressWarnings("unchecked") public static <T> List<T> toUnmutableList(
+            final Observable<T> source, int capacity, Comparator<T>... comparators) {
         Iterator<T> iterator = BlockingObservable.from(source).getIterator();
         List<T> list = new ArrayList<>(capacity);
         while (iterator.hasNext()) {
@@ -105,9 +104,8 @@ public class RxUtils {
      * @param <T> the type of the returning elements
      * @return an modifiable list from the source Observable
      */
-    @SuppressWarnings("unchecked")
-    public static <T> List<T> toMutableList(Observable<T> source, int capacity,
-          Comparator<T>... comparators) {
+    @SuppressWarnings("unchecked") public static <T> List<T> toMutableList(Observable<T> source,
+            int capacity, Comparator<T>... comparators) {
         List<T> list = new ArrayList<>(capacity);
         Iterator<T> iterator = BlockingObservable.from(source).getIterator();
         while (iterator.hasNext()) {
@@ -125,14 +123,19 @@ public class RxUtils {
             StackTraceElement[] stackTrace = checkpoint.getStackTrace();
             StackTraceElement element = stackTrace[1]; // First element after `crashOnError()`
             String msg = String.format("onError() crash from subscribe() in %s.%s(%s:%s)",
-                                       element.getClassName(),
-                                       element.getMethodName(),
-                                       element.getFileName(),
-                                       element.getLineNumber());
+                    element.getClassName(), element.getMethodName(), element.getFileName(),
+                    element.getLineNumber());
 
             //throw new OnErrorNotImplementedException(msg, throwable);
             Log.e("logRxError", new OnErrorNotImplementedException(msg, throwable));
         };
+    }
+
+    /**
+     * Returns true if the given subscription not nul and not unsubscribed
+     */
+    public static boolean hasSubscribers(Subscription subscription) {
+        return subscription != null && !subscription.isUnsubscribed();
     }
 
     /**
@@ -146,17 +149,14 @@ public class RxUtils {
     }
 
     public static class SubscriberAdapter<T> extends rx.Subscriber<T> {
-        @Override
-        public void onCompleted() {
+        @Override public void onCompleted() {
             // no-op by default.
         }
 
-        @Override
-        public void onError(Throwable e) {
+        @Override public void onError(Throwable e) {
         }
 
-        @Override
-        public void onNext(T t) {
+        @Override public void onNext(T t) {
             // no-op by default.
         }
     }
@@ -171,7 +171,7 @@ public class RxUtils {
             return Observable.empty();
         }
         return Observable.range(0, jsonArray.size())
-                         .flatMap(i -> Observable.just(jsonArray.get(i)));
+                .flatMap(i -> Observable.just(jsonArray.get(i)));
     }
 
     /**
@@ -192,11 +192,10 @@ public class RxUtils {
      * Returns a comma separated string from the given observable, by calling the {@link
      * Object#toString()} method of emitted objects. Useful for debugging observables.
      */
-    @SuppressWarnings("unchecked")
-    public static String asString(Observable observable) {
+    @SuppressWarnings("unchecked") public static String asString(Observable observable) {
         StringBuilder sb = new StringBuilder();
         observable.reduce("", (a, b) -> String.format("%s, %s", a.toString(), b.toString()))
-                  .subscribe(sb::append);
+                .subscribe(sb::append);
         return sb.toString();
     }
 }

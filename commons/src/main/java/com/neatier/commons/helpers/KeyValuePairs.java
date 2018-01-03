@@ -262,8 +262,8 @@ public class KeyValuePairs<K, V> implements KeyValueStreamer<K, V> {
      * Returns an {@link Observable} emitting a list of objects with type V stored within the
      * internal map.
      */
-    @Override public Observable valuesAsListStream() {
-        return Observable.from(values()).toList();
+    @Override public Observable<V> valuesAsListStream() {
+        return (Observable<V>) Observable.from(values()).toList();
     }
 
     /**
