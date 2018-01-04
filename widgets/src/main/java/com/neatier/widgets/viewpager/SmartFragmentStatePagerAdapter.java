@@ -15,10 +15,19 @@ package com.neatier.widgets.viewpager;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+/**
+ * An abstract {@link FragmentPagerAdapter} sub class which contains helper function
+ * to get the Fragment of any page.
+ * @see #getRegisteredFragmentByPageId(int)
+ * @see #getRegisteredFragmentByPos(int)
+ * @see #getPageId(int)
+ * @param <T>
+ */
 public abstract class SmartFragmentStatePagerAdapter<T extends Fragment>
       extends FragmentStatePagerAdapter {
 
