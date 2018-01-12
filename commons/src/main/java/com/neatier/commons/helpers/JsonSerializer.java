@@ -47,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import rx.Observable;
-import rx.functions.Func1;
 import trikita.log.Log;
 
 /**
@@ -69,6 +68,18 @@ public class JsonSerializer<T> {
      * JsonParser to parse json strings.
      */
     private JsonParser jsonParser;
+
+    public JsonSerializer() {
+        this(new Gson(), new JsonParser());
+    }
+
+    /**
+     * Constructor with the given gson serializer and a json parser instance
+     */
+    public JsonSerializer(final Gson gson, JsonParser parser) {
+        this.gson = gson;
+        this.jsonParser = parser;
+    }
 
     /**
      * Returns a property value with the given member name, of the given {@link JsonObject} with
@@ -217,16 +228,38 @@ public class JsonSerializer<T> {
         return map;
     }
 
-    public JsonSerializer() {
-        this(new Gson(), new JsonParser());
-    }
-
-    /**
-     * Constructor with the given gson serializer and a json parser instance
-     */
-    public JsonSerializer(final Gson gson, JsonParser parser) {
-        this.gson = gson;
-        this.jsonParser = parser;
+    public static JsonElement getCheckedJsonEntry(final Map.Entry<String, JsonElement> entry,
+            final KeyValuePairs<String, Object> params, final JsonObject templateObject) {
+        String key = entry.getKey();
+        //JsonReader value = new JsonReader(new StringReader((String) params.get(key)));
+        //value.setLenient(true);
+        Object value = params.get(key);
+        JsonElement valueElem = JsonSerializer.parse(value.toString());
+        Preconditions.checkNotNull(value, key);
+        if (templateObject.get(key).isJsonObject()) {
+            Preconditions.checkArgument(valueElem.isJsonObject(),
+                    String.format("%s Not a Json Object: %s", key, params.get(key)));
+            return valueElem.getAsJsonObject();
+        } else if (templateObject.get(key).isJsonArray()) {
+            Preconditions.checkArgument(valueElem.isJsonArray(),
+                    String.format("%s Not a JsonArray: %s", key, params.get(key)));
+            return valueElem.getAsJsonArray();
+        } else if (templateObject.get(key).isJsonPrimitive()) {
+            Preconditions.checkArgument(valueElem.isJsonPrimitive(),
+                    String.format("%s Not a JsonPrimitive: %s", key, params.get(key)));
+            if (value instanceof String) {
+                return new JsonPrimitive((String) value);
+            } else if (value instanceof Long) {
+                return new JsonPrimitive((Long) value);
+            } else if (value instanceof Number) {
+                return new JsonPrimitive((Number) value);
+            } else if (value instanceof Boolean) {
+                return new JsonPrimitive((Boolean) value);
+            }
+            return valueElem.getAsJsonPrimitive();
+        }
+        throw new IllegalArgumentException(
+                String.format("%sNot a JsonElement: %s", key, params.get(key)));
     }
 
     /**
@@ -294,13 +327,12 @@ public class JsonSerializer<T> {
         return fromJsonArray(jsonArray, returnClass);
     }
 
-    public Observable<List<T>> deserializeAllAsync(String jsonString,
+    public Observable<T> deserializeAllAsync(String jsonString,
           final TypeAdapter<T> typeAdapter) {
         JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
         return Observable.from(Lists.newArrayList(jsonArray.iterator()))
-                         .flatMap(jsonElement ->
-                                        Observable.just(typeAdapter.fromJsonTree(jsonElement)))
-                         .toList();
+                         .flatMap(jsonElement -> Observable.just(
+                                 typeAdapter.fromJsonTree(jsonElement)));
     }
 
     /**
@@ -454,44 +486,11 @@ public class JsonSerializer<T> {
         return jsonParser;
     }
 
-    public static JsonElement getCheckedJsonEntry(final Map.Entry<String, JsonElement> entry,
-          final KeyValuePairs<String, Object> params, final JsonObject templateObject) {
-        String key = entry.getKey();
-        //JsonReader value = new JsonReader(new StringReader((String) params.get(key)));
-        //value.setLenient(true);
-        Object value = params.get(key);
-        JsonElement valueElem = JsonSerializer.parse(value.toString());
-        Preconditions.checkNotNull(value, key);
-        if (templateObject.get(key).isJsonObject()) {
-            Preconditions.checkArgument(
-                  valueElem.isJsonObject(),
-                  String.format("%s Not a Json Object: %s", key, params.get(key))
-            );
-            return valueElem.getAsJsonObject();
-        } else if (templateObject.get(key).isJsonArray()) {
-            Preconditions.checkArgument(
-                  valueElem.isJsonArray(),
-                  String.format("%s Not a JsonArray: %s", key, params.get(key))
-            );
-            return valueElem.getAsJsonArray();
-        } else if (templateObject.get(key).isJsonPrimitive()) {
-            Preconditions.checkArgument(
-                  valueElem.isJsonPrimitive(),
-                  String.format("%s Not a JsonPrimitive: %s", key, params.get(key))
-            );
-            if (value instanceof String) {
-                return new JsonPrimitive((String) value);
-            } else if (value instanceof Long) {
-                return new JsonPrimitive((Long) value);
-            } else if (value instanceof Number) {
-                return new JsonPrimitive((Number) value);
-            } else if (value instanceof Boolean) {
-                return new JsonPrimitive((Boolean) value);
-            }
-            return valueElem.getAsJsonPrimitive();
-        }
-        throw new IllegalArgumentException(
-              String.format("%sNot a JsonElement: %s", key, params.get(key)));
+    /**
+     * Returns the {@link Gson} of this serializer.
+     */
+    public Gson getGson() {
+        return gson;
     }
 }
 
