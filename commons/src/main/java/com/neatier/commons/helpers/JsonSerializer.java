@@ -304,20 +304,6 @@ public class JsonSerializer<T> {
     }
 
     /**
-     * Returns a Observable emitting a list of the given type adapter type items deserialized from
-     * the
-     * given json string
-     */
-    public Observable<List<T>> serializeAllAsync(String jsonString,
-          final TypeAdapter<T> typeAdapter) {
-        JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
-        return Observable.from(Lists.newArrayList(jsonArray.iterator()))
-                         .flatMap(
-                               jsonElement -> Observable.just(
-                                     typeAdapter.fromJsonTree(jsonElement))).toList();
-    }
-
-    /**
      * Returns a list of  objects with the given type T, deserialized from the given json string.
      *
      * @see #fromJsonArray(JsonArray, Class)
@@ -327,12 +313,14 @@ public class JsonSerializer<T> {
         return fromJsonArray(jsonArray, returnClass);
     }
 
-    public Observable<T> deserializeAllAsync(String jsonString,
-          final TypeAdapter<T> typeAdapter) {
+    /**
+     * Returns a Observable emitting a the given type adapter type items deserialized from
+     * the given json string
+     */
+    public Observable<T> deserializeAllAsync(String jsonString, final TypeAdapter<T> typeAdapter) {
         JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
         return Observable.from(Lists.newArrayList(jsonArray.iterator()))
-                         .flatMap(jsonElement -> Observable.just(
-                                 typeAdapter.fromJsonTree(jsonElement)));
+                .flatMap(jsonElement -> Observable.just(typeAdapter.fromJsonTree(jsonElement)));
     }
 
     /**
