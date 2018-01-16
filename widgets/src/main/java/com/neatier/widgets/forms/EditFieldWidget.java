@@ -25,13 +25,14 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.TypedArrayUtils;
+import android.text.InputType;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -70,7 +71,9 @@ import trikita.log.Log;
  * <li>app:if_helperTextColor helper text color resource</li>
  * <li>app:ew_labelAsHint - true if the label should be shown as the {@link EditText} hint</li>
  * <li>app:ew_helperAsHint - true if the helper text should be shown as the {@link EditText}
- * hint</li>
+ * <li>android:imeOptions - {@link EditText#setImeOptions(int)}
+ * <li>android:setImeActionLabel- {@link EditText#setImeActionLabel(CharSequence, int)} </li>
+ * <li>android:inputType- {@link EditText#setInputType(int)}</li>
  * <li>app:ew_multiLine" true if the {@link EditText} can be multiline</li>
  * <li>app:ew_unfocusedFieldAlign - text alignment of the {@link EditText#setGravity(int)} in
  * unfocused mode </li>
@@ -83,12 +86,14 @@ import trikita.log.Log;
  * @author László Gálosi
  * @since 12/05/16
  */
-public class EditFieldWidget extends FrameLayout
-      implements HasInputField<String, String> {
+public class EditFieldWidget extends FrameLayout implements HasInputField<String, String> {
     public static final int DEFAULT_TEXTEVENT_FREQ = 400;
     protected final int mLabelTextColor;
     protected final int mHelperTextColor;
     protected final int mFieldTextColor;
+    private int mImeOptions;
+    private String mImeActionLabel;
+    protected int mInputType;
     protected String mLabelFormat = "%s";
     protected float mInputTextSize;
     protected @ColorInt int mInputTextColor;
@@ -131,8 +136,8 @@ public class EditFieldWidget extends FrameLayout
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
                 mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
             }
-            int color = ContextCompat.getColor(getContext(), hasFocus ? R.color.colorAccent
-                                                                      : R.color.colorTextPrimary);
+            int color = ContextCompat.getColor(getContext(),
+                    hasFocus ? R.color.colorAccent : R.color.colorTextPrimary);
             if (Flags.isSet(mFocusFlags, FOCUS_FLAG_EDIT_COLOR) && mEditText != null) {
                 mEditText.setTextColor(color);
             }
@@ -162,37 +167,33 @@ public class EditFieldWidget extends FrameLayout
         this(context, attrs, 0);
     }
 
-    @SuppressLint("RtlHardcoded")
+    @SuppressLint({ "RtlHardcoded", "RestrictedApi" })
     public EditFieldWidget(final Context context, final AttributeSet attrs,
-          final int defStyleAttr) {
+            final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray prefa =
-              context.obtainStyledAttributes(attrs, R.styleable.Preference, defStyleAttr, 0);
+                context.obtainStyledAttributes(attrs, R.styleable.Preference, defStyleAttr, 0);
         TypedArray ifa =
-              context.obtainStyledAttributes(attrs, R.styleable.HasInputField, defStyleAttr, 0);
+                context.obtainStyledAttributes(attrs, R.styleable.HasInputField, defStyleAttr, 0);
         TypedArray wa =
-              context.obtainStyledAttributes(attrs, R.styleable.EditFieldWidget, defStyleAttr,
-                                             0);
+                context.obtainStyledAttributes(attrs, R.styleable.EditFieldWidget, defStyleAttr, 0);
 
         mKey = prefa.getString(R.styleable.Preference_android_key);
 
         mLayoutRes = TypedArrayUtils.getResourceId(prefa, R.styleable.Preference_layout,
-                                                   R.styleable.Preference_android_layout,
-                                                   R.layout.widget_editfield_w_label);
+                R.styleable.Preference_android_layout, R.layout.widget_editfield_w_label);
 
         mFocusedFieldAlign =
-              wa.getInteger(R.styleable.EditFieldWidget_ew_focusedFieldAlign, Gravity.LEFT);
+                wa.getInteger(R.styleable.EditFieldWidget_ew_focusedFieldAlign, Gravity.LEFT);
         mUnFocusedFieldAlign =
-              wa.getInteger(R.styleable.EditFieldWidget_ew_unfocusedFieldAlign, Gravity.LEFT);
+                wa.getInteger(R.styleable.EditFieldWidget_ew_unfocusedFieldAlign, Gravity.LEFT);
         if (wa.hasValue(R.styleable.EditFieldWidget_ew_focusedFieldAlign)) {
             setFocusBehavior(null, FOCUS_FLAG_GRAVITY);
         }
         mLabelText = ifa.getString(R.styleable.HasInputField_if_label);
-        mLabelViewId =
-              ifa.getResourceId(R.styleable.HasInputField_if_labelViewId, 0);
+        mLabelViewId = ifa.getResourceId(R.styleable.HasInputField_if_labelViewId, 0);
         mHelperText = ifa.getString(R.styleable.HasInputField_if_helper);
-        mHelperViewId =
-              ifa.getResourceId(R.styleable.HasInputField_if_helperViewId, 0);
+        mHelperViewId = ifa.getResourceId(R.styleable.HasInputField_if_helperViewId, 0);
         mShowLabel = ifa.getBoolean(R.styleable.HasInputField_if_showLabel, true);
         mShowHelper = ifa.getBoolean(R.styleable.HasInputField_if_showHelper, true);
         if (ifa.hasValue(R.styleable.HasInputField_if_labelFormat)) {
@@ -200,17 +201,19 @@ public class EditFieldWidget extends FrameLayout
         }
 
         mLabelTextColor = ifa.getColor(R.styleable.HasInputField_if_labelTextColor,
-                                       ContextCompat.getColor(getContext(),
-                                                              R.color.colorTextPrimary));
+                ContextCompat.getColor(getContext(), R.color.colorTextPrimary));
         mHelperTextColor = ifa.getColor(R.styleable.HasInputField_if_helperTextColor,
-                                        ContextCompat.getColor(getContext(),
-                                                               R.color.colorTextSecondary));
+                ContextCompat.getColor(getContext(), R.color.colorTextSecondary));
         mFieldTextColor = ifa.getColor(R.styleable.HasInputField_if_fieldTextColor,
-                                       ContextCompat.getColor(getContext(),
-                                                              R.color.colorTextPrimary));
+                ContextCompat.getColor(getContext(), R.color.colorTextPrimary));
         mLabelAsHint = wa.getBoolean(R.styleable.EditFieldWidget_ew_labelAsHint, false);
         mHelperAsHint = wa.getBoolean(R.styleable.EditFieldWidget_ew_helperAsHint, false);
         mMultiLine = wa.getBoolean(R.styleable.EditFieldWidget_ew_multiLine, false);
+        mInputType =
+                wa.getInt(R.styleable.EditFieldWidget_android_inputType, InputType.TYPE_CLASS_TEXT);
+        mImeOptions = wa.getInt(R.styleable.EditFieldWidget_android_imeOptions,
+                EditorInfo.IME_ACTION_NEXT);
+        mImeActionLabel = wa.getString(R.styleable.EditFieldWidget_android_imeActionLabel);
         mValue = wa.getString(R.styleable.EditFieldWidget_value);
         prefa.recycle();
         ifa.recycle();
@@ -223,7 +226,7 @@ public class EditFieldWidget extends FrameLayout
             removeAllViews();
             mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
-                                        LayoutParams.MATCH_PARENT);
+                    LayoutParams.MATCH_PARENT);
             addView(mItemView);
             mEditText = (EditText) mItemView.findViewById(R.id.inputField);
             mEditText.setTextColor(mFieldTextColor);
@@ -232,6 +235,11 @@ public class EditFieldWidget extends FrameLayout
                 setHelper(mHelperText, 0);
                 mHelperView.setTextColor(mHelperTextColor);
             }
+            mEditText = (EditText) mItemView.findViewById(R.id.inputField);
+            mEditText.setTextColor(mFieldTextColor);
+            mEditText.setInputType(mInputType);
+            mEditText.setImeOptions(mImeOptions);
+            mEditText.setImeActionLabel(mImeActionLabel, mImeOptions);
             if (mLabelViewId > 0) {
                 mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
                 mDefaultFieldPaddingStart = mEditText.getPaddingLeft();
@@ -270,10 +278,10 @@ public class EditFieldWidget extends FrameLayout
     public CompositeSubscription ensureWidgetSubs(TextChangeObserver textChangeObserver) {
         mSubscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(mSubscriptions);
         Subscription sub = RxTextView.textChangeEvents(mEditText)
-                                     .filter(event -> !mIgnoreTextChange)
-                                     .debounce(mTextChangeFrequency, TimeUnit.MILLISECONDS)
-                                     .observeOn(AndroidSchedulers.mainThread())
-                                     .subscribe(textChangeObserver);
+                .filter(event -> !mIgnoreTextChange)
+                .debounce(mTextChangeFrequency, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(textChangeObserver);
         mSubscriptions.add(sub);
         return mSubscriptions;
     }
@@ -309,8 +317,7 @@ public class EditFieldWidget extends FrameLayout
 
     public EditText getEditText() {
         Preconditions.checkNotNull(mEditText,
-                                   "InputField hasn't been initialized properly: "
-                                         + getKey());
+                "InputField hasn't been initialized properly: " + getKey());
         return mEditText;
     }
 
@@ -342,14 +349,12 @@ public class EditFieldWidget extends FrameLayout
             leftPadding = getEditText().getPaddingLeft();
         } else {
             leftPadding = mDefaultFieldPaddingStart
-                  + mLabelView.getPaddingLeft()
-                  + textBounds.right
-                  + ThemeUtil.dpToPx(getContext(), 2);
+                    + mLabelView.getPaddingLeft()
+                    + textBounds.right
+                    + ThemeUtil.dpToPx(getContext(), 2);
         }
-        getEditText().setPadding(leftPadding,
-                                 getEditText().getPaddingTop(),
-                                 getFieldPaddingRight(),
-                                 getEditText().getPaddingBottom());
+        getEditText().setPadding(leftPadding, getEditText().getPaddingTop(), getFieldPaddingRight(),
+                getEditText().getPaddingBottom());
     }
 
     @Nullable @Override public String getLabel() {
@@ -365,9 +370,8 @@ public class EditFieldWidget extends FrameLayout
         if (mHelperView == null && mHelperViewId > 0) {
             mHelperView = (TextView) findViewById(mHelperViewId);
         }
-        int textColor = ContextCompat.getColor(getContext(), colorRes > 0
-                                                             ? colorRes
-                                                             : R.color.colorTextSecondary);
+        int textColor = ContextCompat.getColor(getContext(),
+                colorRes > 0 ? colorRes : R.color.colorTextSecondary);
         if (mHelperAsHint) {
             getEditText().setHint(helperText);
             if (colorRes > 0) {
@@ -481,18 +485,18 @@ public class EditFieldWidget extends FrameLayout
     }
 
     public void showSoftInput() {
-        InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
-              Context.INPUT_METHOD_SERVICE);
+        InputMethodManager mgr =
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         assert mgr != null;
         mgr.showSoftInput(getEditText(), InputMethodManager.SHOW_IMPLICIT);
     }
 
     public void hideSoftInput() {
-        InputMethodManager mgr = (InputMethodManager) getContext().getSystemService(
-              Context.INPUT_METHOD_SERVICE);
+        InputMethodManager mgr =
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         assert mgr != null;
         mgr.hideSoftInputFromInputMethod(getEditText().getWindowToken(),
-                                         InputMethodManager.HIDE_IMPLICIT_ONLY);
+                InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
     public void applyFocusFlags(final boolean hasFocus) {
