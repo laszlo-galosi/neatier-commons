@@ -13,6 +13,7 @@
 
 package com.neatier.widgets.forms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.databinding.BindingMethod;
@@ -30,6 +31,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import com.fernandocejas.arrow.checks.Preconditions;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.DrawableHelper;
 
@@ -71,7 +73,6 @@ import com.neatier.widgets.helpers.DrawableHelper;
 @BindingMethods({
                       @BindingMethod(type = CompoundButtonFieldWidget.class,
                                      attribute = "cbfw_onClick", method = "setOnClickListener"),
-
                 })
 public class CompoundButtonFieldWidget extends EditFieldWidget {
 
@@ -82,9 +83,8 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
     protected final Drawable mButtonDrawable;
     protected final ColorStateList mDrawableColor;
     protected ImageView mButton;
-    View.OnClickListener mOnClickListener;
-
     protected boolean mExpanded;
+    View.OnClickListener mOnClickListener;
     private @IdRes int mClickableViewId;
     private View mClickableView;
 
@@ -96,6 +96,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RestrictedApi")
     public CompoundButtonFieldWidget(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -120,21 +121,41 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         initView(context);
     }
 
+    @SuppressLint("RestrictedApi")
+    private ColorStateList createDefaultColorStateList(TintTypedArray a, int attr,
+          int baseColorThemeAttr,
+          @ColorRes int... defaultColorRes) {
+        final TypedValue value = new TypedValue();
+        if (!getContext().getTheme().resolveAttribute(baseColorThemeAttr, value, true)) {
+            return null;
+        }
+        ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
+              getContext(), value.resourceId);
+        if (!getContext().getTheme().resolveAttribute(
+              android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
+            return null;
+        }
+        int baseColor = baseColorStateList.getDefaultColor();
+        int defaultColor =
+              defaultColorRes.length > 0 ? ContextCompat.getColor(getContext(), defaultColorRes[0])
+                                         : baseColor;
+        return new ColorStateList(new int[][] {
+              EXPANDED_STATES,
+              EMPTY_STATE_SET
+        }, new int[] {
+              baseColorStateList.getColorForState(EXPANDED_STATE_SET, defaultColor),
+              a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
+        });
+    }
+
     @Override public void initView(final Context context) {
         super.initView(context);
         mButton = (ImageView) mItemView.findViewById(R.id.btn_action);
+        Preconditions.checkNotNull(mButton, "No ImageButton with id btn_action found.");
         getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
         if (mClickableViewId > 0) {
             mClickableView = mItemView.findViewById(mClickableViewId);
         }
-    }
-
-    @Override public void setOnClickListener(final View.OnClickListener onClickListener) {
-        mOnClickListener = onClickListener;
-    }
-
-    @Override public int getFieldPaddingRight() {
-        return getEditText().getPaddingRight();
     }
 
     @Override protected void onAttachedToWindow() {
@@ -165,6 +186,32 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         super.onDetachedFromWindow();
     }
 
+    @Override public int getFieldPaddingRight() {
+        return getEditText().getPaddingRight();
+    }
+
+    protected int[] getDrawableState(final int[] state) {
+        if (mExpanded) {
+            mergeDrawableStates(state, EXPANDED_STATE_SET);
+        }
+        //Log.v("onCreateDrawableState", getId(), Arrays.toString(state));
+        return state;
+    }
+
+    @Override public void setOnClickListener(final View.OnClickListener onClickListener) {
+        mOnClickListener = onClickListener;
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        int[] state = super.onCreateDrawableState(extraSpace + 2);
+        return getDrawableState(state);
+    }
+
+    public boolean isExpanded() {
+        return mExpanded;
+    }
+
     public void setExpanded(final boolean expanded) {
         mExpanded = expanded;
         int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
@@ -179,63 +226,5 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
               )
         );
         super.refreshDrawableState();
-    }
-
-    /*@Override protected void drawableStateChanged() {
-        super.drawableStateChanged();
-        int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-        mButton.setImageDrawable(
-              DrawableHelper.drawableForColorState(mButtonDrawable, mDrawableColor,
-                                                   getDrawableState(getDrawableState()),
-                                                   defaultColor, getContext()
-              ));
-    }*/
-
-    public boolean isExpanded() {
-        return mExpanded;
-    }
-
-    public ImageView getButtonView() {
-        return mButton;
-    }
-
-    @Override
-    protected int[] onCreateDrawableState(int extraSpace) {
-        int[] state = super.onCreateDrawableState(extraSpace + 2);
-        return getDrawableState(state);
-    }
-
-    protected int[] getDrawableState(final int[] state) {
-        if (mExpanded) {
-            mergeDrawableStates(state, EXPANDED_STATE_SET);
-        }
-        //Log.v("onCreateDrawableState", getId(), Arrays.toString(state));
-        return state;
-    }
-
-    private ColorStateList createDefaultColorStateList(TintTypedArray a, int attr,
-          int baseColorThemeAttr,
-          @ColorRes int... defaultColorRes) {
-        final TypedValue value = new TypedValue();
-        if (!getContext().getTheme().resolveAttribute(baseColorThemeAttr, value, true)) {
-            return null;
-        }
-        ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
-              getContext(), value.resourceId);
-        if (!getContext().getTheme().resolveAttribute(
-              android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
-            return null;
-        }
-        int baseColor = baseColorStateList.getDefaultColor();
-        int defaultColor =
-              defaultColorRes.length > 0 ? ContextCompat.getColor(getContext(), defaultColorRes[0])
-                                         : baseColor;
-        return new ColorStateList(new int[][] {
-              EXPANDED_STATES,
-              EMPTY_STATE_SET
-        }, new int[] {
-              baseColorStateList.getColorForState(EXPANDED_STATE_SET, defaultColor),
-              a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
-        });
     }
 }

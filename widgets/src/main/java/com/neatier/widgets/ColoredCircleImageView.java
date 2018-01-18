@@ -231,6 +231,19 @@ public class ColoredCircleImageView extends AppCompatImageView {
         }
 
         /**
+         * Set a gradient shader computed from the given diameter.
+         *
+         * @param diameter the diameter for the gradient to compute.
+         */
+        private void updateRadialGradient(int diameter) {
+            mRadialGradient = new RadialGradient(diameter / 2, diameter / 2,
+                                                 mShadowRadius,
+                                                 new int[] { FILL_SHADOW_COLOR, Color.TRANSPARENT },
+                                                 null, Shader.TileMode.CLAMP);
+            mShadowPaint.setShader(mRadialGradient);
+        }
+
+        /**
          * Draws the oval shaped shadow around its canvas with the given paint.
          */
         @Override
@@ -249,19 +262,6 @@ public class ColoredCircleImageView extends AppCompatImageView {
             mShadowPaint = new Paint();
             mShadowRadius = shadowRadius;
             updateRadialGradient((int) rect().width());
-        }
-
-        /**
-         * Set a gradient shader computed from the given diameter.
-         *
-         * @param diameter the diameter for the gradient to compute.
-         */
-        private void updateRadialGradient(int diameter) {
-            mRadialGradient = new RadialGradient(diameter / 2, diameter / 2,
-                                                 mShadowRadius,
-                                                 new int[] { FILL_SHADOW_COLOR, Color.TRANSPARENT },
-                                                 null, Shader.TileMode.CLAMP);
-            mShadowPaint.setShader(mRadialGradient);
         }
     }
 }

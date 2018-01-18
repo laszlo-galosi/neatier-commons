@@ -13,10 +13,11 @@
 
 package com.neatier.widgets.forms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -35,8 +36,6 @@ import com.neatier.widgets.R;
 import com.neatier.widgets.ThemeUtil;
 import com.neatier.widgets.helpers.DrawableHelper;
 import com.neatier.widgets.helpers.WidgetUtils;
-
-import static android.R.attr.inputType;
 
 /**
  * An {@link EditFieldWidget} sub class of a widget with password transformation type type,
@@ -61,10 +60,9 @@ public class PasswordFieldWidget extends EditFieldWidget {
 
     private final Drawable mRevealDrawable;
     private final ColorStateList mIconColorStateList;
-    private boolean mAutoHide = true;
     ImageButton mBtnReveal;
     boolean isPasswordRevealed;
-
+    private boolean mAutoHide = true;
     View.OnFocusChangeListener mAutoHideFocusChangeListener = (view, hasFocus) -> {
         super.mDefaultFocusChangeListener.onFocusChange(view, hasFocus);
         boolean visible = mAutoHide ? hasFocus : true;
@@ -80,6 +78,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RestrictedApi")
     public PasswordFieldWidget(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -97,75 +96,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
         setPasswordRevealed(isPasswordRevealed);
     }
 
-    @Override public void initView(final Context context) {
-        super.initView(context);
-        mBtnReveal = (ImageButton) mItemView.findViewById(R.id.btn_action);
-        getEditText().setInputType(
-              InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        Preconditions.checkNotNull(mBtnReveal, "No ImageButton with id btn_show found.");
-        mBtnReveal.setOnClickListener(v -> setPasswordRevealed(!isPasswordRevealed));
-    }
-
-    public PasswordFieldWidget setPasswordRevealed(final boolean passwordRevealed) {
-        isPasswordRevealed = passwordRevealed;
-        WidgetUtils.setVisibilityOf(mBtnReveal,     mAutoHide ? getEditText().hasFocus() : true);
-        int defaultColor = mFieldTextColor;
-        mBtnReveal.setImageDrawable(
-              /*DrawableHelper.drawableForColorState*/
-              getDrawableForColorState(mRevealDrawable, mIconColorStateList,
-                                                   /*getDrawableState(getDrawableState()),*/
-                                       defaultColor, getContext())
-        );
-
-        getEditText().setInputType(inputType);
-        getEditText().setTransformationMethod(isPasswordRevealed
-                                              ? null : PasswordTransformationMethod.getInstance());
-        super.refreshDrawableState();
-        moveCursorToEnd();
-        return this;
-    }
-
-    @Override
-    protected int[] onCreateDrawableState(int extraSpace) {
-        int[] state = super.onCreateDrawableState(extraSpace + 2);
-        return getDrawableState(state);
-    }
-
-    @Override
-    public void setFocusBehavior(@Nullable final View.OnFocusChangeListener fl,
-          final int focusFlags) {
-        super.setFocusBehavior(mAutoHideFocusChangeListener, focusFlags);
-    }
-
-    private Drawable getDrawableForColorState(Drawable drawable, ColorStateList colorState,
-          @ColorInt int defaultColor, final Context context) {
-        int baseColor = colorState.getColorForState(getDrawableState(), defaultColor);
-        if (baseColor == defaultColor) {
-            return drawable;
-        }
-        if (drawable != null) {
-            return DrawableHelper.withContext(context)
-                                 .withColorState(colorState, getDrawableState(getDrawableState()),
-                                                 defaultColor)
-                                 .withDrawable(drawable)
-                                 .tint().get();
-        }
-        return drawable;
-    }
-
-    private int[] getDrawableState(final int[] state) {
-        if (isPasswordRevealed) {
-            mergeDrawableStates(state, REVEALED_STATE_SET);
-        }
-        //Log.v("onCreateDrawableState", getId(), Arrays.toString(state));
-        return state;
-    }
-
-    @Override public int getFieldPaddingRight() {
-        boolean visible = mAutoHide ? getEditText().hasFocus() : true;
-        return visible ? ThemeUtil.dpToPx(getContext(), 36) : mDefaultFieldPaddingStart;
-    }
-
+    @SuppressLint("RestrictedApi")
     private ColorStateList createDefaultColorStateList(TintTypedArray a, int attr,
           int baseColorThemeAttr,
           @ColorRes int... defaultColorRes) {
@@ -190,5 +121,79 @@ public class PasswordFieldWidget extends EditFieldWidget {
               baseColorStateList.getColorForState(REVEALED_STATE_SET, defaultColor),
               a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
         });
+    }
+
+    public PasswordFieldWidget setPasswordRevealed(final boolean passwordRevealed) {
+        isPasswordRevealed = passwordRevealed;
+        WidgetUtils.setVisibilityOf(mBtnReveal, mAutoHide ? getEditText().hasFocus() : true);
+        int defaultColor = mFieldTextColor;
+        mBtnReveal.setImageDrawable(
+              DrawableHelper.drawableForColorState(mRevealDrawable, mIconColorStateList,
+                                                   getDrawableState(getDrawableState()),
+                                                   defaultColor, getContext())
+        );
+        getEditText().setTransformationMethod(isPasswordRevealed
+                                              ? null : PasswordTransformationMethod.getInstance());
+        getEditText().setTypeface(Typeface.DEFAULT);
+        getEditText().setTextColor(mFieldTextColor);
+        super.refreshDrawableState();
+        moveCursorToEnd();
+        return this;
+    }
+
+    private int[] getDrawableState(final int[] state) {
+        if (isPasswordRevealed) {
+            mergeDrawableStates(state, REVEALED_STATE_SET);
+        }
+        //Log.v("onCreateDrawableState", getId(), Arrays.toString(state));
+        return state;
+    }
+
+    @Override public void initView(final Context context) {
+        super.initView(context);
+        mBtnReveal = (ImageButton) mItemView.findViewById(R.id.btn_action);
+        getEditText().setInputType(
+              InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        getEditText().setTransformationMethod(isPasswordRevealed
+                                              ? PasswordTransformationMethod.getInstance() : null);
+        Preconditions.checkNotNull(mBtnReveal, "No ImageButton with id btn_show found.");
+    }
+
+    @Override protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mBtnReveal == null) {
+            return;
+        }
+        mBtnReveal.setOnClickListener(v -> setPasswordRevealed(!isPasswordRevealed));
+    }
+
+    @Override protected void onDetachedFromWindow() {
+        mBtnReveal.setOnClickListener(null);
+        super.onDetachedFromWindow();
+    }
+
+    @Override public int getFieldPaddingRight() {
+        boolean visible = mAutoHide ? getEditText().hasFocus() : true;
+        return visible ? ThemeUtil.dpToPx(getContext(), 36) : mDefaultFieldPaddingStart;
+    }
+
+    @Override
+    public void setFocusBehavior(@Nullable final View.OnFocusChangeListener fl,
+          final int focusFlags) {
+        OnFocusChangeListener mergedFl = (view, hasFocus) -> {
+            if (mAutoHideFocusChangeListener != null) {
+                mAutoHideFocusChangeListener.onFocusChange(view, hasFocus);
+            }
+            if (fl != null) {
+                fl.onFocusChange(view, hasFocus);
+            }
+        };
+        super.setFocusBehavior(mergedFl, focusFlags);
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        int[] state = super.onCreateDrawableState(extraSpace + 2);
+        return getDrawableState(state);
     }
 }
