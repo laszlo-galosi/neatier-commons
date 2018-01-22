@@ -317,7 +317,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
 
     protected void updatePaddings() {
         Rect textBounds = new Rect(0, 0, 0, 0);
-        //Compute text bounds with formatted text
+        //Compute text bounds with formatted textgit
         String formatted = String.format(mLabelFormat, mLabelText);
         if (mLabelTextPaint != null && formatted != null) {
             mLabelTextPaint.getTextBounds(formatted, 0, formatted.length(), textBounds);
