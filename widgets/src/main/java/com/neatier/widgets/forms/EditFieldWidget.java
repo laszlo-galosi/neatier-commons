@@ -317,8 +317,10 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
 
     protected void updatePaddings() {
         Rect textBounds = new Rect(0, 0, 0, 0);
-        if (mLabelTextPaint != null && mLabelText != null) {
-            mLabelTextPaint.getTextBounds(mLabelText, 0, mLabelText.length(), textBounds);
+        //Compute text bounds with formatted text
+        String formatted = String.format(mLabelFormat, mLabelText);
+        if (mLabelTextPaint != null && formatted != null) {
+            mLabelTextPaint.getTextBounds(formatted, 0, formatted.length(), textBounds);
         }
         int leftPadding;
         if (isMultiLine()) {
