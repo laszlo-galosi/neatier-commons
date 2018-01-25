@@ -59,6 +59,7 @@ public class CheckboxFieldWidget extends FrameLayout
     private TextView mLabelView;
     private TextView mHelperView;
     private Paint mLabelTextPaint;
+    private String key;
 
     public CheckboxFieldWidget(final Context context) {
         this(context, null);
@@ -169,7 +170,6 @@ public class CheckboxFieldWidget extends FrameLayout
         if (mHelperView == null && mHelperViewId > 0) {
             mHelperView = (TextView) findViewById(mHelperViewId);
         }
-        ;
         WidgetUtils.setTextOf(mHelperView, mHelperText);
         if (colorRes > 0 && mHelperView != null) {
             mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
@@ -210,5 +210,10 @@ public class CheckboxFieldWidget extends FrameLayout
 
     public Paint getLabelTextPaint() {
         return mLabelTextPaint;
+    }
+
+    public CheckboxFieldWidget setKey(String key) {
+        this.key = key;
+        return this;
     }
 }

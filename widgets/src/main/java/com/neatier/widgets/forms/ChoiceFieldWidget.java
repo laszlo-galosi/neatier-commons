@@ -13,6 +13,7 @@
 
 package com.neatier.widgets.forms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
@@ -77,6 +78,7 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RestrictedApi")
     public ChoiceFieldWidget(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
