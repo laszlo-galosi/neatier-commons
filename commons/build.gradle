@@ -23,13 +23,14 @@ repositories {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
     compileSdkVersion versions.androidCompileSdkVersion
     buildToolsVersion versions.androidBuildToolsVersion
     defaultConfig {
+        minSdkVersion minSdk()
+        targetSdkVersion versions.androidTargetSdkVersion
         defaultPublishConfig 'release'
         publishNonDefault true
     }
@@ -43,26 +44,26 @@ android {
 }
 
 configurations {
-    testOutput.extendsFrom(testCompile)
+    testOutput.extendsFrom(testImplementation)
 }
 
 dependencies {
     //Optional, Collections, Guava like but lightweight on method count library
-    compile appBuildingDependencies.arrow
-    compile appBuildingDependencies.dagger
-    compile appBuildingDependencies.javaxInject
-//  compile appBuildingDependencies.javaxAnnotationApi
+    implementation appBuildingDependencies.arrow
+    implementation appBuildingDependencies.dagger
+    implementation appBuildingDependencies.javaxInject
+//  implementation appBuildingDependencies.javaxAnnotationApi
 
-    compile appBuildingDependencies.trikitaLog
-    compile appBuildingDependencies.rxAndroid
-    compile appBuildingDependencies.rxJava
-    compile appBuildingDependencies.androidAnnotations
-    compile appBuildingDependencies.supportV7
-    compile appBuildingDependencies.jodaTimeAndroid
-    compile dataDependencies.gson
+    implementation appBuildingDependencies.trikitaLog
+    implementation appBuildingDependencies.rxAndroid
+    implementation appBuildingDependencies.rxJava
+    implementation appBuildingDependencies.androidAnnotations
+    implementation appBuildingDependencies.supportV7
+    implementation appBuildingDependencies.jodaTimeAndroid
+    implementation dataDependencies.gson
 
-    testCompile robolectricTestDependencies.junit
-    testCompile robolectricTestDependencies.assertj
-    testCompile robolectricTestDependencies.mockito
-    testCompile robolectricTestDependencies.robolectric
+    testImplementation robolectricTestDependencies.junit
+    testImplementation robolectricTestDependencies.assertj
+    testImplementation robolectricTestDependencies.mockito
+    testImplementation robolectricTestDependencies.robolectric
 }
