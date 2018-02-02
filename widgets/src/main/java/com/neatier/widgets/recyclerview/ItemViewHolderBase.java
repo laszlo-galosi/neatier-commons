@@ -33,7 +33,7 @@ public class ItemViewHolderBase extends RecyclerView.ViewHolder
 
     View mMainWidget;
     protected View mItemView;
-    Context mContext;
+    protected Context mContext;
     protected Optional<Object> mDataItem;
 
     @Override public void bind(final Object dataItem) {
