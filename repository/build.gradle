@@ -56,40 +56,41 @@ android {
 
 
 dependencies {
-  //    implementation fileTree(dir: 'libs', include: ['*.jar'])
+  //    compile fileTree(dir: 'libs', include: ['*.jar'])
 
   //Uncomment next line when building a project using this library
 //  debugCompile project(path: ':neatier-commons:commons', configuration: "debug")
-  implementation project(':neatier-commons:commons')
+  compile project(':neatier-commons:commons')
 //  releaseCompile project(path: ':neatier-commons:commons', configuration: "release")
   //Uncomment next line  while building the library.
-  //      implementation project(path: ':commons')
+  //      compile project(path: ':commons')
 
   //Optional, Collections, Guava like but lightweight on method count library
-  implementation appBuildingDependencies.arrow
-  implementation appBuildingDependencies.rxJava
+  compile appBuildingDependencies.arrow
+  compile appBuildingDependencies.rxJava
   annotationProcessor appBuildingDependencies.autoValue
-  compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
+  provided 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
   annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
 
   //Dagger 2 related
-  implementation appBuildingDependencies.dagger
+  compile appBuildingDependencies.dagger
   annotationProcessor appBuildingDependencies.daggerCompiler
-  compileOnly appBuildingDependencies.javaxInject
+  provided appBuildingDependencies.javaxInject
+  compile appBuildingDependencies.androidAnnotations
 
   //libraries on demand per project
-  implementation appBuildingDependencies.trikitaLog
+  compile appBuildingDependencies.trikitaLog
 
   //Networking
-  implementation dataDependencies.gson
-  implementation dataDependencies.okHttp
-  implementation dataDependencies.okHttpInterceptor
-  implementation dataDependencies.retrofit
-  implementation dataDependencies.retrofitRxJava
-  implementation dataDependencies.retrofitGsonConverter
+  compile dataDependencies.gson
+  compile dataDependencies.okHttp
+  compile dataDependencies.okHttpInterceptor
+  compile dataDependencies.retrofit
+  compile dataDependencies.retrofitRxJava
+  compile dataDependencies.retrofitGsonConverter
 
   //Datarepository
-  //    implementation 'com.karumi.rosie:rosie:2.0.0'
+  //    compile 'com.karumi.rosie:rosie:2.0.0'
 
   //testing
   testImplementation robolectricTestDependencies.junit

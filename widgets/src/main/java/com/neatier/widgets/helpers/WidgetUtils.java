@@ -440,7 +440,6 @@ public class WidgetUtils {
           View.OnClickListener cbClick, int... range) {
         String label = (String) view.getText();
         view.setClickable(true);
-        view.setOnClickListener(cbClick);
         SpannableString ss = new SpannableString(label);
         ClickableSpan span = new ClickableSpan() {
             @Override

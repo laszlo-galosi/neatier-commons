@@ -209,7 +209,7 @@ public class RestApiResponseException extends ErrorBundleException {
      * Returns the response body as a json serialized string from the response info key-value pairs.
      */
     public @Nullable String getResponseBody() {
-        return (String) mResponseInfo.get(RESP_BODY);
+        return mResponseInfo.get(RESP_BODY).toString();
     }
 
     /**

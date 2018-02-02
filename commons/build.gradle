@@ -49,18 +49,18 @@ configurations {
 
 dependencies {
     //Optional, Collections, Guava like but lightweight on method count library
-    implementation appBuildingDependencies.arrow
-    implementation appBuildingDependencies.dagger
-    implementation appBuildingDependencies.javaxInject
-//  implementation appBuildingDependencies.javaxAnnotationApi
+    compile appBuildingDependencies.arrow
+    compile appBuildingDependencies.dagger
+    compile appBuildingDependencies.javaxInject
+//  compile appBuildingDependencies.javaxAnnotationApi
 
-    implementation appBuildingDependencies.trikitaLog
-    implementation appBuildingDependencies.rxAndroid
-    implementation appBuildingDependencies.rxJava
-    implementation appBuildingDependencies.androidAnnotations
-    implementation appBuildingDependencies.supportV7
-    implementation appBuildingDependencies.jodaTimeAndroid
-    implementation dataDependencies.gson
+    compile appBuildingDependencies.trikitaLog
+    compile appBuildingDependencies.rxAndroid
+    compile appBuildingDependencies.rxJava
+    compile appBuildingDependencies.androidAnnotations
+    compile appBuildingDependencies.supportV7
+    compile appBuildingDependencies.jodaTimeAndroid
+    compile dataDependencies.gson
 
     testImplementation robolectricTestDependencies.junit
     testImplementation robolectricTestDependencies.assertj
