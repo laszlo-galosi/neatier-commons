@@ -16,7 +16,6 @@ package com.neatier.widgets.forms;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
@@ -40,11 +39,12 @@ import com.neatier.widgets.helpers.WidgetUtils;
 /**
  * An {@link EditFieldWidget} sub class of a widget with password transformation type type,
  * and a reveal compound button.
- * <p>Custom style attributes includes {@link EditFieldWidget}'s attributes:
+ * <p>Custom style attributes including {@link EditFieldWidget}'s attributes:
  * <ul>
  * <li>app:pf_buttonDrawable - drawable resource of the reveal password button</li>
  * <li>app:pf_buttonTintList - {@link ColorStateList} of the reveal password button</li>
- * <li>app:pf_autoHide - true if the password should be revealed when the field gets the focus</li>
+ * <li>app:pf_autoHide - true if the reveal button should be hidden when the field lost or has not
+ * the focus</li>
  * </ul>
  *
  * @author László Gálosi
@@ -56,7 +56,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
 
     public static final int[] REVEALED_STATE_SET = { R.attr.state_revealed };
     public static final int[] REVEALED_STATES =
-          new int[] { R.attr.state_revealed, -R.attr.state_revealed };
+            new int[] { R.attr.state_revealed, -R.attr.state_revealed };
 
     private final Drawable mRevealDrawable;
     private final ColorStateList mIconColorStateList;
@@ -65,8 +65,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
     private boolean mAutoHide = true;
     View.OnFocusChangeListener mAutoHideFocusChangeListener = (view, hasFocus) -> {
         super.mDefaultFocusChangeListener.onFocusChange(view, hasFocus);
-        boolean visible = mAutoHide ? hasFocus : true;
-        WidgetUtils.setVisibilityOf(mBtnReveal, visible);
+        setPasswordRevealed(isPasswordRevealed);
         updatePaddings();
     };
 
@@ -80,61 +79,66 @@ public class PasswordFieldWidget extends EditFieldWidget {
 
     @SuppressLint("RestrictedApi")
     public PasswordFieldWidget(final Context context, final AttributeSet attrs,
-          final int defStyleAttr) {
+            final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TintTypedArray a = TintTypedArray.obtainStyledAttributes(context, attrs,
-                                                                 R.styleable.PasswordFieldWidget,
-                                                                 defStyleAttr, 0);
+                R.styleable.PasswordFieldWidget,
+                defStyleAttr, 0);
+        TintTypedArray wa = TintTypedArray.obtainStyledAttributes(context, attrs,
+                R.styleable.EditFieldWidget, defStyleAttr, 0);
         mRevealDrawable = a.hasValue(R.styleable.PasswordFieldWidget_pf_buttonDrawable)
-                          ? a.getDrawable(R.styleable.PasswordFieldWidget_pf_buttonDrawable) :
-                          ContextCompat.getDrawable(getContext(), R.drawable.ic_eye_24dp);
+                ? a.getDrawable(R.styleable.PasswordFieldWidget_pf_buttonDrawable) :
+                ContextCompat.getDrawable(getContext(), R.drawable.ic_eye_24dp);
         mIconColorStateList =
-              createDefaultColorStateList(a, R.styleable.PasswordFieldWidget_pf_buttonTintList,
-                                          android.R.attr.textColorPrimary,
-                                          R.color.colorTextPrimary);
+                createDefaultColorStateList(a, R.styleable.PasswordFieldWidget_pf_buttonTintList,
+                        android.R.attr.textColorPrimary,
+                        R.color.colorTextPrimary);
         mAutoHide = a.getBoolean(R.styleable.PasswordFieldWidget_pf_autoHide, false);
+        mInputType = wa.getInt(R.styleable.EditFieldWidget_android_inputType,
+                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        wa.recycle();
+        a.recycle();
         setPasswordRevealed(isPasswordRevealed);
     }
 
     @SuppressLint("RestrictedApi")
     private ColorStateList createDefaultColorStateList(TintTypedArray a, int attr,
-          int baseColorThemeAttr,
-          @ColorRes int... defaultColorRes) {
+            int baseColorThemeAttr,
+            @ColorRes int... defaultColorRes) {
         final TypedValue value = new TypedValue();
         if (!getContext().getTheme().resolveAttribute(baseColorThemeAttr, value, true)) {
             return null;
         }
         ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
-              getContext(), value.resourceId);
+                getContext(), value.resourceId);
         if (!getContext().getTheme().resolveAttribute(
-              android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
+                android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
             return null;
         }
         int baseColor = baseColorStateList.getDefaultColor();
         int defaultColor =
-              defaultColorRes.length > 0 ? ContextCompat.getColor(getContext(), defaultColorRes[0])
-                                         : baseColor;
+                defaultColorRes.length > 0 ? ContextCompat.getColor(getContext(),
+                        defaultColorRes[0])
+                        : baseColor;
         return new ColorStateList(new int[][] {
-              REVEALED_STATES,
-              EMPTY_STATE_SET
+                REVEALED_STATES,
+                EMPTY_STATE_SET
         }, new int[] {
-              baseColorStateList.getColorForState(REVEALED_STATE_SET, defaultColor),
-              a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
+                baseColorStateList.getColorForState(REVEALED_STATE_SET, defaultColor),
+                a.hasValue(attr) ? a.getColor(attr, defaultColor) : defaultColor
         });
     }
 
     public PasswordFieldWidget setPasswordRevealed(final boolean passwordRevealed) {
         isPasswordRevealed = passwordRevealed;
-        WidgetUtils.setVisibilityOf(mBtnReveal, mAutoHide ? getEditText().hasFocus() : true);
+        WidgetUtils.setVisibilityOf(mBtnReveal, !mAutoHide || getEditText().hasFocus());
         int defaultColor = mFieldTextColor;
         mBtnReveal.setImageDrawable(
-              DrawableHelper.drawableForColorState(mRevealDrawable, mIconColorStateList,
-                                                   getDrawableState(getDrawableState()),
-                                                   defaultColor, getContext())
+                DrawableHelper.drawableForColorState(mRevealDrawable, mIconColorStateList,
+                        getDrawableState(getDrawableState()),
+                        defaultColor, getContext())
         );
-        getEditText().setTransformationMethod(isPasswordRevealed
-                                              ? null : PasswordTransformationMethod.getInstance());
-        getEditText().setTypeface(Typeface.DEFAULT);
+        setInputType();
         getEditText().setTextColor(mFieldTextColor);
         super.refreshDrawableState();
         moveCursorToEnd();
@@ -151,12 +155,18 @@ public class PasswordFieldWidget extends EditFieldWidget {
 
     @Override public void initView(final Context context) {
         super.initView(context);
-        mBtnReveal = (ImageButton) mItemView.findViewById(R.id.btn_action);
-        getEditText().setInputType(
-              InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        mBtnReveal = mItemView.findViewById(R.id.btn_action);
+        setInputType();
+        Preconditions.checkNotNull(mBtnReveal, "No ImageButton with id btn_action found.");
+    }
+
+    @Override protected void setInputType() {
+        getEditText().setInputType(mInputType);
         getEditText().setTransformationMethod(isPasswordRevealed
-                                              ? PasswordTransformationMethod.getInstance() : null);
-        Preconditions.checkNotNull(mBtnReveal, "No ImageButton with id btn_show found.");
+                ? null : PasswordTransformationMethod.getInstance());
+        //Set the typeface, because EditText android:inputType="textPassword" attribute changes
+        // the typeface to monospace when the transformation method changes.
+        getEditText().setTypeface(mFieldTypeface);
     }
 
     @Override protected void onAttachedToWindow() {
@@ -164,6 +174,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
         if (mBtnReveal == null) {
             return;
         }
+        setInputType();
         mBtnReveal.setOnClickListener(v -> setPasswordRevealed(!isPasswordRevealed));
     }
 
@@ -173,13 +184,13 @@ public class PasswordFieldWidget extends EditFieldWidget {
     }
 
     @Override public int getFieldPaddingRight() {
-        boolean visible = mAutoHide ? getEditText().hasFocus() : true;
+        boolean visible = !mAutoHide || getEditText().hasFocus();
         return visible ? ThemeUtil.dpToPx(getContext(), 36) : mDefaultFieldPaddingStart;
     }
 
     @Override
     public void setFocusBehavior(@Nullable final View.OnFocusChangeListener fl,
-          final int focusFlags) {
+            final int focusFlags) {
         OnFocusChangeListener mergedFl = (view, hasFocus) -> {
             if (mAutoHideFocusChangeListener != null) {
                 mAutoHideFocusChangeListener.onFocusChange(view, hasFocus);
@@ -188,7 +199,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
                 fl.onFocusChange(view, hasFocus);
             }
         };
-        super.setFocusBehavior(mergedFl, focusFlags);
+        super.setFocusBehavior(mergedFl, focusFlags | FOCUS_FLAG_SHOW_KEYBOARD);
     }
 
     @Override
