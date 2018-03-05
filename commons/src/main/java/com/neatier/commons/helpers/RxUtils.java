@@ -12,10 +12,13 @@
  */
 package com.neatier.commons.helpers;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +32,7 @@ import rx.Subscription;
 import rx.exceptions.OnErrorNotImplementedException;
 import rx.functions.Action1;
 import rx.observables.BlockingObservable;
+import rx.observables.SyncOnSubscribe;
 import rx.subscriptions.CompositeSubscription;
 import trikita.log.Log;
 
@@ -197,5 +201,31 @@ public class RxUtils {
         observable.reduce("", (a, b) -> String.format("%s, %s", a.toString(), b.toString()))
                 .subscribe(sb::append);
         return sb.toString();
+    }
+
+    public static Observable<byte[]> readFile(@NonNull FileInputStream inputStream) {
+        final SyncOnSubscribe<FileInputStream, byte[]> fileReader = SyncOnSubscribe.createStateful(
+                () -> inputStream, (stream, output) -> {
+                    try {
+                        final byte[] buffer = new byte[1024];
+                        int count = stream.read(buffer);
+                        if (count < 0) {
+                            output.onCompleted();
+                        } else {
+                            output.onNext(buffer);
+                        }
+                    } catch (IOException error) {
+                        output.onError(error);
+                    }
+                    return stream;
+                },
+                s -> {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        RxUtils.logRxError().call(e);
+                    }
+                });
+        return Observable.create(fileReader);
     }
 }
