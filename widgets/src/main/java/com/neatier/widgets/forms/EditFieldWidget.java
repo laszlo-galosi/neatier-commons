@@ -253,13 +253,13 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
             addView(mItemView);
+            mEditText = mItemView.findViewById(R.id.inputField);
+            mEditText.setTextColor(mFieldTextColor);
             if (mHelperViewId > 0) {
                 mHelperView = mItemView.findViewById(mHelperViewId);
                 setHelperWithColor(mHelperText, mHelperTextColor);
                 mHelperView.setTextColor(mHelperTextColor);
             }
-            mEditText = mItemView.findViewById(R.id.inputField);
-            mEditText.setTextColor(mFieldTextColor);
             setInputType();
             mEditText.setImeOptions(mImeOptions);
             mEditText.setImeActionLabel(mImeActionLabel, mImeOptions);
@@ -271,7 +271,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             }
             setLabel(mLabelText);
             if (mHelperAsHint) {
-                mEditText.setHint(getHelper());
+                setHint(getHelper());
             }
             WidgetUtils.setVisibilityOf(mHelperView, mShowHelper);
             WidgetUtils.setVisibilityOf(mLabelView, mShowLabel);
@@ -392,8 +392,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
 
     private void setHint(String hintText) {
         SpannableString ss = new SpannableString(hintText);
-        ss.setSpan(mTypefaceSpan, 0, ss.length(),
-                Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        ss.setSpan(mTypefaceSpan, 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(mHelperTextColor), 0,
                 ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         mEditText.setHint(ss);
@@ -532,6 +531,10 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
         if (Flags.isSet(mFocusFlags, FOCUS_FLAG_GRAVITY)) {
             mEditText.setGravity(hasFocus ? mFocusedFieldAlign : mUnFocusedFieldAlign);
         }
+    }
+
+    public void showHideLabel(boolean show) {
+        WidgetUtils.setVisibilityOf(mLabelView, show);
     }
 
     public static class TextChangeObserver implements Observer<TextViewTextChangeEvent> {
