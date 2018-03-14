@@ -20,10 +20,14 @@ import android.support.annotation.StringRes;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
 import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Pair;
+import android.view.View;
 import android.widget.TextView;
 import com.fernandocejas.arrow.checks.Preconditions;
 import com.neatier.commons.helpers.KeyValuePairs;
@@ -63,6 +67,11 @@ public class Spannables {
      * Map containing span text - color int value-pairs for creating {@link BackgroundColorSpan}s.
      */
     private KeyValuePairs<String, Integer> mTypeFaces = new KeyValuePairs<>(2);
+
+    /**
+     * Map containing span text - clicklistener int value-pairs for creating {@link ClickableSpan}s.
+     */
+    private KeyValuePairs<String, View.OnClickListener> mClickables = new KeyValuePairs<>(2);
 
     /**
      * Map containing span text - type face int value-pairs for creating {@link StyleSpan}s.
@@ -189,6 +198,22 @@ public class Spannables {
     }
 
     /**
+     * Builder like method for adding a {@link ClickableSpan} with the given click listener.
+     * <p>The text to be spanned should be set previously. In order the {@link
+     * ClickableSpan#onClick(View)} is to be called, don't forget to {@link
+     * TextView#setMovementMethod(MovementMethod)} to {@link LinkMovementMethod#getInstance()} for
+     * the TextView for which the the Spannable is
+     * applied.
+     */
+    public Spannables clickable(String substring, View.OnClickListener clickListener) {
+        Preconditions.checkNotNull(mTextToSpan, "Spannable text not initialized.");
+        Preconditions.checkArgument(mSpanRanges.containsKey(substring),
+                String.format("No sub span added yet:%s", substring));
+        mClickables.put(substring, clickListener);
+        return this;
+    }
+
+    /**
      * Creates and returns a SpannableStringBuilder to use with a {@link TextView}.
      */
     public SpannableStringBuilder build() {
@@ -205,6 +230,7 @@ public class Spannables {
                     Integer fgColor = mForegroundColors.get(key);
                     Integer bgColor = mBackgroundColors.get(key);
                     Integer typeFace = mTypeFaces.get(key);
+                    View.OnClickListener onClick = mClickables.get(key);
                     if (fgColor == null) {
                         foreground(key, defaultFgColor);
                         fgColor = mForegroundColors.get(key);
@@ -217,6 +243,14 @@ public class Spannables {
                     }
                     if (typeFace != null) {
                         ssb.setSpan(new StyleSpan(typeFace), range.first,
+                                range.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    }
+                    if (onClick != null) {
+                        ssb.setSpan(new ClickableSpan() {
+                                        @Override public void onClick(View v) {
+                                            onClick.onClick(v);
+                                        }
+                                    }, range.first,
                                 range.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     }
                 });
