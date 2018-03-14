@@ -25,6 +25,7 @@ import android.text.method.MovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.view.View;
@@ -77,6 +78,12 @@ public class Spannables {
      * Map containing span text - type face int value-pairs for creating {@link StyleSpan}s.
      */
     private KeyValuePairs<String, Integer> mBackgroundColors = new KeyValuePairs<>(2);
+
+    /**
+     * Map containing span text - relative size float value-pairs for creating {@link
+     * RelativeSizeSpan}s.
+     */
+    private KeyValuePairs<String, Float> mRelativeSizeSpans = new KeyValuePairs<>(2);
 
     private Spannables(String textToSpan, @NonNull Context context) {
         mContext = context;
@@ -214,6 +221,22 @@ public class Spannables {
     }
 
     /**
+     * Builder like method for adding a {@link RelativeSizeSpan} with the given relative size.
+     * <p>The text to be spanned should be set previously.
+     * applied.
+     *
+     * @param relativeSize the proportion of the TextView's font size.
+     * @see RelativeSizeSpan#RelativeSizeSpan(float)
+     */
+    public Spannables relativeSize(String substring, Float relativeSize) {
+        Preconditions.checkNotNull(mTextToSpan, "Spannable text not initialized.");
+        Preconditions.checkArgument(mSpanRanges.containsKey(substring),
+                String.format("No sub span added yet:%s", substring));
+        mRelativeSizeSpans.put(substring, relativeSize);
+        return this;
+    }
+
+    /**
      * Creates and returns a SpannableStringBuilder to use with a {@link TextView}.
      */
     public SpannableStringBuilder build() {
@@ -230,6 +253,7 @@ public class Spannables {
                     Integer fgColor = mForegroundColors.get(key);
                     Integer bgColor = mBackgroundColors.get(key);
                     Integer typeFace = mTypeFaces.get(key);
+                    Float relativeSize = mRelativeSizeSpans.get(key);
                     View.OnClickListener onClick = mClickables.get(key);
                     if (fgColor == null) {
                         foreground(key, defaultFgColor);
@@ -243,6 +267,10 @@ public class Spannables {
                     }
                     if (typeFace != null) {
                         ssb.setSpan(new StyleSpan(typeFace), range.first,
+                                range.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                    }
+                    if (relativeSize != null) {
+                        ssb.setSpan(new RelativeSizeSpan(relativeSize), range.first,
                                 range.second, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                     }
                     if (onClick != null) {
