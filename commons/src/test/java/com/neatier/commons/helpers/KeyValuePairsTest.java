@@ -21,12 +21,10 @@ import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.util.SparseLongArray;
-
 import com.google.gson.annotations.SerializedName;
 import com.neatier.commons.ApplicationStub;
 import com.neatier.commons.BuildConfig;
 import com.neatier.commons.CommonsTestCase;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,14 +32,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
-
 import rx.Observable;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 30/07/15
+ * @author László Gálosi
+ * @since 30/07/15
  */
 @Config(sdk = 16, constants = BuildConfig.class, application = ApplicationStub.class, manifest =
         Config.NONE)

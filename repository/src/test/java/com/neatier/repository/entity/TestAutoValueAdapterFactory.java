@@ -8,7 +8,8 @@ import com.neatier.data.entity.AutoGson;
 import com.neatier.data.entity.TestEntity;
 
 /**
- * Created by László Gálosi on 16/06/16
+ * @author László Gálosi
+ * @since 16/06/16
  */
 public class TestAutoValueAdapterFactory implements TypeAdapterFactory {
 

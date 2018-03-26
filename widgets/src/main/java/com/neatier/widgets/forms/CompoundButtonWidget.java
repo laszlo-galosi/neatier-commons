@@ -43,7 +43,33 @@ import rx.functions.Action1;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 27/02/17
+ * Custom widget for a button widget with compound Drawables.
+ * <p>Custom style attributes:
+ * <ul>
+ * <li>app:layout - the widgets layout resource</li>
+ * <li>app:if_fieldKey - string identifier of the key </li>
+ * <li>app:if_labelViewId - the label view </li>
+ * <li>app:if_helperViewId - the helper text view id </li>
+ * <li>app:if_widgetLayout the custom widget layout to be inflated</li>
+ * <li>app:if_showLabel - true if the label should be visible</li>
+ * <li>app:if_showHelper - true if the helper text should be visible</li>
+ * <li>app:if_label - label text</li>
+ * <li>app:if_helper - helper text</li>
+ * <li>app:if_labelFormat -label {@link String#format(String, Object...)}</li>
+ * <li>app:if_labelTextColor - label text color resource</li>
+ * <li>app:if_helperTextColor helper text color resource</li>
+ * <li>app:cbw_iconViewId - the view id of the View displaying the compound drawable</li>
+ * <li>app:cbw_icon - the icon drawable resource </li>
+ * <li>app:cbw_iconTintList - {@link ColorStateList} resource of the icon</li>
+ * <li>app:cbw_showIcon - true if the icon view should be visible.</li>
+ * <li>app:cbw_background - the button background resource of the widget</li>
+ * <li>app:cbw_backgroundTintList - {@link ColorStateList} resource of the button background</li>
+ * <li>app:cbw_onClick - OnClickListener button</li>
+ * </ul>
+ * </p>
+ *
+ * @author László Gálosi
+ * @since 27/02/17
  */
 
 @BindingMethods(
@@ -295,6 +321,7 @@ public class CompoundButtonWidget extends FrameLayout
         mOnClickListener = onClickListener;
     }
 
+    @SuppressWarnings("unchecked")
     @Override protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         Log.d("onAttachedToWindow", getKey(), "onClick", mOnClickListener);
@@ -309,14 +336,7 @@ public class CompoundButtonWidget extends FrameLayout
                 mAction.call(this);
             }
         });
-        //mLabelView.setTag(this.getId());
     }
-
-   /* @Override protected void onDetachedFromWindow() {
-        mLabelView.setOnClickListener(null);
-        mItemView.setOnClickListener(null);
-        super.onDetachedFromWindow();
-    }*/
 
     @Override public void refreshDrawableState() {
         super.refreshDrawableState();

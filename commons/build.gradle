@@ -23,13 +23,14 @@ repositories {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
     compileSdkVersion versions.androidCompileSdkVersion
     buildToolsVersion versions.androidBuildToolsVersion
     defaultConfig {
+        minSdkVersion minSdk()
+        targetSdkVersion versions.androidTargetSdkVersion
         defaultPublishConfig 'release'
         publishNonDefault true
     }
@@ -43,7 +44,7 @@ android {
 }
 
 configurations {
-    testOutput.extendsFrom(testCompile)
+    testOutput.extendsFrom(testImplementation)
 }
 
 dependencies {
@@ -61,8 +62,8 @@ dependencies {
     compile appBuildingDependencies.jodaTimeAndroid
     compile dataDependencies.gson
 
-    testCompile robolectricTestDependencies.junit
-    testCompile robolectricTestDependencies.assertj
-    testCompile robolectricTestDependencies.mockito
-    testCompile robolectricTestDependencies.robolectric
+    testImplementation robolectricTestDependencies.junit
+    testImplementation robolectricTestDependencies.assertj
+    testImplementation robolectricTestDependencies.mockito
+    testImplementation robolectricTestDependencies.robolectric
 }

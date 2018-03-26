@@ -31,7 +31,19 @@ import rx.functions.Func1;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 26/04/17
+ * A {@link ChoiceFieldWidget} sub class representing a widget with a {@link RadioGroup} like
+ * behavior.
+ * <p>Custom style attributes includes {@link ChoiceFieldWidget}'s attributes:
+ * <ul>
+ * <li>app:rbcw_buttonGroupId - the id of the ViewGroup which contains the radio buttons</li>
+ * <li>app:rbcw_buttonLayout - layout resource of the radio button</li>
+ * <li>app:rbcw_selectedValue - the initially selected option integer value</li>
+ * <li>app:rbcw_onCheckedChanged - {@link RadioGroup.OnCheckedChangeListener} for the radio
+ * group</li>
+ * </ul>
+ *
+ * @author László Gálosi
+ * @since 26/04/17
  */
 @BindingMethods(
       @BindingMethod(type = RadioButtonChoiceWidget.class, attribute = "rbcw_onCheckedChanged",

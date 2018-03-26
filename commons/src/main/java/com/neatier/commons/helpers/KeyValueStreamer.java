@@ -13,16 +13,16 @@
 
 package com.neatier.commons.helpers;
 
+import android.support.annotation.Nullable;
 import com.neatier.commons.exception.ErrorBundleException;
-
 import java.util.Map;
-
 import rx.Observable;
 
 /**
- * * Helper abstract class to build and retrieve key value associations which uses {@link Map<K,V>}
+ * * Helper abstract class to build and retrieve key value associations which uses {@link Map}
  * interface.
- * Created by László Gálosi on 04/08/15
+ * @author László Gálosi
+ * @since 04/08/15
  */
 public interface KeyValueStreamer<K, V> {
 
@@ -47,7 +47,7 @@ public interface KeyValueStreamer<K, V> {
      * @return an {@link Observable} emitting the required value if found, or an {@link
      * Observable#error(Throwable)}
      */
-    Observable getOrError(K key, V errorIfEquals, ErrorBundleException t);
+    Observable getOrError(K key, @Nullable V errorIfEquals, ErrorBundleException t);
 
     /**
      * @return an {@link Observable} emitting the stored keys.

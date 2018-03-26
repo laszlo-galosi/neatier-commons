@@ -15,7 +15,6 @@ package com.neatier.commons.exception;
 
 import com.neatier.commons.CommonsTestCase;
 import com.neatier.commons.helpers.KeyValuePairs;
-
 import org.junit.Test;
 
 import static com.neatier.commons.exception.RestApiResponseException.RESP_BODY;
@@ -25,7 +24,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by László Gálosi on 13/08/15
+ * @author László Gálosi
+ * @since 13/08/15
  */
 public class RestApiResponseExceptionTest extends CommonsTestCase {
 

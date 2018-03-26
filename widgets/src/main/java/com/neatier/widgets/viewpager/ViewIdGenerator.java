@@ -4,6 +4,9 @@ import android.os.Build;
 import android.view.View;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Helper class to generate unique view for differet {@link Build.VERSION#SDK_INT}
+ */
 class ViewIdGenerator {
 
     int generateViewId() {

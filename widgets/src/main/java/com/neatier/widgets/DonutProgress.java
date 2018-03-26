@@ -45,7 +45,35 @@ import rx.Completable;
 import trikita.log.Log;
 
 /**
- * Created by bruce on 14-10-30.
+ * Creates a circular progress bar with customizable colors, width for the finished and unfinished
+ * bars. It can display the progress value with custom format and suffix.
+ *
+ * * <p>Custom style attributes:
+ * <ul>
+ * <li>app:progressValue - the current progress value as an integer</li>
+ * <li>app:maxValue - the max value as an integer </li>
+ * <li>app:finishedColor - the finished progress tint color resource </li>
+ * <li>app:unfinishedColor - the unfinished progress tint color resource </li>
+ * <li>app:innerCircleBackgroundColor - the inner circle background color resource</li>
+ * <li>app:progressTextFormat - the displayed progress text {@link String#format(String, Object...)}</li>
+ * <li>app:progressTextSize - the progress {@link TextView} text size</li>
+ * <li>app:progressTextColor - the progress {@link TextView} text color </li>
+ * <li>app:labelText - the text of the label view</li>
+ * <li>app:labelTextSize - the text size of the label view</li>
+ * <li>app:labelTextColor - the text color resource of the lable view</li>
+ * <li>app:suffixText - suffix for the progress value e.g. %</li>
+ * <li>app:suffixTextSize - the suffix text size </li>
+ * <li>app:suffixTextColor - the suffix text color </li>
+ * <li>app:finishedStrokeWidth - the finished progressbar stroke width </li>
+ * <li>app:unfinishedStrokeWidth - the unfinished progressbar stroke width  </li>
+ * <li>app:donut_widgetLayout - the layout resource of the widget</li>
+ * <li>app:startAngle - starting angle of the circular progress view.</li>
+ * <li>app:animDuration - the animation duration </li>
+ * <li>app:animInterpolator - the animation interpolator</li>
+ * </ul>
+ *
+ * @author László Gálosi
+ * @since 14-10-30.
  */
 public class DonutProgress extends FrameLayout {
 

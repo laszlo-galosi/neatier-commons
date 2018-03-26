@@ -14,7 +14,7 @@
 
 package com.neatier.repository.entity;
 
-import com.google.common.collect.Lists;
+import com.fernandocejas.arrow.collections.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
@@ -28,7 +28,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 08/06/16
+ * @author László Gálosi
+ * @since 08/06/16
  */
 public class AutoValueAdapterFactoryTest extends DataTestCase {
 

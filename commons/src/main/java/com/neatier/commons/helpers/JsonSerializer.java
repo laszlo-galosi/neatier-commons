@@ -41,28 +41,59 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.internal.LinkedTreeMap;
 import com.google.gson.stream.JsonReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import rx.Observable;
-import rx.functions.Func1;
 import trikita.log.Log;
 
 /**
- * Class  Serializer/Deserializer for basic entities of generic type.
+ * Helper class for serializing/de-serializing  basic objects  with generic type and primitives.
  */
 public class JsonSerializer<T> {
 
+    /**
+     * Json parser of this serializer.
+     */
     public static JsonParser JSON_PARSER = new JsonParser();
 
+    /**
+     * The main gson library class.
+     */
     private final Gson gson;
+
+    /**
+     * JsonParser to parse json strings.
+     */
     private JsonParser jsonParser;
 
-    public static
-    @Nullable <M extends Object> M getAsChecked(String memberName,
-          final JsonObject jsonObject,
-          final Class<M> returnClass) {
+    public JsonSerializer() {
+        this(new Gson(), new JsonParser());
+    }
+
+    /**
+     * Constructor with the given gson serializer and a json parser instance
+     */
+    public JsonSerializer(final Gson gson, JsonParser parser) {
+        this.gson = gson;
+        this.jsonParser = parser;
+    }
+
+    /**
+     * Returns a property value with the given member name, of the given {@link JsonObject} with
+     * the given type or null if not found or cannot be returned with the given type.
+     *
+     * @param memberName the property name
+     * @param jsonObject the json object which property value should be returned
+     * @param returnClass the class of the expected values
+     * @param <M> the type of the expected values
+     * @see JsonObject#get(String)
+     */
+    @SuppressWarnings("unchecked")
+    public static @Nullable <M> M getAsChecked(String memberName,
+            final JsonObject jsonObject, final Class<M> returnClass) {
         if (jsonObject != null && jsonObject.has(memberName)) {
             JsonElement jsonElem = jsonObject.get(memberName);
             if (jsonElem.isJsonNull()) {
@@ -94,15 +125,147 @@ public class JsonSerializer<T> {
         return null;
     }
 
-    public JsonSerializer() {
-        this(new Gson(), new JsonParser());
+    /**
+     * Returns a json object created with the given template string and given key-value pairs
+     * parameters.
+     *
+     * @param params the key-value pairs which entry values will be substituted in the given
+     * template in the resulted json object
+     * @param templateString the Json serialized template string of the returned json object.
+     */
+    public static JsonObject buildJsonByTemplate(final KeyValuePairs<String, Object> params,
+            final String templateString) {
+        JsonObject templateObject = JsonSerializer.JSON_PARSER.parse(templateString)
+                .getAsJsonObject();
+        JsonObject bodyObject = new JsonObject();
+        for (Map.Entry<String, JsonElement> entry :
+                templateObject.entrySet()) {
+            if (params.containsKey(entry.getKey())) {
+                bodyObject.add(entry.getKey(),
+                        getCheckedJsonEntry(entry.getKey(), params, templateObject));
+            }
+        }
+        return bodyObject;
     }
 
-    public JsonSerializer(final Gson gson, JsonParser parser) {
-        this.gson = gson;
-        this.jsonParser = parser;
+    /**
+     * Returns a json element which can be JsonObject, JsonArray, JsonPrimitive depending on the
+     * given template json object class, from the given key-value parameters by checking if its
+     * contains the given key, and its value is
+     * type is the same as the template object.
+     *
+     * @param key the key to be checked if its contained in the given key-value parameters.
+     * @param params key-value pairs to be checked containing the given key,
+     * and its value is according to the given template json object
+     * @param templateObject the template object which class is the expected class of the value
+     * contained in the given key-value pairs
+     */
+    private static JsonElement getCheckedJsonEntry(String key,
+            final KeyValuePairs<String, Object> params, final JsonObject templateObject) {
+        //String key = entry.getKey();
+
+        Object value = params.get(key);
+        JsonElement valueElem = JsonSerializer.parse(value.toString());
+        Preconditions.checkNotNull(value, key);
+        if (templateObject.get(key).isJsonObject()) {
+            Preconditions.checkArgument(
+                    valueElem.isJsonObject(),
+                    String.format("%s Not a Json Object: %s", key, params.get(key))
+            );
+            return valueElem.getAsJsonObject();
+        } else if (templateObject.get(key).isJsonArray()) {
+            Preconditions.checkArgument(
+                    valueElem.isJsonArray(),
+                    String.format("%s Not a JsonArray: %s", key, params.get(key))
+            );
+            return valueElem.getAsJsonArray();
+        } else if (templateObject.get(key).isJsonPrimitive()) {
+            Preconditions.checkArgument(
+                    valueElem.isJsonPrimitive(),
+                    String.format("%s Not a JsonPrimitive: %s", key, params.get(key))
+            );
+            if (value instanceof String) {
+                return new JsonPrimitive((String) value);
+            } else if (value instanceof Long) {
+                return new JsonPrimitive((Long) value);
+            } else if (value instanceof Number) {
+                return new JsonPrimitive((Number) value);
+            } else if (value instanceof Boolean) {
+                return new JsonPrimitive((Boolean) value);
+            }
+            return valueElem.getAsJsonPrimitive();
+        }
+        throw new IllegalArgumentException(
+                String.format("%sNot a JsonElement: %s", key, params.get(key)));
     }
 
+    /**
+     * Returns a json element parsed from the given json serialized string.
+     *
+     * @see JsonParser#parse(String)
+     */
+    public static JsonElement parse(String jsonString) {
+        JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
+        jsonReader.setLenient(true);
+        return JSON_PARSER.parse(jsonReader);
+    }
+
+    /**
+     * Return a tree map representation of the given json object.
+     */
+    @SuppressWarnings("unchecked")
+    public static LinkedTreeMap<String, JsonElement> treeMapFromJson(JsonObject json) {
+        if (json == null) {
+            return null;
+        }
+        LinkedTreeMap map = new LinkedTreeMap<String, JsonElement>();
+        Observable.from(json.entrySet())
+                .subscribe(entry -> {
+                    String key = entry.getKey();
+                    JsonElement value = entry.getValue();
+                    map.put(key, value);
+                });
+        return map;
+    }
+
+    public static JsonElement getCheckedJsonEntry(final Map.Entry<String, JsonElement> entry,
+            final KeyValuePairs<String, Object> params, final JsonObject templateObject) {
+        String key = entry.getKey();
+        //JsonReader value = new JsonReader(new StringReader((String) params.get(key)));
+        //value.setLenient(true);
+        Object value = params.get(key);
+        JsonElement valueElem = JsonSerializer.parse(value.toString());
+        Preconditions.checkNotNull(value, key);
+        if (templateObject.get(key).isJsonObject()) {
+            Preconditions.checkArgument(valueElem.isJsonObject(),
+                    String.format("%s Not a Json Object: %s", key, params.get(key)));
+            return valueElem.getAsJsonObject();
+        } else if (templateObject.get(key).isJsonArray()) {
+            Preconditions.checkArgument(valueElem.isJsonArray(),
+                    String.format("%s Not a JsonArray: %s", key, params.get(key)));
+            return valueElem.getAsJsonArray();
+        } else if (templateObject.get(key).isJsonPrimitive()) {
+            Preconditions.checkArgument(valueElem.isJsonPrimitive(),
+                    String.format("%s Not a JsonPrimitive: %s", key, params.get(key)));
+            if (value instanceof String) {
+                return new JsonPrimitive((String) value);
+            } else if (value instanceof Long) {
+                return new JsonPrimitive((Long) value);
+            } else if (value instanceof Number) {
+                return new JsonPrimitive((Number) value);
+            } else if (value instanceof Boolean) {
+                return new JsonPrimitive((Boolean) value);
+            }
+            return valueElem.getAsJsonPrimitive();
+        }
+        throw new IllegalArgumentException(
+                String.format("%sNot a JsonElement: %s", key, params.get(key)));
+    }
+
+    /**
+     * Returns a serialized string representation of the given serializable  object by examining its
+     * type.
+     */
     public String serialize(final Object value) {
         JsonObject jsonObject = null;
         if (value instanceof String) {
@@ -118,73 +281,72 @@ public class JsonSerializer<T> {
             return gson.toJson((JsonElement) value);
         }
         throw new IllegalArgumentException(
-              String.format("Invalid object type to serialize: %s", value));
+                String.format("Invalid object type to serialize: %s", value));
     }
 
     /**
-     * Serialize an object to Json.
-     *
-     * @param entity to serialize.
+     * Returns the serialized string representation of the given entity with the given type T.
      */
     public String serialize(T entity, Class<T> entityClass) {
-        String jsonString = gson.toJson(entity, entityClass);
-        return jsonString;
+        return gson.toJson(entity, entityClass);
     }
 
     /**
-     * Serialize an object to Json.
-     *
-     * @param entityList to serialize.
+     * Returns the serialized string representation of the given entity list containing items with
+     * the given type T.
      */
     public String serializeAll(List<T> entityList, Class<T> entityClass) {
         JsonArray jsonArray = new JsonArray();
         for (int i = 0, len = entityList.size(); i < len; i++) {
             jsonArray.add(gson.toJsonTree(entityList.get(i), entityClass));
         }
-        String jsonString = gson.toJson(jsonArray);
-        return jsonString;
+        return gson.toJson(jsonArray);
     }
 
-    public Observable<List<T>> serializeAllAsync(String jsonString,
-          final TypeAdapter<T> typeAdapter) {
-        JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
-        return Observable.from(Lists.newArrayList(jsonArray.iterator()))
-                         .flatMap(new Func1<JsonElement, Observable<T>>() {
-                             @Override public Observable<T> call(final JsonElement jsonElement) {
-                                 return Observable.just(typeAdapter.fromJsonTree(jsonElement));
-                             }
-                         }).toList();
-    }
-
+    /**
+     * Returns a list of  objects with the given type T, deserialized from the given json string.
+     *
+     * @see #fromJsonArray(JsonArray, Class)
+     */
     public List<T> deserializeAll(String jsonString, Class<T> returnClass) {
         JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
         return fromJsonArray(jsonArray, returnClass);
     }
 
-    public Observable<List<T>> deserializeAllAsync(String jsonString,
-          final TypeAdapter<T> typeAdapter) {
+    /**
+     * Returns a Observable emitting a the given type adapter type items deserialized from
+     * the given json string
+     */
+    public Observable<T> deserializeAllAsync(String jsonString, final TypeAdapter<T> typeAdapter) {
         JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
         return Observable.from(Lists.newArrayList(jsonArray.iterator()))
-                         .flatMap(jsonElement ->
-                                        Observable.just(typeAdapter.fromJsonTree(jsonElement)))
-                         .toList();
+                .flatMap(jsonElement -> Observable.just(typeAdapter.fromJsonTree(jsonElement)));
     }
 
+    /**
+     * Returns a list of objects with the given type T converted from the given json array.
+     *
+     * @see Gson#fromJson(JsonElement, Class)
+     */
     @NonNull public List<T> fromJsonArray(final JsonArray jsonArray, final Class<T> returnClass) {
         int size = jsonArray.size();
         List<T> resultList = new ArrayList<>(size);
-        for (int i = 0, len = size; i < len; i++) {
+        for (int i = 0; i < size; i++) {
             try {
                 T elem = gson.fromJson(jsonArray.get(i), returnClass);
                 resultList.add(elem);
             } catch (JsonSyntaxException jse) {
                 Log.e("fromJsonArray error", jse);
-                continue;
             }
         }
         return resultList;
     }
 
+    /**
+     * Returns a json object deserialized from the given json string.
+     *
+     * @see #deserialize(String, Class)
+     */
     public JsonObject deserialize(final String jsonString) {
         if (jsonString == null) {
             return new JsonObject();
@@ -193,34 +355,38 @@ public class JsonSerializer<T> {
         }
     }
 
+    /**
+     * Returns an object with the given type E, converted from the given json element.
+     *
+     * @see Gson#fromJson(JsonElement, Class)
+     */
     public T fromJsonElement(final JsonElement jsonElement, Class<T> returnClass) {
         return gson.fromJson(jsonElement, returnClass);
     }
 
     /**
-     * Deserialize a json representation of an object.
+     * Deserialize the given json serialized string with the given type E.
      *
-     * @param jsonString A json string to deserialize.
-     * @return the deserialized entity
+     * @see Gson#fromJson(Reader, Class)
      */
-    public <T> T deserialize(String jsonString, Class<T> entityClass) {
-        T entity = gson.fromJson(jsonString, entityClass);
-        return entity;
+    public <E> E deserialize(String jsonString, Class<E> entityClass) {
+        return gson.fromJson(jsonString, entityClass);
     }
 
-    public <T> T deserialize(final String jsonString, final TypeAdapter<T> typeAdapter)
+    /**
+     * Returns a deserialized object with the given type E deserialized from the given json string.
+     *
+     * @see TypeAdapter#fromJson(String)
+     */
+    public <E> E deserialize(final String jsonString, final TypeAdapter<E> typeAdapter)
           throws IOException {
         return typeAdapter.fromJson(jsonString);
     }
 
     /**
-     * Deserialize a json representation of an object.
-     *
-     * @param treeMap A treemap deserialize.
-     * @param entityClass A json string to deserialize.
-     * @return the deserialized entity.
+     * Returns an object with the given type converted from the given tree map.
      */
-    public <T> T deserialize(LinkedTreeMap treeMap, Class<T> entityClass) {
+    public <E> E deserialize(LinkedTreeMap treeMap, Class<E> entityClass) {
         int len = treeMap.keySet().size();
         JsonObject jsonObject = new JsonObject();
         for (Object key : treeMap.keySet()) {
@@ -235,10 +401,12 @@ public class JsonSerializer<T> {
                 jsonObject.addProperty((String) key, (String) value);
             }
         }
-        T entity = gson.fromJson(jsonObject, entityClass);
-        return entity;
+        return gson.fromJson(jsonObject, entityClass);
     }
 
+    /**
+     * Returns a json object converted from the given tree map.
+     */
     public JsonObject deserialize(LinkedTreeMap treeMap) {
         int len = treeMap.keySet().size();
         JsonObject jsonObject = new JsonObject();
@@ -257,6 +425,11 @@ public class JsonSerializer<T> {
         return jsonObject;
     }
 
+    /**
+     * Returns true if the given json serialized string is a json object.
+     *
+     * @see JsonElement#isJsonArray()
+     */
     public boolean isJsonArray(final String jsonString) {
         try {
             JsonArray jsonArray = (JsonArray) jsonParser.parse(jsonString);
@@ -266,6 +439,11 @@ public class JsonSerializer<T> {
         }
     }
 
+    /**
+     * Returns true if the given json serialized string is a json object.
+     *
+     * @see JsonElement#isJsonObject()
+     */
     public boolean isJsonObject(final Object object) {
         try {
             JsonElement elem = jsonParser.parse((String) object);
@@ -275,6 +453,11 @@ public class JsonSerializer<T> {
         }
     }
 
+    /**
+     * Returns true if the given json serialized string is a json primitive.
+     *
+     * @see JsonElement#isJsonPrimitive()
+     */
     public boolean isJsonPrimitive(final Object jsonString) {
         try {
             JsonElement elem = jsonParser.parse((String) jsonString);
@@ -284,83 +467,18 @@ public class JsonSerializer<T> {
         }
     }
 
+    /**
+     * Returns the json parsers of this serializer.
+     */
     public JsonParser getJsonParser() {
         return jsonParser;
     }
 
-    public static JsonObject buildJsonByTemplate(final KeyValuePairs<String, Object> params,
-          final String templateString) {
-        JsonObject templateObject = JsonSerializer.JSON_PARSER.parse(templateString)
-                                                              .getAsJsonObject();
-        JsonObject bodyObject = new JsonObject();
-        for (Map.Entry<String, JsonElement> entry :
-              templateObject.entrySet()) {
-            if (params.containsKey(entry.getKey())) {
-                bodyObject.add(entry.getKey(),
-                               getCheckedJsonEntry(entry, params, templateObject));
-            }
-        }
-        return bodyObject;
-    }
-
-    public static JsonElement getCheckedJsonEntry(final Map.Entry<String, JsonElement> entry,
-          final KeyValuePairs<String, Object> params, final JsonObject templateObject) {
-        String key = entry.getKey();
-        //JsonReader value = new JsonReader(new StringReader((String) params.get(key)));
-        //value.setLenient(true);
-        Object value = params.get(key);
-        JsonElement valueElem = JsonSerializer.parse(value.toString());
-        Preconditions.checkNotNull(value, key);
-        if (templateObject.get(key).isJsonObject()) {
-            Preconditions.checkArgument(
-                  valueElem.isJsonObject(),
-                  String.format("%s Not a Json Object: %s", key, params.get(key))
-            );
-            return valueElem.getAsJsonObject();
-        } else if (templateObject.get(key).isJsonArray()) {
-            Preconditions.checkArgument(
-                  valueElem.isJsonArray(),
-                  String.format("%s Not a JsonArray: %s", key, params.get(key))
-            );
-            return valueElem.getAsJsonArray();
-        } else if (templateObject.get(key).isJsonPrimitive()) {
-            Preconditions.checkArgument(
-                  valueElem.isJsonPrimitive(),
-                  String.format("%s Not a JsonPrimitive: %s", key, params.get(key))
-            );
-            if (value instanceof String) {
-                return new JsonPrimitive((String) value);
-            } else if (value instanceof Long) {
-                return new JsonPrimitive((Long) value);
-            } else if (value instanceof Number) {
-                return new JsonPrimitive((Number) value);
-            } else if (value instanceof Boolean) {
-                return new JsonPrimitive((Boolean) value);
-            }
-            return valueElem.getAsJsonPrimitive();
-        }
-        throw new IllegalArgumentException(
-              String.format("%sNot a JsonElement: %s", key, params.get(key)));
-    }
-
-    public static JsonElement parse(String jsonString) {
-        JsonReader jsonReader = new JsonReader(new StringReader(jsonString));
-        jsonReader.setLenient(true);
-        return JSON_PARSER.parse(jsonReader);
-    }
-
-    public static LinkedTreeMap<String, JsonElement> treeMapFromJson(JsonObject json) {
-        if (json == null) {
-            return null;
-        }
-        LinkedTreeMap map = new LinkedTreeMap<String, JsonElement>();
-        Observable.from(json.entrySet())
-                  .subscribe(entry -> {
-                      String key = entry.getKey();
-                      JsonElement value = entry.getValue();
-                      map.put(key, value);
-                  });
-        return map;
+    /**
+     * Returns the {@link Gson} of this serializer.
+     */
+    public Gson getGson() {
+        return gson;
     }
 }
 

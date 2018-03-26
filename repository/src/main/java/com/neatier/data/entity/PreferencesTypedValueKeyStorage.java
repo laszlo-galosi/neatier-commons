@@ -10,7 +10,10 @@ import java.io.IOException;
 import rx.Observable;
 
 /**
- * Created by László Gálosi on 16/06/16
+ * A {@link PreferencesOnDeviceStorage} abstract class implementing the {@link OnDeviceKeyTypedValueStorage}
+ * interface for using {@link TypeAdapter} when storing the values.
+ * @author László Gálosi
+ * @since 16/06/16
  */
 public abstract class PreferencesTypedValueKeyStorage<K, V> extends PreferencesOnDeviceStorage<K, V>
       implements OnDeviceKeyTypedValueStorage<K, V> {
@@ -24,13 +27,13 @@ public abstract class PreferencesTypedValueKeyStorage<K, V> extends PreferencesO
     }
 
     @Override public void writeKeyedContent(final K key, final V content) {
-        mSharedKeyValueStore.put((String) getStorableKey(key),
+        mSharedKeyValueStore.put((String) getStoreableKey(key),
                                  getTypeAdapter().toJson(content)).commit();
     }
 
     @Override public V readOneByKey(final K key) {
         V emptyValue = (V) "{}";
-        Object result = mSharedKeyValueStore.getOrDefault(getStorableKey(key), emptyValue);
+        Object result = mSharedKeyValueStore.getOrDefault(getStoreableKey(key), emptyValue);
         try {
             return getTypeAdapter().fromJson((String) result);
         } catch (IOException e) {

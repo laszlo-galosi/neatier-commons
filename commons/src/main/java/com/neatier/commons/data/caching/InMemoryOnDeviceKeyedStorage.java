@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -20,9 +21,11 @@ import javax.inject.Singleton;
 import rx.Observable;
 
 /**
- * Implementation of  an InMemory {@link OnDeviceKeyedStorage} implementation via {@link
+ * Implementation of  an in memory {@link OnDeviceKeyedStorage} via {@link
  * SparseArray<Object>}
- * Created by László Gálosi on 24/07/15
+ *
+ * @author László Gálosi
+ * @since 24/07/15
  */
 @Singleton
 public class InMemoryOnDeviceKeyedStorage<K, V> implements OnDeviceKeyedStorage<K, V> {

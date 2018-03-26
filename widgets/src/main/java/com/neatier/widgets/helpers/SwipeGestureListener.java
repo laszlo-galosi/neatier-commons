@@ -22,7 +22,12 @@ import rx.functions.Action1;
 import trikita.log.Log;
 
 /**
- * Created by László Gálosi on 23/05/16
+ * A {@link GestureDetector.OnGestureListener} sub class with custom properties
+ * swipe behavior effecting properties such as minimum swipe distance, max swipe offset path
+ * swipe threshold velocity.
+ *
+ * @author László Gálosi
+ * @since 23/05/16
  */
 public class SwipeGestureListener implements GestureDetector.OnGestureListener {
 

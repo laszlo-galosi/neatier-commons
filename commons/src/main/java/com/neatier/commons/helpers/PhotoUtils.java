@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.FileProvider;
@@ -32,7 +33,10 @@ import trikita.log.Log;
 import static android.app.Activity.RESULT_OK;
 
 /**
- * Created by László Gálosi on 22/03/17
+ * Contains helper functions using the Android Camera and photos stored on the device.
+ *
+ * @author László Gálosi
+ * @since 22/03/17
  */
 public class PhotoUtils {
     public static final String EXTRA_OUTPUT_PATH = "CameraOutputPath";
@@ -90,7 +94,7 @@ public class PhotoUtils {
         final File fileFromUri = getFileFromContentUri(mediaUri, fallbackBundle, context);
         //If the file created via the chooser intent is exist, and has length
         // determines that this was taken by the camera.
-        if (fileFromUri != null && fileFromUri.exists() && fileFromUri.length() > 0) {
+        if (fileFromUri.exists() && fileFromUri.length() > 0) {
             return resultIntent != null && resultIntent.getAction() != null
                    ? resultIntent.getAction()
                    : MediaStore.ACTION_IMAGE_CAPTURE;
@@ -98,14 +102,30 @@ public class PhotoUtils {
         return resultIntent != null ? resultIntent.getAction() : null;
     }
 
-    @Nullable public static File getFileFromContentUri(final Uri contentUri,
+    /**
+     * Returns a File from the given content Uri.
+     *
+     * @param contentUri the content Uri to extract the File
+     * @param extraBundle bundle containing {@link #EXTRA_OUTPUT_PATH}
+     * @param context context
+     * @see #extractFileFromContentUri(Uri, String, Context)
+     */
+    public static @NonNull File getFileFromContentUri(final Uri contentUri,
           BundleWrapper extraBundle, final Context context) {
         String fileExtraPath = extraBundle.getAs(EXTRA_OUTPUT_PATH, String.class);
         return extractFileFromContentUri(contentUri, fileExtraPath, context);
     }
 
-    @Nullable
-    public static File extractFileFromContentUri(final Uri contentUri, final String fileExtraPath,
+    /**
+     * Returns a File from the given content Uri and extra file path.
+     *
+     * @param contentUri the content Uri to extract the File
+     * @param fileExtraPath the file path optional to create the File from.
+     * @param context context
+     * @see #extractFileFromContentUri(Uri, String, Context)
+     */
+    public static @NonNull File extractFileFromContentUri(final Uri contentUri,
+            final @Nullable String fileExtraPath,
           final Context context) {
         Log.d("extractFileFromContentUri", contentUri, fileExtraPath);
         if (fileExtraPath != null) {
@@ -135,65 +155,79 @@ public class PhotoUtils {
         return FileProvider.getUriForFile(context, fileProviderName, file);
     }
 
+    /**
+     * Creates and returns an Observable emitting a new Image File with a prefix of {@code IMG_}
+     * stored locally on the device.
+     *
+     * @see Context#getExternalFilesDir(String)
+     */
     public static Observable<File> createImageFile(final Context context) {
         // Create an image file name
         String imageFileName = String.format(
-              "IMG_%s",
-              DateTimeHelper.toStoreableDateString(DateTimeHelper.nowLocal(), "yyyy_MM_dd_HH_mm_ss")
+                "IMG_%s",
+                DateTimeHelper.toStoreableDateString(DateTimeHelper.nowLocal(),
+                        "yyyy_MM_dd_HH_mm_ss")
         );
 
         final File mediaStorageDir = new File(
-              context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-              //Environment.getExternalStorageDirectory(),
-              context.getPackageName()
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                //Environment.getExternalStorageDirectory(),
+                context.getPackageName()
         );
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return Observable.error(
-                      new InternalErrorException(String.format("Failed to create directory.%s",
-                                                               mediaStorageDir.getAbsolutePath())));
+                        new InternalErrorException(String.format("Failed to create directory.%s",
+                                mediaStorageDir.getAbsolutePath())));
             }
         }
 
         return Observable.just(mediaStorageDir)
-                         .flatMap(storageDir -> Observable.just(
-                               new File(String.format("%s%s%s.jpg",
-                                                      mediaStorageDir.getPath(),
-                                                      File.separator,
-                                                      imageFileName)
-                               )
-                         ));
+                .flatMap(storageDir -> Observable.just(
+                        new File(String.format("%s%s%s.jpg",
+                                mediaStorageDir.getPath(),
+                                File.separator,
+                                imageFileName)
+                        )
+                ));
     }
 
+    /**
+     * Creates and returns an Observable emitting a new Video File with a prefix of {@code VID_}
+     * stored locally on the device.
+     *
+     * @see Context#getExternalFilesDir(String)
+     */
     public static Observable<File> createVideoFile(final Context context) {
         // Create an image file name
         String imageFileName = String.format(
-              "VID_%s",
-              DateTimeHelper.toStoreableDateString(DateTimeHelper.nowLocal(), "yyyy_MM_dd_HH_mm_ss")
+                "VID_%s",
+                DateTimeHelper.toStoreableDateString(DateTimeHelper.nowLocal(),
+                        "yyyy_MM_dd_HH_mm_ss")
         );
 
         final File mediaStorageDir = new File(
-              context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-              //Environment.getExternalStorageDirectory(),
-              context.getPackageName()
+                context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                //Environment.getExternalStorageDirectory(),
+                context.getPackageName()
         );
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 return Observable.error(
-                      new InternalErrorException(String.format("Failed to create directory.%s",
-                                                               mediaStorageDir.getAbsolutePath())));
+                        new InternalErrorException(String.format("Failed to create directory.%s",
+                                mediaStorageDir.getAbsolutePath())));
             }
         }
 
         return Observable.just(mediaStorageDir)
-                         .flatMap(storageDir -> Observable.just(
-                               new File(String.format("%s%s%s.mp4",
-                                                      mediaStorageDir.getPath(),
-                                                      File.separator,
-                                                      imageFileName)
-                               )
-                         ));
+                .flatMap(storageDir -> Observable.just(
+                        new File(String.format("%s%s%s.mp4",
+                                mediaStorageDir.getPath(),
+                                File.separator,
+                                imageFileName)
+                        )
+                ));
     }
 }

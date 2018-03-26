@@ -9,6 +9,14 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import trikita.log.Log;
 
+/**
+ * An abstract PagerAdapter helper sub class with View of type V storing the instantiated views
+ * in a {@link Map<V, Integer>} with cabapality to save and restore its views state
+ *
+ * @see ViewPagerAdapterState
+ * @see #saveState()
+ * @see #bindView(View, int)
+ */
 public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
 
     protected final Map<V, Integer> instantiatedViews = new WeakHashMap<>();
@@ -77,7 +85,6 @@ public abstract class ViewPagerAdapter<V extends View> extends PagerAdapter {
             bindView(entry.getKey(), entry.getValue());
         }
     }
-
 
     @SuppressWarnings("unchecked")
     // `key` is the object we return in `instantiateItem(ViewGroup container, int position)`

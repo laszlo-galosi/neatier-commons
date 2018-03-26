@@ -15,18 +15,14 @@ package com.neatier.commons;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
-
 import com.neatier.commons.helpers.LongTaskScheduler;
-
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
-
-import java.util.Arrays;
-import java.util.List;
-
 import rx.Observable;
 import rx.Observer;
 import rx.Scheduler;
@@ -40,7 +36,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Base class for Robolectric data layer tests.
  * Inherit from this class to create a test.
  * <p/>
- * Created by vandekr on 11/02/14.
+ * @author vandekr
+ * @since 11/02/14.
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(sdk = 21, constants = BuildConfig.class, application = ApplicationStub.class, manifest =

@@ -28,6 +28,9 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
+/**
+ * A Dagger {@link Module @Module} class providing the {@link OkHttpClient} Singleton instance.
+ */
 @Module
 public class NetworkModule {
 
@@ -35,15 +38,15 @@ public class NetworkModule {
 
     @Provides @NonNull @Singleton
     public OkHttpClient provideOkHttpClient(Context context,
-          @OkHttpInterceptors @NonNull List<Interceptor> interceptors,
-          @OkHttpNetworkInterceptors @NonNull List<Interceptor> networkInterceptors) {
+            @OkHttpInterceptors @NonNull List<Interceptor> interceptors,
+            @OkHttpNetworkInterceptors @NonNull List<Interceptor> networkInterceptors) {
 
         File cacheDir = new File(context.getCacheDir(), "http");
         Cache cache = new Cache(cacheDir, DISK_CACHE_SIZE);
         final OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder()
-              .cache(cache)
-              .connectTimeout(NetworkSettings.CONNECTION_TIMEOUT, NetworkSettings.TIMEOUT_UNIT)
-              .readTimeout(NetworkSettings.READ_TIMEOUT, NetworkSettings.TIMEOUT_UNIT);
+                .cache(cache)
+                .connectTimeout(NetworkSettings.CONNECTION_TIMEOUT, NetworkSettings.TIMEOUT_UNIT)
+                .readTimeout(NetworkSettings.READ_TIMEOUT, NetworkSettings.TIMEOUT_UNIT);
 
         for (Interceptor interceptor : interceptors) {
             okHttpBuilder.addInterceptor(interceptor);

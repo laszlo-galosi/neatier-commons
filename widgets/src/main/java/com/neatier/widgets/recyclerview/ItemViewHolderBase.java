@@ -24,14 +24,16 @@ import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.Bindable;
 
 /**
- * Created by László Gálosi on 18/03/16
+ * A {@link RecyclerView.ViewHolder} base class with helper functions.
+ * @author László Gálosi
+ * @since 18/03/16
  */
 public class ItemViewHolderBase extends RecyclerView.ViewHolder
       implements Bindable {
 
     View mMainWidget;
     protected View mItemView;
-    Context mContext;
+    protected Context mContext;
     protected Optional<Object> mDataItem;
 
     @Override public void bind(final Object dataItem) {

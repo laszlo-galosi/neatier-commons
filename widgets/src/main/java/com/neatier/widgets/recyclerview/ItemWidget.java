@@ -14,6 +14,7 @@
 
 package com.neatier.widgets.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -31,7 +32,12 @@ import com.neatier.widgets.ThemeUtil;
 import com.neatier.widgets.helpers.WidgetUtils;
 
 /**
- * Created by László Gálosi on 31/10/15
+ * A custom {@link Bindable} {@link LinearLayout} with custom item height and background color and
+ * supporting
+ * {@link OnClickListener} and {@link OnLongClickListener}s
+ *
+ * @author László Gálosi
+ * @since 31/10/15
  */
 public class ItemWidget extends LinearLayout implements Bindable {
 
@@ -62,7 +68,7 @@ public class ItemWidget extends LinearLayout implements Bindable {
         init(context, attrs, 0, 0);
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressLint("ResourceAsColor") @SuppressWarnings("deprecation")
     private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ItemWidget, defStyleAttr,
                                                       defStyleRes);
@@ -99,7 +105,7 @@ public class ItemWidget extends LinearLayout implements Bindable {
               LayoutParams.MATCH_PARENT,
               ThemeUtil.dpToPx(getContext(), mLayoutHeight));
 
-        WidgetUtils.setLayoutSizeOf(mContentView.get(),  LayoutParams.MATCH_PARENT,
+        WidgetUtils.setLayoutSizeOf(mContentView.get(), LayoutParams.MATCH_PARENT,
                                     ThemeUtil.dpToPx(getContext(), mLayoutHeight));
 
         //layoutParams.leftMargin = ThemeUtil.dpToPx(getContext(), R.dimen.material_padding);

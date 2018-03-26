@@ -14,21 +14,40 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by László Gálosi on 30/07/15
+ * An exception representing an error message which should be presented to the user.
+ * @author László Gálosi
+ * @since 30/07/15
  */
 public class ErrorBundleException extends Exception {
+    /**
+     * @see Exception#Exception()
+     */
     public ErrorBundleException() {
         super();
     }
 
+    /**
+     * Constructor with the given error message.
+     *
+     * @see Exception#Exception(String)
+     */
     public ErrorBundleException(final String message) {
         super(message);
     }
 
+    /**
+     * Construction with the given error message and error cause.
+     *
+     * @see Exception#Exception(String, Throwable)
+     */
     public ErrorBundleException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructor with the given error cause.
+     * @see Exception#Exception(Throwable)
+     */
     public ErrorBundleException(final Throwable cause) {
         super(cause);
     }

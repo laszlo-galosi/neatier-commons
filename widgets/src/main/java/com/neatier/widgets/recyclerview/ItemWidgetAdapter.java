@@ -27,8 +27,14 @@ import com.neatier.widgets.Bindable;
 import com.neatier.widgets.R;
 import java.util.List;
 
+/**
+ * {@link RecyclerView.Adapter} with {@link ItemWidget} ViewHolder
+ * containing data items with type T.
+ * It has a custom {@link View.OnClickListener} attached by
+ * {@link ItemWidget#setOnClickListener(View.OnClickListener)}
+ */
 public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
-      implements Leakable {
+        implements Leakable {
     protected final Context mContext;
     @LayoutRes protected int mItemLayout;
     protected List<T> mDataset;
@@ -43,7 +49,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
     }
 
     public ItemWidgetAdapter(final Context context,
-          @LayoutRes final int itemLayout, int itemHeight, @Nullable List<T> dataSet) {
+            @LayoutRes final int itemLayout, int itemHeight, @Nullable List<T> dataSet) {
         mContext = context;
         mItemLayout = itemLayout;
         mItemHeight = itemHeight;
@@ -55,8 +61,8 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
      */
     @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemWidget itemWidget =
-              new ItemWidget(getItemLayout(viewType), getItemHeight(viewType), mContext)
-                    .setContentClickable(mItemClickable);
+                new ItemWidget(getItemLayout(viewType), getItemHeight(viewType), mContext)
+                        .setContentClickable(mItemClickable);
         itemWidget.initView(mContext);
         return new ListItemViewHolder(itemWidget, R.id.itemText, mContext);
     }
@@ -154,7 +160,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
     }
 
     public ItemWidgetAdapter setCustomClickListener(
-          final View.OnClickListener customClickListener) {
+            final View.OnClickListener customClickListener) {
         mCustomClickListener = Optional.fromNullable(customClickListener);
         return this;
     }

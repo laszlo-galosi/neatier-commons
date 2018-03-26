@@ -19,41 +19,44 @@ import android.content.res.ColorStateList;
 import android.databinding.BindingMethod;
 import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.TintTypedArray;
 import android.util.AttributeSet;
+import android.widget.LinearLayout;
 import com.neatier.widgets.helpers.ColorStates;
 import com.neatier.widgets.helpers.DrawableHelper;
 
 /**
- * A {@link AppCompatImageView} sub class with tinted drawable.
+ * A {@link LinearLayout} sub class with tinted background.
  *
  * @author László Gálosi
- * @since 27/02/17
+ * @since 14/05/17
  */
 @BindingMethods(
-      @BindingMethod(type = TintedImageView.class, attribute = "tiv_drawableTintList",
-                     method = "setDrawableColor")
+        @BindingMethod(type = TintedBackgroundLinearLayout.class, attribute =
+            "tbvg_drawableTintList", method = "setBackgroundDrawableColor")
 )
-public class TintedImageView extends AppCompatImageView {
+public class TintedBackgroundLinearLayout extends LinearLayout {
 
     /**
-     * The color of the image drawable.
+     * The color of the background drawable as a {@link ColorStateList}
      */
     private ColorStateList mDrawableColor;
 
-    public TintedImageView(final Context context) {
+    public TintedBackgroundLinearLayout(final Context context) {
         this(context, null);
     }
 
-    public TintedImageView(final Context context, final AttributeSet attrs) {
+    public TintedBackgroundLinearLayout(final Context context,
+          @Nullable final AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
     /**
      * Constructor performing inflation from XML and apply a class-specific base style from the
-     * given theme attribute or style resource.
+     * given
+     * theme attribute or style resource.
      *
      * @param context The Context the view is running in, through which it can
      * access the current theme, resources, etc.
@@ -61,19 +64,18 @@ public class TintedImageView extends AppCompatImageView {
      * @param defStyleAttr An attribute in the current theme that contains a
      * reference to a style resource that supplies default values for
      * the view. Can be 0 to not look for defaults.
-     * @see super#AppCompatImageView(Context)  (Context, AttributeSet, int)
-     * @see R.styleable#TintedImageView_tiv_drawableTintList
+     * @see super#LinearLayout(Context)  (Context, AttributeSet, int)
+     * @see R.styleable#TintedBackgroundViewGroup_tbvg_drawableTintList
      */
     @SuppressLint("RestrictedApi")
-    public TintedImageView(final Context context, final AttributeSet attrs,
-            final int defStyleAttr) {
+    public TintedBackgroundLinearLayout(final Context context,
+          @Nullable final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TintTypedArray a = TintTypedArray.obtainStyledAttributes(context, attrs,
-                R.styleable.TintedImageView,
-                defStyleAttr, 0);
+        TintTypedArray a = TintTypedArray.obtainStyledAttributes(
+              context, attrs, R.styleable.TintedBackgroundViewGroup, defStyleAttr, 0);
         mDrawableColor =
                 ColorStates.with(a, context)
-                        .styleable(R.styleable.TintedImageView_tiv_drawableTintList, 0)
+                        .styleable(R.styleable.TintedBackgroundViewGroup_tbvg_drawableTintList, 0)
                         .defaultColorRes(R.color.colorPrimary)
                         .stateSet(EMPTY_STATE_SET)
                         .create();
@@ -89,8 +91,8 @@ public class TintedImageView extends AppCompatImageView {
     @Override protected void drawableStateChanged() {
         super.drawableStateChanged();
         int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-        this.setImageDrawable(
-                DrawableHelper.drawableForColorState(getDrawable(), mDrawableColor,
+        this.setBackground(
+                DrawableHelper.drawableForColorState(getBackground(), mDrawableColor,
                         getDrawableState(),
                         defaultColor, getContext()
                 )
@@ -98,16 +100,17 @@ public class TintedImageView extends AppCompatImageView {
     }
 
     /**
-     * Returns the drawable color as a ColorStateList
+     * Returns the background color as a ColorStateList
      */
-    public ColorStateList getDrawableColor() {
+    public ColorStateList getBackgroundDrawableColor() {
         return mDrawableColor;
     }
 
     /**
-     * Sets the image drawable color to the given color state list.
+     * Sets the views background to the given color state list.
      */
-    public void setDrawableColor(final ColorStateList drawableColor) {
+    public void setBackgroundDrawableColor(final ColorStateList drawableColor) {
         mDrawableColor = drawableColor;
+        refreshDrawableState();
     }
 }

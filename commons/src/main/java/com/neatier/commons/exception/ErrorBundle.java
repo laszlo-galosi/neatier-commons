@@ -17,7 +17,14 @@ package com.neatier.commons.exception;
  * Interface to represent a wrapper around an {@link Exception} to manage errors.
  */
 public interface ErrorBundle {
+
+    /**
+     * Returns the wrapped exception.
+     */
     Exception getException();
 
+    /**
+     * Returns the error message.
+     */
     String getErrorMessage();
 }

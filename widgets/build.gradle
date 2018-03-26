@@ -27,8 +27,6 @@ buildscript {
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 apply from: '../dependencies.gradle'
-//Retrolambda
-apply plugin: 'me.tatarka.retrolambda'
 
 
 android {
@@ -78,8 +76,9 @@ dependencies {
   //Internal dependencies
   //Uncomment next line when building a project using this library
   //  compile project(path: ':neatier-commons:commons')
-  debugCompile project(path: ':neatier-commons:commons', configuration: "debug")
-  releaseCompile project(path: ':neatier-commons:commons', configuration: "release")
+  compile project(':neatier-commons:commons')
+//  debugCompile project(path: ':neatier-commons:commons', configuration: "debug")
+//  releaseCompile project(path: ':neatier-commons:commons', configuration: "release")
   //Uncomment next line  while building the library.
   //      compile project(path: ':commons')
   //Optional, Collections, Guava like but lightweight on method count library
@@ -102,7 +101,7 @@ dependencies {
   compile appBuildingDependencies.butterKnife
   //    compile dataDependencies.gson
 
-  testCompile robolectricTestDependencies.junit
+  testImplementation robolectricTestDependencies.junit
   //    testCompile robolectricTestDependencies.assertj
   //    testCompile robolectricTestDependencies.mockito
   //    testCompile robolectricTestDependencies.robolectric

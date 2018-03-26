@@ -14,7 +14,7 @@
 package com.neatier.commons.helpers;
 
 import com.neatier.commons.CommonsTestCase;
-
+import java.sql.Timestamp;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
@@ -22,14 +22,13 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import java.sql.Timestamp;
-
 import static com.neatier.commons.helpers.DateTimeHelper.SERVER_UTC_PATTERN;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 /**
- * Created by László Gálosi on 17/09/15
+ * @author László Gálosi
+ * @since 17/09/15
  */
 public class DateTimeHelperTest extends CommonsTestCase {
 

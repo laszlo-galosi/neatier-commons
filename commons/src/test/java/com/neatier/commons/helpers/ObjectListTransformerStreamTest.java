@@ -15,20 +15,17 @@ package com.neatier.commons.helpers;
 
 import android.content.Context;
 import android.text.format.DateUtils;
-
 import com.neatier.commons.CommonsTestCase;
-
+import java.util.Arrays;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.robolectric.shadows.ShadowApplication;
-
-import java.util.Arrays;
-
 import rx.functions.Func1;
 
 /**
- * Created by László Gálosi on 25/11/15
+ * @author László Gálosi
+ * @since 25/11/15
  */
 public class ObjectListTransformerStreamTest extends CommonsTestCase {
 

@@ -15,18 +15,22 @@
 package com.neatier.repository.datasource;
 
 import com.fernandocejas.frodo.annotation.RxLogObservable;
+import com.neatier.commons.data.caching.OnDeviceKeyedStorage;
 import com.neatier.data.entity.Identifiable;
 import com.neatier.data.entity.OnDeviceKeyTypedValueStorage;
 import java.util.Collection;
 import java.util.List;
 import rx.Observable;
-import rx.functions.Func1;
 
 import static rx.Observable.error;
 import static rx.Observable.just;
 
 /**
- * Created by László Gálosi on 10/06/16
+ * A key-value data source, which stores the entries locally via
+ * {@link OnDeviceKeyTypedValueStorage}.
+ *
+ * @author László Gálosi
+ * @since 10/06/16
  */
 public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
 
@@ -37,14 +41,24 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
         this.onDeviceKeyedStorage = onDeviceKeyedStorage;
     }
 
+    /**
+     * Returns true if the given value is stored in the data source
+     *
+     * @see OnDeviceKeyedStorage#containsKey(Object)
+     */
     public boolean isValid(final V value) {
-        return onDeviceKeyedStorage.containsKey((K) value.getKey());
+        return onDeviceKeyedStorage.containsKey(value.getKey());
     }
 
+    /**
+     * Returns an Observable emitting all the stored values or {@link Observable#error(Throwable)}
+     * if any Exception occurred.
+     */
+    @SuppressWarnings("unchecked")
     public Observable<V> getAllAsync() {
-        return onDeviceKeyedStorage.keys().flatMap((Func1<K, Observable<V>>) key -> {
+        return onDeviceKeyedStorage.keys().flatMap(key -> {
             try {
-                V value = onDeviceKeyedStorage.readOneByKey(key);
+                V value = onDeviceKeyedStorage.readOneByKey((K) key);
                 if (value != null && isValid(value)) {
                     return Observable.just(value);
                 } else {
@@ -57,6 +71,11 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
         });
     }
 
+    /**
+     * Returns an Observable emitting the value stored by the given key, or if not
+     * found an {@link Observable#empty()} or {@link Observable#error(Throwable)} if any
+     * Exception occurred.
+     */
     public Observable<V> getByKeyAsync(final K key) {
         return just(key).flatMap(k -> {
             try {
@@ -72,6 +91,12 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
         });
     }
 
+    /**
+     * Adds or update the provided value into this data source.
+     *
+     * @param value The value to be persisted.
+     * @return an Observable emitting the value after its addition or update.
+     */
     @RxLogObservable
     public Observable<V> addOrUpdateAsync(final V value) {
         return just(value).flatMap(v -> {
@@ -85,6 +110,12 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
         });
     }
 
+    /**
+     * Add or updates all the provided values into this data source.
+     *
+     * @param values A collection of values to be added or persisted.
+     * @return Observable emitting a list of values that has been persisted.
+     */
     @RxLogObservable
     public Observable<List<V>> addOrUpdateAllAsync(final Collection<V> values) {
         return Observable.from(values).flatMap(v -> {
@@ -97,6 +128,13 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
         }).toList();
     }
 
+    /**
+     * Deletes a value given its associated key.
+     *
+     * @param key The key that uniquely identifies the value to be deleted.
+     * @return an {@link Observable} emitting Boolean.TRUE or {@link Observable#error(Throwable)}
+     * if any Exception occurred.
+     */
     @RxLogObservable
     public rx.Observable<Boolean> deleteByKeyAsync(K key) {
         return just(key).flatMap(k -> {
@@ -109,12 +147,18 @@ public class AsyncCacheDataSource<K, V extends Identifiable<K>> {
         });
     }
 
+    /**
+     * Delete all the values stored in this data source.
+     *
+     * @return an {@link Observable} emitting Boolean.TRUE or {@link Observable#error(Throwable)}
+     * if any Exception occurred.
+     */
     @RxLogObservable
     public Observable<Boolean> deleteAllAsync() {
         return just(Boolean.TRUE)
-              .flatMap(r -> {
-                  onDeviceKeyedStorage.clear();
-                  return just(r);
-              });
+                .flatMap(r -> {
+                    onDeviceKeyedStorage.clear();
+                    return just(r);
+                });
     }
 }

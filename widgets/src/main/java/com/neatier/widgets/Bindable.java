@@ -17,10 +17,19 @@ package com.neatier.widgets;
 import com.fernandocejas.arrow.optional.Optional;
 
 /**
- * Created by László Gálosi on 18/03/16
+ * Interface for binding a data item with Type T.
+ *
+ * @author László Gálosi
+ * @since 18/03/16
  */
 public interface Bindable<T> {
+    /**
+     * Binds the given data item with type T.
+     */
     void bind(final T dataItem);
 
+    /**
+     * Returns an Optional of data with type T.
+     */
     Optional<T> getData();
 }

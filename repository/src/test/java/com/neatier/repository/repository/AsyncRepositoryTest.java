@@ -1,6 +1,6 @@
 package com.neatier.repository.repository;
 
-import com.google.common.collect.Lists;
+import com.fernandocejas.arrow.collections.Lists;
 import com.neatier.commons.helpers.KeyValuePairs;
 import com.neatier.data.entity.TestEntity;
 import com.neatier.repository.AsyncRepository;
@@ -24,7 +24,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 /**
- * Created by László Gálosi on 12/06/16
+ * @author László Gálosi
+ * @since 12/06/16
  */
 public class AsyncRepositoryTest extends DataTestCase {
     @Mock AsyncCacheDataSource<Integer, TestEntity> mockCacheDataSource;

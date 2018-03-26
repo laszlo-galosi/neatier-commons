@@ -26,7 +26,8 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by László Gálosi on 01/09/16
+ * @author László Gálosi
+ * @since 01/09/16
  */
 public class JsonSerializerTest extends CommonsTestCase {
 

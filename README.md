@@ -1,16 +1,10 @@
 neaTier-commons
 ===============
-Pure POJO Java helper and util classes for Android which I frequently use during android development.
+Multi-module Android library project containing helper, util and custom widget classes
+for building android applications implemented in Android Java 8.
 
-
-Building the project
+Modules
 ====================
-- Building the library.
-Uncomment this line in *neatier-commons/repository/build.gradle* and or
-*neatier-commons/widgets/build.gradle*:
-**compile project(path: ':commons')**
-
-- Building a project using library.
-Uncomment this line in 'neatier-commons/repository/build.gradle'  and or
-*neatier-commons/widgets/build.gradle*:
-**compile project(path: ':neatier-commons:commons')**
+- commons: contains pure Java helper and util classes.
+- widgets: contains custom android views for building rich android ui.
+- repository: contains the repository related classes of the data layer of a  "clean application architecture"

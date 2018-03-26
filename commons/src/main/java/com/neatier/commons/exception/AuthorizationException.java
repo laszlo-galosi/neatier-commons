@@ -14,7 +14,10 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by László Gálosi on 29/07/15
+ * An ErrorBundleException subclass for user authentication related errors.
+ *
+ * @author László Gálosi
+ * @since 29/07/15
  */
 public class AuthorizationException extends ErrorBundleException {
 
@@ -22,14 +25,29 @@ public class AuthorizationException extends ErrorBundleException {
         super();
     }
 
+    /**
+     * Constructor with the given error message.
+     *
+     * @param message the exception message parameter.
+     */
     public AuthorizationException(final String message) {
         super(message);
     }
 
+    /**
+     * Construction with the given error message and error cause.
+     *
+     * @see Exception#Exception(String, Throwable)
+     */
     public AuthorizationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * Constructor with the given error cause.
+     *
+     * @see Exception#Exception(Throwable)
+     */
     public AuthorizationException(final Throwable cause) {
         super(cause);
     }

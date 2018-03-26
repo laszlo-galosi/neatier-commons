@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -13,42 +14,50 @@
 
 package com.neatier.commons.data.caching;
 
-/**
- * OnDeviceKeyedStorage implementation using {@link android.content.SharedPreferences}.
- * Created by László Gálosi on 24/07/15
- */
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import com.neatier.commons.helpers.JsonSerializer;
 import com.neatier.commons.helpers.SharedKeyValueStore;
 import java.util.List;
 import rx.Observable;
 
+/**
+ * OnDeviceKeyedStorage implementation using {@link android.content.SharedPreferences}.
+ *
+ * @author László Gálosi
+ * @since 24/07/15
+ */
 public abstract class PreferencesOnDeviceStorage<K, V>
         implements OnDeviceKeyedStorage.FileOnDeviceKeyStorage<K, V> {
     protected final String keyPrefix;
     protected final SharedKeyValueStore<K, V> mSharedKeyValueStore;
     protected final JsonSerializer mJsonSerializer;
 
+    /**
+     * Constructor with the given preferences fil name, and key prefix
+     *
+     * @param jsonSerializer json serializer for content stored
+     * @param preferenceFileName the SharedPreferences file name
+     * @param prefix key prefix
+     * @see #extractKeyFromFileName(String)
+     */
     public PreferencesOnDeviceStorage(final Context context,
-                                      @Nullable final JsonSerializer jsonSerializer,
-                                      final String preferenceFileName,
-                                      String prefix) {
+            @Nullable final JsonSerializer jsonSerializer,
+            final String preferenceFileName,
+            String prefix) {
         this.keyPrefix = prefix;
         this.mSharedKeyValueStore =
-                new SharedKeyValueStore<K, V>(context, jsonSerializer, preferenceFileName);
+                new SharedKeyValueStore<>(context, jsonSerializer, preferenceFileName);
         this.mJsonSerializer = jsonSerializer;
     }
 
     @Override
     public void writeKeyedContent(final K key, final V content) {
-        String keyToStore = (String) getStorableKey(key);
+        String keyToStore = (String) getStoreableKey(key);
         if ((content instanceof JsonElement
-                || content instanceof JsonObject
                 || content instanceof LinkedTreeMap
                 || content instanceof List) && mJsonSerializer != null) {
             mSharedKeyValueStore.put(keyToStore, mJsonSerializer.serialize(content)).apply();
@@ -59,10 +68,17 @@ public abstract class PreferencesOnDeviceStorage<K, V>
 
     @Override
     public V readOneByKey(final K key) {
-        return mSharedKeyValueStore.getOrDefault(getStorableKey(key), null);
+        return mSharedKeyValueStore.getOrDefault(getStoreableKey(key), null);
     }
 
-    protected K getStorableKey(final K key) {
+    /**
+     * Returns a  key with type K from the given key and the key prefix.
+     *
+     * @see #getKeyClass()
+     */
+    @SuppressLint("DefaultLocale")
+    @SuppressWarnings({ "unchecked", "MalformedFormatString" })
+    protected K getStoreableKey(final K key) {
         Class keyClass = getKeyClass();
         if (keyClass == Long.class) {
             return (K) String.format("%s%d", this.keyPrefix, key);
@@ -73,19 +89,19 @@ public abstract class PreferencesOnDeviceStorage<K, V>
     }
 
     @Override
-    public Observable<Object> readAll() {
+    public Observable readAll() {
         return mSharedKeyValueStore.valuesAsStream();
     }
 
     @Override
     public void removeOneByKey(final K key) {
-        mSharedKeyValueStore.remove((String)getStorableKey(key))
+        mSharedKeyValueStore.remove((String) getStoreableKey(key))
                 .commit();
     }
 
     @Override
     public boolean containsKey(final K key) {
-            return mSharedKeyValueStore.containsKey(getStorableKey(key));
+        return mSharedKeyValueStore.containsKey(getStoreableKey(key));
     }
 
     @Override
@@ -94,14 +110,16 @@ public abstract class PreferencesOnDeviceStorage<K, V>
     }
 
     @Override
-    public Observable<Object> keys() {
+    @SuppressWarnings("unchecked")
+    public Observable keys() {
         return mSharedKeyValueStore.keysAsStream().map(o -> {
+            String key = (String) o;
             if (getKeyClass() == Long.class) {
-                return Long.parseLong(((String) o).substring(keyPrefix.length()));
+                return Long.parseLong(key.substring(keyPrefix.length()));
             } else if (getKeyClass() == Integer.class) {
-                return Integer.parseInt(((String) o).substring(keyPrefix.length()));
+                return Integer.parseInt(key.substring(keyPrefix.length()));
             } else {
-                return (((String) o).substring(keyPrefix.length()));
+                return (key.substring(keyPrefix.length()));
             }
         });
     }

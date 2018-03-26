@@ -25,7 +25,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 /**
- * Created by László Gálosi on 29/04/16
+ * {@link Renderable} implementation for rendering {@link DateTime} objects.
+ * @author László Gálosi
+ * @since 29/04/16
  */
 public class DateTimeRenderer implements Renderable<DateTime> {
 

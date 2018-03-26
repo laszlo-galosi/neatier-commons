@@ -14,12 +14,12 @@
 package com.neatier.commons;
 
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Created by vandekr on 11/02/14.
+ * @author vandekr
+ * @since 11/02/14.
  */
 public class DummyTest {
     @Before

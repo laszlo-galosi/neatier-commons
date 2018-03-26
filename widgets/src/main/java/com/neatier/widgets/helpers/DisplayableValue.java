@@ -24,8 +24,9 @@ import org.joda.time.LocalTime;
 
 /**
  * Helper class to format values to a user friendly displayable text.
- * Dormatting works as in  {@link String#format(String, Object...)}
- * Created by László Gálosi on 09/11/15
+ * Formatting works as in  {@link String#format(String, Object...)}
+ * @author László Gálosi
+ * @since 09/11/15
  */
 public class DisplayableValue {
     public String valueFormat = "%.0f";

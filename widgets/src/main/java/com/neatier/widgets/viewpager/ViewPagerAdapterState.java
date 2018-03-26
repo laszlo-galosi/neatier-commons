@@ -5,19 +5,23 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.SparseArray;
 
+/**
+ * Parcelable implementation for saving and restoring {@link ViewPagerAdapter}
+ * views state.
+ */
 public class ViewPagerAdapterState implements Parcelable {
 
     public static final Creator<ViewPagerAdapterState> CREATOR =
-          new Creator<ViewPagerAdapterState>() {
+            new Creator<ViewPagerAdapterState>() {
 
-              public ViewPagerAdapterState createFromParcel(Parcel in) {
-                  return ViewPagerAdapterState.from(in);
-              }
+                public ViewPagerAdapterState createFromParcel(Parcel in) {
+                    return ViewPagerAdapterState.from(in);
+                }
 
-              public ViewPagerAdapterState[] newArray(int size) {
-                  return new ViewPagerAdapterState[size];
-              }
-          };
+                public ViewPagerAdapterState[] newArray(int size) {
+                    return new ViewPagerAdapterState[size];
+                }
+            };
 
     private final SparseArray<SparseArray<Parcelable>> viewStates;
 

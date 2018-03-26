@@ -16,9 +16,10 @@ package com.neatier.commons.helpers;
 
 /**
  * Interface designating that the implementation class must free up some memory, when it's no
- * longer
- * use.
- * Created by László Gálosi on 26/09/15
+ * longer use.
+ *
+ * @author László Gálosi
+ * @since 26/09/15
  */
 public interface HeapHog {
     /**

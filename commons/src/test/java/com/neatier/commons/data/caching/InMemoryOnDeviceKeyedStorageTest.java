@@ -15,10 +15,8 @@ package com.neatier.commons.data.caching;
 
 import com.neatier.commons.CommonsTestCase;
 import com.neatier.commons.helpers.KeyValuePairs;
-
 import org.junit.After;
 import org.junit.Test;
-
 import rx.Observable;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -26,7 +24,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 26/07/15
+ * @author László Gálosi
+ * @since 26/07/15
  */
 public class InMemoryOnDeviceKeyedStorageTest extends CommonsTestCase {
     static final String KEY_PREFIX = "entity_";

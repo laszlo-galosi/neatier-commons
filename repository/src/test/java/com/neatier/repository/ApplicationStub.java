@@ -17,7 +17,8 @@ package com.neatier.repository;
 import android.app.Application;
 
 /**
- * Created by vandekr on 11/02/14.
+ * @author vandekr
+ * @since 11/02/14.
  */
 public class ApplicationStub extends Application {
 }

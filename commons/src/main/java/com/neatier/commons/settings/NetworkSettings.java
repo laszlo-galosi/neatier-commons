@@ -16,12 +16,25 @@ package com.neatier.commons.settings;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by László Gálosi on 08/08/15
+ * Contains Network connection related static timeout values.
+ *
+ * @author László Gálosi
+ * @since 08/08/15
  */
 public class NetworkSettings {
     //Networking related constants
+    /**
+     * Connection read timeout in seconds.
+     */
     public static final long READ_TIMEOUT = 30;
+
+    /**
+     * Connection timeout in seconds.
+     */
     public static final long CONNECTION_TIMEOUT = 20;
+    /**
+     * Timeout time unit.
+     */
     public static final TimeUnit TIMEOUT_UNIT = TimeUnit.SECONDS;
 
     private NetworkSettings() {

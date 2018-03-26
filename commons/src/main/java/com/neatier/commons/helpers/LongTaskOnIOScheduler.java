@@ -13,6 +13,7 @@
 
 package com.neatier.commons.helpers;
 
+import rx.Observable;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -21,14 +22,25 @@ import rx.schedulers.Schedulers;
  * {@link LongTaskScheduler} implementation, which performs the long running operation on the
  * {@link
  * Schedulers#io()} thread, and returns on the {@link AndroidSchedulers#mainThread()}
- * Created by László Gálosi on 03/08/15
+ *
+ * @author László Gálosi
+ * @since 03/08/15
  */
 public class LongTaskOnIOScheduler implements LongTaskScheduler {
+    /**
+     * Returns a scheduler to perform the long async task, usually th {@link Schedulers#io} to use
+     * in {@link Observable#subscribeOn(Scheduler)} call.
+     */
     @Override
     public Scheduler performMeOn() {
         return Schedulers.io();
     }
 
+    /**
+     * Returns a scheduler to observe the long async task result, usually th {@link
+     * AndroidSchedulers#mainThread()} to use
+     * in {@link Observable#observeOn(Scheduler)} (Scheduler)} call.
+     */
     @Override
     public Scheduler notifyMeOn() {
         return AndroidSchedulers.mainThread();

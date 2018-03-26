@@ -15,6 +15,7 @@ limitations under the License.
 */
 package com.neatier.widgets.helpers;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -31,8 +32,11 @@ import com.neatier.widgets.R;
 import java.util.ArrayList;
 
 /**
- * Helper class that iterates through Toolbar views, and sets dynamically icons and texts color
- * Created by chomi3 on 2015-01-19.
+ * Helper class that iterates through Toolbar views, and sets icons and texts color
+ * dynamically.
+ *
+ * @author chomi3
+ * @since 2015-01-19.
  */
 public class ToolbarColorizeHelper {
 
@@ -125,7 +129,7 @@ public class ToolbarColorizeHelper {
         });
     }
 
-    private static void removeOnGlobalLayoutListener(View v,
+    @SuppressLint("ObsoleteSdkInt") private static void removeOnGlobalLayoutListener(View v,
           ViewTreeObserver.OnGlobalLayoutListener listener) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);

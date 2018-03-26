@@ -33,8 +33,16 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+/**
+ * An abstract {@link FragmentPagerAdapter} sub class which contains helper function
+ * to get the Fragment of any page.
+ *
+ * @see #getRegisteredFragmentByPageId(int)
+ * @see #getRegisteredFragmentByPos(int)
+ * @see #getPageId(int)
+ */
 public abstract class SmartFragmentPagerAdapter<T extends Fragment>
-      extends FragmentPagerAdapter {
+        extends FragmentPagerAdapter {
 
     protected SparseArray<T> mRegisteredFragments = new SparseArray<>(3);
 

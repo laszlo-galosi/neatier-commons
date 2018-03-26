@@ -25,7 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 26/07/15
+ * @author László Gálosi
+ * @since 26/07/15
  */
 public class FileOnDeviceKeyedStorageImplTest extends CommonsTestCase {
 

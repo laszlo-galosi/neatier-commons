@@ -21,7 +21,8 @@ import org.junit.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Created by László Gálosi on 09/06/16
+ * @author László Gálosi
+ * @since 09/06/16
  */
 public class ChangeableBaseUrlTest {
 

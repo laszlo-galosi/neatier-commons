@@ -21,7 +21,8 @@ import rx.Observable;
  * Interface for objects which main responsibility is the asynchronous interaction with the data
  * layer
  * via Repositories.
- * Created by László Gálosi on 07/06/16
+ * @author László Gálosi
+ * @since 07/06/16
  */
 public interface RepositoryInteraction<T> {
 

@@ -20,21 +20,36 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.neatier.widgets.ThemeUtil;
 
+/**
+ * A recyclerView ItemDecoration subclass which draws a spacing around the recycler view
+ * items with the specified width.
+ */
 public class ItemSpacingDecoration extends RecyclerView.ItemDecoration {
 
+    /**
+     * The width of the spacing in pixels between the RecyclerView items.
+     */
     protected int mItemSpacing;
 
-    public static ItemSpacingDecoration withDp(int dp, Context context) {
-        return new ItemSpacingDecoration(context, dp);
-    }
-
+    /**
+     * Constructs an ItemDecoration with the given context and item spacing width measured in dp.
+     */
     public ItemSpacingDecoration(@NonNull Context context, int itemSpacingInDp) {
         mItemSpacing = ThemeUtil.dpToPx(context, itemSpacingInDp);
     }
 
+    /**
+     * Can be  overridden to control the decoration drawing for the given outer rectangle
+     * of the given RecyclerView child view depending on the given RecyclerView state.
+     *
+     * @param outRect the outer rectangle of the child view
+     * @param view the child view on which the item decoration should be drawn
+     * @param parent the pRecyclerView parent of the child iew.
+     * @param state the RecyclerView's state.
+     */
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent,
-          RecyclerView.State state) {
+            RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         outRect.set(mItemSpacing, mItemSpacing, mItemSpacing, mItemSpacing);
     }

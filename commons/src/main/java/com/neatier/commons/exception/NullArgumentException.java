@@ -14,13 +14,18 @@
 package com.neatier.commons.exception;
 
 /**
- * Created by Krisztian on 11/9/15.
+ * An {@link IllegalArgumentException} sub class denoting that the specified argu,emt is null.
+ * @author Lászlo Gálos
+ * @since 11/9/15.
  */
 public class NullArgumentException extends IllegalArgumentException {
     public NullArgumentException() {
         super("Argument is null.");
     }
 
+    /**
+     * Constructor with the missing given argument name.
+     */
     public NullArgumentException(final String argumentName) {
         super(argumentName + " argument is missing.");
     }

@@ -14,7 +14,9 @@
 package com.neatier.commons.settings;
 
 /**
- * Created by Krisztian on 4/12/2015.
+ * Contains static constants for the application.
+ * @author Krisztian
+ * @since 4/12/2015.
  */
 public class FactorySettings {
 

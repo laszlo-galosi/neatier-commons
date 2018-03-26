@@ -15,20 +15,18 @@
 package com.neatier.commons.helpers;
 
 import android.os.Bundle;
-
 import com.neatier.commons.CommonsTestCase;
-
+import java.io.Serializable;
 import org.hamcrest.CoreMatchers;
 import org.joda.time.DateTime;
 import org.junit.Test;
-
-import java.io.Serializable;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Created by László Gálosi on 15/04/16
+ * @author László Gálosi
+ * @since 15/04/16
  */
 public class BundleWrapperTest extends CommonsTestCase {
 

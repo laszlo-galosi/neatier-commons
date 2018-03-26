@@ -21,10 +21,20 @@ import java.util.List;
 import rx.Observable;
 
 /**
- * Created by László Gálosi on 10/06/16
+ * An interface collection for defining data sources which can be mutable or read only,
+ * using {@link Observable}s  to work with.
+ *
+ * @author László Gálosi
+ * @since 10/06/16
  */
 public interface AsyncDataSources {
 
+    /**
+     * A mutable AsyncDataSource
+     *
+     * @param <K> the type of the keys.
+     * @param <V> the type of the value
+     */
     interface WriteableAsyncDataSource<K, V extends Identifiable<K>> {
         /**
          * Adds or update the provided value into this data source.
@@ -43,7 +53,7 @@ public interface AsyncDataSources {
          * @throws Exception any exception on the data source.
          */
         Observable<List<V>> addOrUpdateAll(Collection<V> values,
-              final KeyValuePairs<String, Object> requestParams);
+                final KeyValuePairs<String, Object> requestParams);
 
         /**
          * Deletes a value given its associated key.
@@ -61,6 +71,12 @@ public interface AsyncDataSources {
         Observable<Boolean> deleteAll(final KeyValuePairs<String, Object> requestParams);
     }
 
+    /**
+     * A read-only AsyncDataSource
+     *
+     * @param <K> the type of the keys.
+     * @param <V> the type of the value
+     */
     interface ReadableAsyncDataSource<K, V extends Identifiable<K>> {
 
         Observable<V> getByKey(K key, final KeyValuePairs<String, Object> requestParams);

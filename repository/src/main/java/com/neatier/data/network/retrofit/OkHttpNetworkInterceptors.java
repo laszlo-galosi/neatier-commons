@@ -17,9 +17,14 @@ package com.neatier.data.network.retrofit;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import javax.inject.Qualifier;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Annotation for using {@link OkHttpClient.Builder#addNetworkInterceptor(Interceptor)}
+ */
 @Documented
 @Qualifier
 @Retention(RUNTIME)

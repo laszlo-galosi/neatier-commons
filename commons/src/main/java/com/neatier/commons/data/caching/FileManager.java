@@ -4,7 +4,8 @@
  *  Proprietary and confidential.
  *
  *  All information contained herein is, and remains the property of Delight Solutions Kft.
- *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions Kft.
+ *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
+  *  Kft.
  *   and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -15,20 +16,19 @@ package com.neatier.commons.data.caching;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import trikita.log.Log;
 
 /**
  * Helper class to do operations on regular files/directories.
- * <p/>
- * Created by vandekr on 11/02/14.
+ *
+ * @author László Gálosi
+ * @since 11/02/14.
  */
 public class FileManager {
 
@@ -42,8 +42,7 @@ public class FileManager {
     /**
      * Writes a file to Disk.
      * This is an I/O operation and this method executes in the main thread, so it is recommended
-     * to
-     * perform this operation using another thread.
+     * to perform this operation using another thread.
      *
      * @param file The file to write to Disk.
      */
@@ -64,8 +63,7 @@ public class FileManager {
     /**
      * Reads a content from a file.
      * This is an I/O operation and this method executes in the main thread, so it is recommended
-     * to
-     * perform the operation using another thread.
+     * to perform the operation using another thread.
      *
      * @param file The file to read from.
      * @return A string with the content of the file.
@@ -107,8 +105,7 @@ public class FileManager {
     /**
      * Warning: Deletes the content of a directory.
      * This is an I/O operation and this method executes in the main thread, so it is recommended
-     * to
-     * perform the operation using another thread.
+     * to perform the operation using another thread.
      *
      * @param directory The directory which its content will be deleted.
      */
@@ -123,13 +120,13 @@ public class FileManager {
     /**
      * Write a value to a user preferences file.
      *
-     * @param context            {@link Context} to retrieve android user preferences.
+     * @param context {@link Context} to retrieve android user preferences.
      * @param preferenceFileName A file name reprensenting where data will be written to.
-     * @param key                A string for the key that will be used to retrieve the value in the future.
-     * @param value              A long representing the value to be inserted.
+     * @param key A string for the key that will be used to retrieve the value in the future.
+     * @param value A long representing the value to be inserted.
      */
     public void writeToPreferences(Context context, String preferenceFileName, String key,
-                                   long value) {
+            long value) {
 
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(preferenceFileName, Context.MODE_PRIVATE);
@@ -141,9 +138,9 @@ public class FileManager {
     /**
      * Get a value from a user preferences file.
      *
-     * @param context            {@link Context} to retrieve android user preferences.
+     * @param context {@link Context} to retrieve android user preferences.
      * @param preferenceFileName A file name representing where data will be getDomainMapper from.
-     * @param key                A key that will be used to retrieve the value from the preference file.
+     * @param key A key that will be used to retrieve the value from the preference file.
      * @return A long representing the value retrieved from the preferences file.
      */
     public long getFromPreferences(Context context, String preferenceFileName, String key) {

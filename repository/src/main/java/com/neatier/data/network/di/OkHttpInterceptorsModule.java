@@ -26,19 +26,21 @@ import okhttp3.Interceptor;
 import okhttp3.logging.HttpLoggingInterceptor;
 import trikita.log.Log;
 
-@Module
-public class OkHttpInterceptorsModule {
+/**
+ * A Dagger {@link Module @Module} class providing the {@link HttpLoggingInterceptor} and
+ * NetworkInterceptors Singleton instances to us with {@link }.
+ */
+@Module public class OkHttpInterceptorsModule {
 
     // Provided as separate dependency for Developer Settings to be able to change HTTP log level
     // at runtime.
-    @Provides @Singleton @NonNull
-    public HttpLoggingInterceptor provideHttpLoggingInterceptor() {
+    @Provides @Singleton @NonNull public HttpLoggingInterceptor provideHttpLoggingInterceptor() {
         return new HttpLoggingInterceptor(message -> Log.d(message));
     }
 
     @Provides @OkHttpInterceptors @Singleton @NonNull
     public List<Interceptor> provideOkHttpInterceptors(
-          @NonNull HttpLoggingInterceptor httpLoggingInterceptor) {
+            @NonNull HttpLoggingInterceptor httpLoggingInterceptor) {
         return Collections.singletonList(httpLoggingInterceptor);
     }
 

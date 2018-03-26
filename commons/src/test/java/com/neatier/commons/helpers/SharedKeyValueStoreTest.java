@@ -15,19 +15,16 @@ package com.neatier.commons.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.neatier.commons.CommonsTestCase;
 import com.neatier.commons.exception.InternalErrorException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.robolectric.shadows.ShadowApplication;
-
 import rx.Observable;
 import rx.schedulers.TestScheduler;
 
@@ -35,7 +32,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 /**
- * Created by László Gálosi on 04/08/15
+ * @author László Gálosi
+ * @since 04/08/15
  */
 public class SharedKeyValueStoreTest extends CommonsTestCase {
 
