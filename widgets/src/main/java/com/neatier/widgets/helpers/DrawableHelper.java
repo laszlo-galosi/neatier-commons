@@ -185,6 +185,9 @@ public class DrawableHelper {
     public DrawableHelper withDrawable(@DrawableRes int drawableRes) {
         //mDrawable = ContextCompat.getDrawable(mContext, drawableRes);
         mDrawable = VectorDrawableCompat.create(mContext.getResources(), drawableRes, null);
+        if (mDrawable == null) {
+            withDrawable(ContextCompat.getDrawable(mContext, drawableRes));
+        }
         return this;
     }
 

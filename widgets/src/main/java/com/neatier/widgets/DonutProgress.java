@@ -505,20 +505,47 @@ public class DonutProgress extends FrameLayout {
         return mTextColor;
     }
 
+    public void setTextColor(int textColor) {
+        this.mTextColor = textColor;
+        this.mTextPaint.setColor(textColor);
+        updateViews();
+    }
+
     public float getTextSize() {
         return mTextSize;
+    }
+
+    public void setTextSize(float textSize) {
+        this.mTextSize = textSize;
+        updateViews();
     }
 
     public int getLabelTextColor() {
         return mLabelTextColor;
     }
 
+    public void setLabelTextColor(final int labelTextColor) {
+        mLabelTextColor = labelTextColor;
+        mLabelTextPaint.setColor(labelTextColor);
+        updateViews();
+    }
+
     public int getSuffixTextColor() {
         return mSuffixTextColor;
     }
 
+    public void setSuffixTextColor(final int suffixTextColor) {
+        mSuffixTextColor = suffixTextColor;
+        mSuffixTextPaint.setColor(suffixTextColor);
+        updateViews();
+    }
+
     public float getLabelTextSize() {
         return mLabelTextSize;
+    }
+
+    public void setLabelTextSize(final float labelTextSize) {
+        mLabelTextSize = labelTextSize;
     }
 
     public float getSuffixTextSize() {
@@ -544,6 +571,12 @@ public class DonutProgress extends FrameLayout {
         return mUnfinishedStrokeColor;
     }
 
+    public void setUnfinishedStrokeColor(int unfinishedStrokeColor) {
+        this.mUnfinishedStrokeColor = unfinishedStrokeColor;
+        this.mUnfinishedPaint.setColor(unfinishedStrokeColor);
+        this.invalidate();
+    }
+
     public String getProgressTextFormat() {
         return mProgressTextFormat;
     }
@@ -564,6 +597,11 @@ public class DonutProgress extends FrameLayout {
 
     public String getLabelText() {
         return mLabelText;
+    }
+
+    public void setLabelText(String labelText) {
+        this.mLabelText = labelText;
+        updateViews();
     }
 
     public float getFinishedStrokeWidth() {
@@ -588,8 +626,21 @@ public class DonutProgress extends FrameLayout {
         return mInnerBackgroundColor;
     }
 
+    public void setInnerBackgroundColor(int innerBackgroundColor) {
+        this.mInnerBackgroundColor = innerBackgroundColor;
+        mInnerCirclePaint.setColor(this.mInnerBackgroundColor);
+        this.invalidate();
+    }
+
     public long getAnimDuration() {
         return mAnimDuration;
+    }
+
+    public void setAnimDuration(final long animDuration) {
+        mAnimDuration = animDuration;
+        if (mProgressAnimator != null) {
+            mProgressAnimator.setDuration(mAnimDuration);
+        }
     }
 
     public int getAnimInterpolatorRes() {
@@ -603,57 +654,6 @@ public class DonutProgress extends FrameLayout {
         if (mProgressAnimator != null) {
             mProgressAnimator.setInterpolator(mAnimationInterPolator);
         }
-    }
-
-    public void setAnimDuration(final long animDuration) {
-        mAnimDuration = animDuration;
-        if (mProgressAnimator != null) {
-            mProgressAnimator.setDuration(mAnimDuration);
-        }
-    }
-
-    public void setInnerBackgroundColor(int innerBackgroundColor) {
-        this.mInnerBackgroundColor = innerBackgroundColor;
-        mInnerCirclePaint.setColor(this.mInnerBackgroundColor);
-        this.invalidate();
-    }
-
-    public void setLabelText(String labelText) {
-        this.mLabelText = labelText;
-        updateViews();
-    }
-
-    public void setUnfinishedStrokeColor(int unfinishedStrokeColor) {
-        this.mUnfinishedStrokeColor = unfinishedStrokeColor;
-        this.mUnfinishedPaint.setColor(unfinishedStrokeColor);
-        this.invalidate();
-    }
-
-    public void setLabelTextSize(final float labelTextSize) {
-        mLabelTextSize = labelTextSize;
-    }
-
-    public void setSuffixTextColor(final int suffixTextColor) {
-        mSuffixTextColor = suffixTextColor;
-        mSuffixTextPaint.setColor(suffixTextColor);
-        updateViews();
-    }
-
-    public void setLabelTextColor(final int labelTextColor) {
-        mLabelTextColor = labelTextColor;
-        mLabelTextPaint.setColor(labelTextColor);
-        updateViews();
-    }
-
-    public void setTextSize(float textSize) {
-        this.mTextSize = textSize;
-        updateViews();
-    }
-
-    public void setTextColor(int textColor) {
-        this.mTextColor = textColor;
-        this.mTextPaint.setColor(textColor);
-        updateViews();
     }
 
     @Override
