@@ -55,6 +55,9 @@
 
   <!--Circle shaped determinate progress bar attributes-->
   <declare-styleable name="DonutProgress">
+    <attr name="donut_prefixViewId" format="reference"/>
+    <attr name="donut_progressViewId" format="reference"/>
+    <attr name="donut_suffixViewId" format="reference"/>
     <attr name="progressValue" format="float"/>
     <attr name="maxValue" format="integer"/>
     <attr name="finishedColor" format="reference|color"/>

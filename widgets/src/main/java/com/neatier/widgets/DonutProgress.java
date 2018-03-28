@@ -22,8 +22,9 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -34,9 +35,6 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.neatier.widgets.helpers.WidgetUtils;
 import java.util.Arrays;
 import oxim.digital.rxanim.RxAnimationBuilder;
@@ -52,10 +50,16 @@ import trikita.log.Log;
  * <ul>
  * <li>app:progressValue - the current progress value as an integer</li>
  * <li>app:maxValue - the max value as an integer </li>
+ * <li>app:donut_widgetLayout - the layout resource of the widget</li>
+ * <li>app:donut_progressViewId - the id of the view displaying the progress value</li>
+ * <li>app:donut_prefixViewId - the id of the view displaying the prefix (label)</li>
+ * <li>app:donut_suffixViewId - the id of the view displaying the suffix of the progress value
+ * (f.ex.: %)</li>
  * <li>app:finishedColor - the finished progress tint color resource </li>
  * <li>app:unfinishedColor - the unfinished progress tint color resource </li>
  * <li>app:innerCircleBackgroundColor - the inner circle background color resource</li>
- * <li>app:progressTextFormat - the displayed progress text {@link String#format(String, Object...)}</li>
+ * <li>app:progressTextFormat - the displayed progress text {@link String#format(String,
+ * Object...)}</li>
  * <li>app:progressTextSize - the progress {@link TextView} text size</li>
  * <li>app:progressTextColor - the progress {@link TextView} text color </li>
  * <li>app:labelText - the text of the label view</li>
@@ -66,7 +70,6 @@ import trikita.log.Log;
  * <li>app:suffixTextColor - the suffix text color </li>
  * <li>app:finishedStrokeWidth - the finished progressbar stroke width </li>
  * <li>app:unfinishedStrokeWidth - the unfinished progressbar stroke width  </li>
- * <li>app:donut_widgetLayout - the layout resource of the widget</li>
  * <li>app:startAngle - starting angle of the circular progress view.</li>
  * <li>app:animDuration - the animation duration </li>
  * <li>app:animInterpolator - the animation interpolator</li>
@@ -99,15 +102,28 @@ public class DonutProgress extends FrameLayout {
     private static final String INSTANCE_ANIM_DURATION = "anim_duration";
     private static final String INSTANCE_ANIM_INTERPOLATOR = "anim_interpolator";
 
-    @Nullable @BindView(R2.id.prefix) TextView mLabelTextView;
-    @Nullable @BindView(R2.id.progress) TextView mProgressTextView;
-    @Nullable @BindView(R2.id.suffix) TextView mSuffixView;
+    @LayoutRes private int mWidgetLayout;
+    @IdRes private int mPrefixViewId;
+    @IdRes private int mProgressViewId;
+    @IdRes private int mSuffixViewId;
+
+    TextView mLabelTextView;
+    TextView mProgressTextView;
+    TextView mSuffixView;
 
     private final float mDefaultStrokeWidth;
-    private final int mDefaultFinishedColor = Color.rgb(66, 145, 241);
-    private final int mDefaultUnfinishedColor = Color.rgb(204, 204, 204);
-    private final int mDefaultTextColor = Color.rgb(66, 145, 241);
-    private final int mDefaultInnerBackgroundColor = Color.TRANSPARENT;
+    @ColorInt private final int mDefaultFinishedColor = Color.rgb(66, 145, 241);
+    @ColorInt private final int mDefaultUnfinishedColor = Color.rgb(204, 204, 204);
+    @ColorInt private final int mDefaultTextColor = Color.rgb(66, 145, 241);
+    @ColorInt private final int mDefaultInnerBackgroundColor = Color.TRANSPARENT;
+
+    @ColorInt private int mFinishedStrokeColor;
+    @ColorInt private int mUnfinishedStrokeColor;
+    @ColorInt private int mTextColor;
+    @ColorInt private int mSuffixTextColor;
+    @ColorInt private int mLabelTextColor;
+    @ColorInt private int mInnerBackgroundColor;
+
     private final int mDefaultMax = 100;
     private final float mDefaultTextSize;
     private final int mMinSize;
@@ -120,30 +136,22 @@ public class DonutProgress extends FrameLayout {
     private RectF mFinishedOuterRect = new RectF();
     private RectF mUnfinishedOuterRect = new RectF();
     private float mTextSize;
-    private int mTextColor;
     private float mProgress = 0.0f;
     private int mMax;
-    private int mFinishedStrokeColor;
-    private int mUnfinishedStrokeColor;
     private float mFinishedStrokeWidth;
     private float mUnfinishedStrokeWidth;
-    private int mInnerBackgroundColor;
     private String mProgressTextFormat = "%.0f";
     private String mSuffixText = "";
     private float mSuffixTextSize;
-    private int mSuffixTextColor;
     private String mLabelText = "";
     private float mLabelTextSize;
-    private int mLabelTextColor;
-    private int mWidgetLayout;
     private View mContentView;
-    private Unbinder mUnbinder;
     private int mWidth;
     private int mHeight;
     private float mStartAngle;
     private float mDefaultStartAngle = 0.0f;
     private long mAnimDuration;
-    private Interpolator mAnimationInterPolator;
+    private Interpolator mAnimationInterpolator;
     private ObjectAnimator mProgressAnimator;
     private float[] mProgressValuesOnAttach;
     private int mAnimInterpolatorRes;
@@ -166,41 +174,52 @@ public class DonutProgress extends FrameLayout {
         mHeight = mMinSize;
         mDefaultStrokeWidth = ThemeUtil.dpToPx(context, 10);
         TypedArray a =
-              context.obtainStyledAttributes(attrs, R.styleable.DonutProgress, defStyleAttr, 0);
+                context.obtainStyledAttributes(attrs, R.styleable.DonutProgress, defStyleAttr, 0);
         initByAttributes(a);
         a.recycle();
         initView(context);
     }
 
     protected void initByAttributes(TypedArray attributes) {
+        if (attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0) > 0) {
+            mWidgetLayout =
+                    attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0);
+        }
+        mPrefixViewId = attributes.getResourceId(R.styleable.DonutProgress_donut_prefixViewId,
+                R.id.prefix);
+        mProgressViewId = attributes.getResourceId(R.styleable.DonutProgress_donut_progressViewId,
+                R.id.progress);
+        mSuffixViewId = attributes.getResourceId(R.styleable.DonutProgress_donut_suffixViewId,
+                R.id.suffix);
+
         mFinishedStrokeColor = attributes.getColor(R.styleable.DonutProgress_finishedColor,
-                                                   mDefaultFinishedColor);
+                mDefaultFinishedColor);
         mUnfinishedStrokeColor = attributes.getColor(R.styleable.DonutProgress_unfinishedColor,
-                                                     mDefaultUnfinishedColor);
+                mDefaultUnfinishedColor);
         mTextColor = attributes.getColor(R.styleable.DonutProgress_progressTextColor,
-                                         mDefaultTextColor);
+                mDefaultTextColor);
         mLabelTextColor = attributes.getColor(R.styleable.DonutProgress_labelTextColor,
-                                              mDefaultTextColor);
+                mDefaultTextColor);
         mSuffixTextColor = attributes.getColor(R.styleable.DonutProgress_labelTextColor,
-                                               mDefaultTextColor);
+                mDefaultTextColor);
         mTextSize = attributes.getDimension(R.styleable.DonutProgress_progressTextSize,
-                                            mDefaultTextSize);
+                mDefaultTextSize);
         mSuffixTextSize = attributes.getDimension(R.styleable.DonutProgress_suffixTextSize,
-                                                  mDefaultTextSize);
+                mDefaultTextSize);
         mLabelTextSize = attributes.getDimension(R.styleable.DonutProgress_labelTextSize,
-                                                 mDefaultTextSize);
+                mDefaultTextSize);
 
         setMax(attributes.getInt(R.styleable.DonutProgress_maxValue, mDefaultMax));
         setProgress(attributes.getFloat(R.styleable.DonutProgress_progressValue, 0.0f));
         mFinishedStrokeWidth =
-              attributes.getDimension(R.styleable.DonutProgress_finishedStrokeWidth,
-                                      mDefaultStrokeWidth);
+                attributes.getDimension(R.styleable.DonutProgress_finishedStrokeWidth,
+                        mDefaultStrokeWidth);
         mUnfinishedStrokeWidth =
-              attributes.getDimension(R.styleable.DonutProgress_unfinishedStrokeWidth,
-                                      mDefaultStrokeWidth);
+                attributes.getDimension(R.styleable.DonutProgress_unfinishedStrokeWidth,
+                        mDefaultStrokeWidth);
         if (attributes.getString(R.styleable.DonutProgress_progressTextFormat) != null) {
             mProgressTextFormat =
-                  attributes.getString(R.styleable.DonutProgress_progressTextFormat);
+                    attributes.getString(R.styleable.DonutProgress_progressTextFormat);
         }
         if (attributes.getString(R.styleable.DonutProgress_labelText) != null) {
             mLabelText = attributes.getString(R.styleable.DonutProgress_labelText);
@@ -209,22 +228,17 @@ public class DonutProgress extends FrameLayout {
             mSuffixText = attributes.getString(R.styleable.DonutProgress_suffixText);
         }
         mInnerBackgroundColor =
-              attributes.getColor(R.styleable.DonutProgress_innerCircleBackgroundColor,
-                                  mDefaultInnerBackgroundColor);
-
-        if (attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0) > 0) {
-            mWidgetLayout =
-                  attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0);
-        }
+                attributes.getColor(R.styleable.DonutProgress_innerCircleBackgroundColor,
+                        mDefaultInnerBackgroundColor);
         mStartAngle = attributes.getFloat(R.styleable.DonutProgress_startAngle, mDefaultStartAngle);
         long defaultAnimTime = getResources().getInteger(android.R.integer.config_longAnimTime);
         mAnimDuration =
-              attributes.getInt(R.styleable.DonutProgress_animDuration, (int) defaultAnimTime);
+                attributes.getInt(R.styleable.DonutProgress_animDuration, (int) defaultAnimTime);
         mAnimInterpolatorRes =
-              attributes.getResourceId(R.styleable.DonutProgress_animInterpolator,
-                                       android.R.anim.decelerate_interpolator);
-        mAnimationInterPolator =
-              AnimationUtils.loadInterpolator(getContext(), mAnimInterpolatorRes);
+                attributes.getResourceId(R.styleable.DonutProgress_animInterpolator,
+                        android.R.anim.decelerate_interpolator);
+        mAnimationInterpolator =
+                AnimationUtils.loadInterpolator(getContext(), mAnimInterpolatorRes);
     }
 
     private void initView(Context context) {
@@ -232,10 +246,12 @@ public class DonutProgress extends FrameLayout {
         if (mWidgetLayout > 0) {
             removeAllViews();
             mContentView = LayoutInflater.from(getContext()).inflate(mWidgetLayout, this, false);
+            mLabelTextView = (TextView) mContentView.findViewById(mPrefixViewId);
+            mProgressTextView = (TextView) mContentView.findViewById(mProgressViewId);
+            mSuffixView = (TextView) mContentView.findViewById(mSuffixViewId);
             WidgetUtils.setLayoutSizeOf(mContentView, LinearLayout.LayoutParams.MATCH_PARENT,
-                                        LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams.MATCH_PARENT);
             addView(mContentView);
-            mUnbinder = ButterKnife.bind(this, this);
         }
         initPainters();
     }
@@ -320,13 +336,13 @@ public class DonutProgress extends FrameLayout {
     public void syncAnim(final Animator animator) {
         animator.setStartDelay(mAnimDuration);
         animator.setDuration(mAnimDuration);
-        animator.setInterpolator(mAnimationInterPolator);
+        animator.setInterpolator(mAnimationInterpolator);
     }
 
     public void syncAnimBuilder(final RxAnimationBuilder animator) {
         animator.delay((int) mAnimDuration)
                 .duration((int) mAnimDuration)
-                .interpolator(mAnimationInterPolator);
+                .interpolator(mAnimationInterpolator);
     }
 
     public float getProgress() {
@@ -339,14 +355,14 @@ public class DonutProgress extends FrameLayout {
     }
 
     private Completable createAnimator(final float[] animValues) {
-        Log.d("Creating animator", "interpolator", mAnimationInterPolator, "duration",
-              mAnimDuration, "range", Arrays.toString(animValues));
+        Log.d("Creating animator", "interpolator", mAnimationInterpolator, "duration",
+                mAnimDuration, "range", Arrays.toString(animValues));
         //object animator animates goalCompletion value resulting an animated progress view.
         mProgressAnimator =
-              ObjectAnimator.ofFloat(this, PROPERTY_PROGRESS, animValues);
+                ObjectAnimator.ofFloat(this, PROPERTY_PROGRESS, animValues);
         mProgressAnimator.setStartDelay(mAnimDuration);
         mProgressAnimator.setDuration(mAnimDuration);
-        mProgressAnimator.setInterpolator(mAnimationInterPolator);
+        mProgressAnimator.setInterpolator(mAnimationInterpolator);
         //Now ensure the two animation run in sequence.
         return RxValueAnimator.from(mProgressAnimator, animator -> {
         }).schedule();
@@ -357,7 +373,6 @@ public class DonutProgress extends FrameLayout {
         if (mProgressAnimator != null) {
             mProgressAnimator.end();
         }
-        mUnbinder.unbind();
         super.onDetachedFromWindow();
     }
 
@@ -382,17 +397,17 @@ public class DonutProgress extends FrameLayout {
     private void drawArc(final Canvas canvas) {
         float delta = Math.max(mFinishedStrokeWidth, mUnfinishedStrokeWidth);
         mFinishedOuterRect.set(delta,
-                               delta,
-                               mWidth - delta,
-                               mHeight - delta);
+                delta,
+                mWidth - delta,
+                mHeight - delta);
         mUnfinishedOuterRect.set(delta,
-                                 delta,
-                                 mWidth - delta,
-                                 mHeight - delta);
+                delta,
+                mWidth - delta,
+                mHeight - delta);
 
         float innerCircleRadius = (mWidth - Math.min(mFinishedStrokeWidth,
-                                                     mUnfinishedStrokeWidth) + Math.abs(
-              mFinishedStrokeWidth - mUnfinishedStrokeWidth)) / 2f;
+                mUnfinishedStrokeWidth) + Math.abs(
+                mFinishedStrokeWidth - mUnfinishedStrokeWidth)) / 2f;
         canvas.drawCircle(mWidth / 2.0f, mHeight / 2.0f, innerCircleRadius, mInnerCirclePaint);
 
         drawArc(mFinishedOuterRect, mStartAngle, getProgressAngle(), mFinishedPaint, canvas);
@@ -404,23 +419,23 @@ public class DonutProgress extends FrameLayout {
         if (!TextUtils.isEmpty(mLabelText)) {
             float textHeight = mLabelTextPaint.descent() + mLabelTextPaint.ascent();
             canvas.drawText(mLabelText,
-                            (mWidth - mLabelTextPaint.measureText(mLabelText)) / 2.0f,
-                            (mWidth - textHeight) / 2.0f,
-                            mLabelTextPaint);
+                    (mWidth - mLabelTextPaint.measureText(mLabelText)) / 2.0f,
+                    (mWidth - textHeight) / 2.0f,
+                    mLabelTextPaint);
         }
         String text = String.format(mProgressTextFormat, mProgress);
         if (!TextUtils.isEmpty(text)) {
             float textHeight = mTextPaint.descent() + mTextPaint.ascent();
             canvas.drawText(text, (mWidth - mTextPaint.measureText(text)) / 2.0f,
-                            (mWidth - textHeight) / 2.0f,
-                            mTextPaint);
+                    (mWidth - textHeight) / 2.0f,
+                    mTextPaint);
         }
         if (!TextUtils.isEmpty(mSuffixText)) {
             float textHeight = mSuffixTextPaint.descent() + mSuffixTextPaint.ascent();
             canvas.drawText(mSuffixText,
-                            (mWidth - mSuffixTextPaint.measureText(mSuffixText)) / 2.0f,
-                            (mWidth - textHeight) / 2.0f,
-                            mSuffixTextPaint);
+                    (mWidth - mSuffixTextPaint.measureText(mSuffixText)) / 2.0f,
+                    (mWidth - textHeight) / 2.0f,
+                    mSuffixTextPaint);
         }
     }
 
@@ -649,10 +664,10 @@ public class DonutProgress extends FrameLayout {
 
     public void setAnimInterpolatorRes(final int animInterpolatorRes) {
         mAnimInterpolatorRes = animInterpolatorRes;
-        mAnimationInterPolator =
-              AnimationUtils.loadInterpolator(getContext(), mAnimInterpolatorRes);
+        mAnimationInterpolator =
+                AnimationUtils.loadInterpolator(getContext(), mAnimInterpolatorRes);
         if (mProgressAnimator != null) {
-            mProgressAnimator.setInterpolator(mAnimationInterPolator);
+            mProgressAnimator.setInterpolator(mAnimationInterpolator);
         }
     }
 
@@ -692,7 +707,7 @@ public class DonutProgress extends FrameLayout {
                 break;
             case MeasureSpec.AT_MOST:
                 measureSpec = MeasureSpec.makeMeasureSpec(
-                      Math.min(MeasureSpec.getSize(measureSpec), mMinSize), MeasureSpec.EXACTLY);
+                        Math.min(MeasureSpec.getSize(measureSpec), mMinSize), MeasureSpec.EXACTLY);
                 break;
         }
     }
