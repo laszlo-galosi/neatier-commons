@@ -253,10 +253,10 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
             addView(mItemView);
-            mEditText = mItemView.findViewById(R.id.inputField);
+            mEditText = (EditText) mItemView.findViewById(R.id.inputField);
             mEditText.setTextColor(mFieldTextColor);
             if (mHelperViewId > 0) {
-                mHelperView = mItemView.findViewById(mHelperViewId);
+                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
                 setHelperWithColor(mHelperText, mHelperTextColor);
                 mHelperView.setTextColor(mHelperTextColor);
             }
@@ -265,10 +265,11 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             mEditText.setImeActionLabel(mImeActionLabel, mImeOptions);
             mDefaultFieldPaddingStart = mEditText.getPaddingLeft();
             if (mLabelViewId > 0) {
-                mLabelView = mItemView.findViewById(mLabelViewId);
+                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
                 mLabelView.setTextColor(mLabelTextColor);
             }
+            setMultiLine(mMultiLine);
             setLabel(mLabelText);
             if (mHelperAsHint) {
                 setHint(getHelper());
@@ -278,6 +279,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             WidgetUtils.setTextOf(mEditText, getValue());
             mItemView.setClickable(false);
             setFocusFlags(mFocusFlags);
+
         }
     }
 
@@ -383,7 +385,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             setHint(formatted);
         }
         if (mLabelView == null) {
-            mLabelView = findViewById(mLabelViewId);
+            mLabelView = (TextView) findViewById(mLabelViewId);
         }
         WidgetUtils.setTextOf(mLabelView, formatted);
         //Update left padding of editText.
@@ -406,7 +408,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
     public void setHelperWithColor(final String helperText, @ColorInt int color) {
         mHelperText = helperText;
         if (mHelperView == null && mHelperViewId > 0) {
-            mHelperView = findViewById(mHelperViewId);
+            mHelperView = (TextView) findViewById(mHelperViewId);
         }
         mHelperTextColor = color;
         if (mHelperAsHint) {
@@ -471,6 +473,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
 
     public void setMultiLine(final boolean multiLine) {
         mMultiLine = multiLine;
+        getEditText().setSingleLine(!multiLine);
     }
 
     public int getFieldPaddingRight() {
