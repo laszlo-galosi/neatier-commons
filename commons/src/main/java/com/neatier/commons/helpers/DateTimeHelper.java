@@ -43,6 +43,7 @@ import org.joda.time.LocalTime;
 import org.joda.time.ReadableInstant;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 import static net.danlew.android.joda.DateUtils.FORMAT_ABBREV_ALL;
 import static net.danlew.android.joda.DateUtils.FORMAT_ABBREV_MONTH;
@@ -295,7 +296,7 @@ public class DateTimeHelper {
     @NonNull
     public static DateTime dateTime(final Calendar calendar) {
         return new DateTime(calendar == null ? Calendar.getInstance() : calendar.getTime())
-              .withZone(DateTimeZone.getDefault());
+                .withZone(DateTimeZone.getDefault());
     }
 
     /**
@@ -459,6 +460,21 @@ public class DateTimeHelper {
             dateTimeToParse = DateTimeHelper.toStoreableDateString(defaultDateTime, pattern);
         }
         return parseDate(dateTimeToParse, pattern, DateTimeZone.getDefault());
+    }
+
+    /**
+     * Tries to parse the given datetime string formatted {@link ISODateTimeFormat}
+     * If any parsing error happens it tries to parse the give default datetime string as a
+     * fallback.
+     *
+     * @see LocalTime#parse(String, DateTimeFormatter)
+     */
+    public static DateTime parseISODateTime(final String dateTimeStr, DateTime defaultDateTime) {
+        String dateTimeToParse = dateTimeStr;
+        if (TextUtils.isEmpty(dateTimeToParse)) {
+            dateTimeToParse = ISODateTimeFormat.dateTime().print(defaultDateTime);
+        }
+        return ISODateTimeFormat.dateTimeParser().parseDateTime(dateTimeToParse);
     }
 
     /**
