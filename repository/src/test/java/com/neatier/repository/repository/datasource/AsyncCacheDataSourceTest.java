@@ -1,6 +1,6 @@
 package com.neatier.repository.repository.datasource;
 
-import com.google.common.collect.Lists;
+import com.fernandocejas.arrow.collections.Lists;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;

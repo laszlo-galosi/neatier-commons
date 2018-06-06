@@ -1,6 +1,6 @@
 package com.neatier.repository.repository;
 
-import com.google.common.collect.Lists;
+import com.fernandocejas.arrow.collections.Lists;
 import com.neatier.commons.helpers.KeyValuePairs;
 import com.neatier.data.entity.TestEntity;
 import com.neatier.repository.AsyncRepository;

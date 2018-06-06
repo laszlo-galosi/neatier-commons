@@ -14,7 +14,7 @@
 
 package com.neatier.repository.entity;
 
-import com.google.common.collect.Lists;
+import com.fernandocejas.arrow.collections.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
