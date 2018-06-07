@@ -31,6 +31,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -138,6 +139,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
     private boolean mMultiLine;
     private CompositeSubscription mSubscriptions;
     private boolean mIgnoreTextChange;
+    private long mTextChangeFrequency = DEFAULT_TEXTEVENT_FREQ;
 
     protected OnFocusChangeListener mDefaultFocusChangeListener = new OnFocusChangeListener() {
         @Override public void onFocusChange(final View v, final boolean hasFocus) {
@@ -312,7 +314,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
         mSubscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(mSubscriptions);
         Subscription sub = RxTextView.textChangeEvents(mEditText)
                 .filter(event -> !mIgnoreTextChange)
-                .debounce(DEFAULT_TEXTEVENT_FREQ, TimeUnit.MILLISECONDS)
+                .debounce(mTextChangeFrequency, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(textChangeObserver);
         mSubscriptions.add(sub);
@@ -330,8 +332,18 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
         super.onDetachedFromWindow();
     }
 
-    public void ignoreTextChange(final boolean ignore) {
+    public EditFieldWidget ignoreTextChange(final boolean ignore) {
         mIgnoreTextChange = ignore;
+        return this;
+    }
+
+    public boolean isIgnoreTextChange() {
+        return mIgnoreTextChange;
+    }
+
+    public EditFieldWidget textChangeFrequency(final long textChangeFrequency) {
+        mTextChangeFrequency = textChangeFrequency;
+        return this;
     }
 
     public void moveCursorToEnd() {
@@ -393,7 +405,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
     }
 
     private void setHint(String hintText) {
-        SpannableString ss = new SpannableString(hintText);
+        SpannableString ss = new SpannableString(TextUtils.isEmpty(hintText) ? "" : hintText);
         ss.setSpan(mTypefaceSpan, 0, ss.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         ss.setSpan(new ForegroundColorSpan(mHelperTextColor), 0,
                 ss.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
