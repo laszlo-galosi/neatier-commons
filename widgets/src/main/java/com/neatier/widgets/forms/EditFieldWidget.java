@@ -281,7 +281,6 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             WidgetUtils.setTextOf(mEditText, getValue());
             mItemView.setClickable(false);
             setFocusFlags(mFocusFlags);
-
         }
     }
 
@@ -341,6 +340,10 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
         return mIgnoreTextChange;
     }
 
+    /**
+     * Set the given frequency of the EditText in milliseconds to wait until a {@link
+     * TextViewTextChangeEvent} is fired processed by the {@link TextChangeObserver}
+     */
     public EditFieldWidget textChangeFrequency(final long textChangeFrequency) {
         mTextChangeFrequency = textChangeFrequency;
         return this;
