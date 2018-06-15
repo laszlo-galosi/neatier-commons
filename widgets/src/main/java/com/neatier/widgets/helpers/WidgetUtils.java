@@ -42,9 +42,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.fernandocejas.arrow.collections.Lists;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.R;
 import com.squareup.picasso.Transformation;
+import java.util.List;
 import java.util.Locale;
 import trikita.log.Log;
 
@@ -70,18 +72,18 @@ public class WidgetUtils {
      */
     @SuppressWarnings("deprecation")
     public static Drawable createStatefulDrawable(final SparseIntArray stateDrawables,
-          final @DrawableRes int defaultDrawableRes, final Context context) {
+            final @DrawableRes int defaultDrawableRes, final Context context) {
         //noinspection deprecation
         Drawable defaultDrawable = context.getResources().getDrawable(defaultDrawableRes);
         android.graphics.drawable.StateListDrawable stateListDrawable =
-              new android.graphics.drawable.StateListDrawable();
+                new android.graphics.drawable.StateListDrawable();
         for (int i = 0, len = stateDrawables.size(); i < len; i++) {
             final int state = stateDrawables.keyAt(i);
             @DrawableRes int drawableRes = stateDrawables.get(state, defaultDrawableRes);
             stateListDrawable.addState(new int[] { state },
-                                       context.getResources()
-                                              .getDrawable(drawableRes > 0 ? drawableRes
-                                                                           : defaultDrawableRes));
+                    context.getResources()
+                            .getDrawable(drawableRes > 0 ? drawableRes
+                                    : defaultDrawableRes));
         }
         stateListDrawable.addState(new int[] {}, defaultDrawable);
         return stateListDrawable;
@@ -101,7 +103,7 @@ public class WidgetUtils {
      * <p>The view nullability and instance of {@link TextView} is checked.</p>
      */
     public static void setTextAndVisibilityOf(@Nullable View view, @StringRes int stringRes,
-          boolean... forceVisible) {
+            boolean... forceVisible) {
         setTextOf(view, stringRes);
         if (forceVisible.length > 0) {
             setVisibilityOf(view, forceVisible[0]);
@@ -138,7 +140,7 @@ public class WidgetUtils {
      * <p>The view nullability and instance of {@link TextView} is checked.</p>
      */
     public static void setTextAndVisibilityOf(@Nullable View view, String text,
-          boolean... forceVisible) {
+            boolean... forceVisible) {
         setTextOf(view, cleanNewLine(text));
         if (forceVisible.length > 0) {
             setVisibilityOf(view, forceVisible[0]);
@@ -458,10 +460,35 @@ public class WidgetUtils {
     }
 
     /**
+     * Returns a list of Views with type specified by the given class for the given parent
+     * ViewGroup, specified by
+     * the given class.
+     */
+    public static <T extends View> List<T> findViewsByClass(View parent,
+            Class<T> clazz) {
+        List<T> children = Lists.newArrayList();
+        if (clazz.isInstance(parent)) {
+            children.add((T) parent);
+        } else if (parent instanceof ViewGroup) {
+            int childCount = ((ViewGroup) parent).getChildCount();
+            for (int i = 0, len = childCount; i < len; i++) {
+                View child = ((ViewGroup) parent).getChildAt(i);
+                if (clazz.isInstance(child)) {
+                    children.add((T) child);
+                } else if (child instanceof ViewGroup) {
+                    children.addAll(findViewsByClass((ViewGroup) child, clazz));
+                }
+            }
+        }
+        return children;
+    }
+
+    /**
      * {@link Transformation} sub class to set the image width to the specified target width
      * and its height is resized to preserve its aspect rations.
      */
     public static class FixedWidthResizeTransform implements Transformation {
+
         final int mTargetWidth;
 
         /**

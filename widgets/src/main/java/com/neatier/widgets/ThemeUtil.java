@@ -281,7 +281,11 @@ public class ThemeUtil {
      * Returns the given resource id's name as a string.
      */
     public static String resourceName(Context context, int resId) {
-        return context.getResources().getResourceEntryName(resId);
+        try {
+            return context.getResources().getResourceEntryName(resId);
+        } catch (Resources.NotFoundException nfe) {
+            return String.valueOf(resId);
+        }
 }
 
     /**
