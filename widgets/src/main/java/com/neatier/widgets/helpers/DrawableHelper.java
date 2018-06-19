@@ -95,6 +95,9 @@ public class DrawableHelper {
     public static Drawable drawableForColorState(@NonNull Drawable drawable,
             ColorStateList colorStateList,
             int[] state, @ColorInt int defaultColor, final Context context) {
+        if (drawable == null) {
+            return null;
+        }
         int baseColor = colorStateList.getColorForState(state, defaultColor);
         if (baseColor == defaultColor) {
             return DrawableHelper.withContext(context)
