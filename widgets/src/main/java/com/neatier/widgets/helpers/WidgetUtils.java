@@ -124,12 +124,21 @@ public class WidgetUtils {
 
     /**
      * Set the visibility of the given view to {@link View#VISIBLE} if the given visible value is
-     * true or {@link View#INVISIBLE} otherwise.
+     * true or {@link View#GONE} otherwise unless the given visibility override is provided.
      * <p>The view nullability is checked.</p>
+     * @param visibilityOverride vararg visibility flags to override based on the given visible conditions
+     * the first item is when the condition is true, the second when the condition is false.
      */
-    public static void setVisibilityOf(@Nullable View view, boolean visible) {
+    public static void setVisibilityOf(@Nullable View view, boolean visible, int... visibilityOverride) {
         if (view != null) {
-            view.setVisibility(visible ? View.VISIBLE : View.GONE);
+            int visibility = visible ? View.VISIBLE : View.GONE;
+            if (visible && visibilityOverride.length > 0) {
+                visibility = visibilityOverride[0];
+            }
+            if (!visible && visibilityOverride.length > 1) {
+                visibility = visibilityOverride[1];
+            }
+            view.setVisibility(visibility);
         }
     }
 
