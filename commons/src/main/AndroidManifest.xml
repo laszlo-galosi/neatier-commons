@@ -14,15 +14,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.neatier.commons">
-  <!--<uses-sdk
-      tools:overrideLibrary=
-          "android.support.v4, android.support.v7.appcompat,android.support.graphics.drawable,
-          net.danlew.android.joda" android:minSdkVersion="9"
-  /-->
   <uses-sdk
       tools:overrideLibrary="com.neatier.commons"
       android:minSdkVersion="21"
-      android:targetSdkVersion="27"/>
-
+      android:targetSdkVersion="28"/>
   <application android:allowBackup="true"/>
 </manifest>

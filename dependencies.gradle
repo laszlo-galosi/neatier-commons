@@ -23,15 +23,15 @@ allprojects {
  * Dependency version definitions. Use exact version numbers instead od '+'
  * may cause breakage in the code with automatic upgrade)
  **/
-def supportVersion = '27.0.3'
+def supportVersion = '$support_version'
 ext.versions = [//Android framework
                 code                         : 3,
                 name                         : '1.3.0',
 
-                androidBuildToolsVersion     : "27.0.3",
-                androidMinSdkVersion         : 16,
-                androidTargetSdkVersion      : 26,
-                androidCompileSdkVersion     : 26,
+                androidBuildToolsVersion     : "$gradle_plugin_version",
+                androidMinSdkVersion         : 21,
+                androidTargetSdkVersion      : 28,
+                androidCompileSdkVersion     : 28,
                 multidexVersion              : '1.0.1',
 
                 androidGradlePlugin          : '3.0.1',

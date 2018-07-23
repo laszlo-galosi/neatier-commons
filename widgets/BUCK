@@ -1,0 +1,234 @@
+android_resource(
+    name = 'res_debug',
+    package = 'com.neatier.widgets',
+    res = res_glob([
+        ('src/main/res', '**'),
+    ]),
+    resource_union = True,
+    deps = [
+        '//.okbuck/cache:android.arch.lifecycle--runtime--1.0.3.aar',
+        '//.okbuck/cache:com.android.databinding--adapters--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.databinding--library--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.support--animated-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--appcompat-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--design--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v14--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--recyclerview-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-ui--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-utils--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-fragment--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-media-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-v4--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--transition--26.1.0.aar',
+        '//.okbuck/cache:com.jakewharton--butterknife--8.0.1.aar',
+        '//.okbuck/cache:com.jakewharton.rxbinding--rxbinding--1.0.0.aar',
+        '//.okbuck/cache:com.takisoft.fix--preference-v7--23.3.0.4-beta.aar',
+        '//.okbuck/cache:io.reactivex--rxandroid--1.2.1.aar',
+        '//.okbuck/cache:net.danlew--android.joda--2.9.3.aar',
+        '//.okbuck/cache:oxim.digital--rxanim--0.9.1.aar',
+        '//neatier-commons/commons:res_debug',
+    ],
+    visibility = [
+        'PUBLIC',
+    ],
+)
+
+android_build_config(
+    name = 'build_config_debug',
+    package = 'com.neatier.widgets',
+    values = [
+        'String APPLICATION_ID = "com.neatier.widgets"',
+        'String BUILD_TYPE = "debug"',
+        'String FLAVOR = ""',
+        'int VERSION_CODE = 3',
+        'String VERSION_NAME = "1.3.0"',
+    ],
+    visibility = [
+        'PUBLIC',
+    ],
+)
+
+lib_deps = []
+
+android_library(
+    name = 'src_debug',
+    srcs = glob([
+        'src/main/java/**/*.java',
+    ]),
+    source = '8',
+    target = '8',
+    plugins = [
+        '//.okbuck/cache/processor:processor_androidx.databinding-databinding-compiler-3.2.0-beta01',
+    ],
+    provided_deps = [
+        '//.okbuck/cache/d8:rt-stub.jar',
+    ],
+
+    manifest = '//.okbuck/gen/neatier-commons/widgets/debug:AndroidManifest.xml',
+    final_r_name = 'R2',
+
+    deps = [
+        '//.okbuck/cache:android.arch.core--common--1.0.0.jar',
+        '//.okbuck/cache:android.arch.lifecycle--common--1.0.3.jar',
+        '//.okbuck/cache:android.arch.lifecycle--runtime--1.0.3.aar',
+        '//.okbuck/cache:co.trikita--log--1.1.1.jar',
+        '//.okbuck/cache:com.android.databinding--adapters--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.databinding--baseLibrary--3.2.0-beta01.jar',
+        '//.okbuck/cache:com.android.databinding--library--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.support--animated-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--appcompat-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--design--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v14--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--recyclerview-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-annotations--26.1.0.jar',
+        '//.okbuck/cache:com.android.support--support-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-ui--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-utils--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-fragment--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-media-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-v4--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--transition--26.1.0.aar',
+        '//.okbuck/cache:com.fernandocejas--arrow--1.0.0.jar',
+        '//.okbuck/cache:com.jakewharton--butterknife--8.0.1.aar',
+        '//.okbuck/cache:com.jakewharton--butterknife-annotations--8.0.1.jar',
+        '//.okbuck/cache:com.jakewharton.rxbinding--rxbinding--1.0.0.aar',
+        '//.okbuck/cache:com.squareup.picasso--picasso--2.5.2.jar',
+        '//.okbuck/cache:com.takisoft.fix--preference-v7--23.3.0.4-beta.aar',
+        '//.okbuck/cache:io.reactivex--rxandroid--1.2.1.aar',
+        '//.okbuck/cache:io.reactivex--rxjava--1.2.3.jar',
+        '//.okbuck/cache:joda-time--joda-time--2.9.3--no-tzdb.jar',
+        '//.okbuck/cache:net.danlew--android.joda--2.9.3.aar',
+        '//.okbuck/cache:org.jetbrains--annotations--13.0.jar',
+        '//.okbuck/cache:oxim.digital--rxanim--0.9.1.aar',
+        '//neatier-commons/commons:res_debug',
+        '//neatier-commons/commons:src_debug',
+        ':build_config_debug',
+        ':res_debug',
+    ],
+    visibility = [
+        'PUBLIC',
+    ],
+)
+
+android_resource(
+    name = 'res_release',
+    package = 'com.neatier.widgets',
+    res = res_glob([
+        ('src/main/res', '**'),
+    ]),
+    resource_union = True,
+    deps = [
+        '//.okbuck/cache:android.arch.lifecycle--runtime--1.0.3.aar',
+        '//.okbuck/cache:com.android.databinding--adapters--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.databinding--library--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.support--animated-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--appcompat-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--design--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v14--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--recyclerview-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-ui--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-utils--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-fragment--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-media-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-v4--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--transition--26.1.0.aar',
+        '//.okbuck/cache:com.jakewharton--butterknife--8.0.1.aar',
+        '//.okbuck/cache:com.jakewharton.rxbinding--rxbinding--1.0.0.aar',
+        '//.okbuck/cache:com.takisoft.fix--preference-v7--23.3.0.4-beta.aar',
+        '//.okbuck/cache:io.reactivex--rxandroid--1.2.1.aar',
+        '//.okbuck/cache:net.danlew--android.joda--2.9.3.aar',
+        '//.okbuck/cache:oxim.digital--rxanim--0.9.1.aar',
+        '//neatier-commons/commons:res_release',
+    ],
+    visibility = [
+        'PUBLIC',
+    ],
+)
+
+android_build_config(
+    name = 'build_config_release',
+    package = 'com.neatier.widgets',
+    values = [
+        'String APPLICATION_ID = "com.neatier.widgets"',
+        'String BUILD_TYPE = "release"',
+        'String FLAVOR = ""',
+        'int VERSION_CODE = 3',
+        'String VERSION_NAME = "1.3.0"',
+    ],
+    visibility = [
+        'PUBLIC',
+    ],
+)
+
+lib_deps = []
+
+android_library(
+    name = 'src_release',
+    srcs = glob([
+        'src/main/java/**/*.java',
+    ]),
+    source = '8',
+    target = '8',
+    plugins = [
+        '//.okbuck/cache/processor:processor_androidx.databinding-databinding-compiler-3.2.0-beta01',
+    ],
+    provided_deps = [
+        '//.okbuck/cache/d8:rt-stub.jar',
+    ],
+
+    manifest = '//.okbuck/gen/neatier-commons/widgets/release:AndroidManifest.xml',
+    final_r_name = 'R2',
+
+    deps = [
+        '//.okbuck/cache:android.arch.core--common--1.0.0.jar',
+        '//.okbuck/cache:android.arch.lifecycle--common--1.0.3.jar',
+        '//.okbuck/cache:android.arch.lifecycle--runtime--1.0.3.aar',
+        '//.okbuck/cache:co.trikita--log--1.1.1.jar',
+        '//.okbuck/cache:com.android.databinding--adapters--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.databinding--baseLibrary--3.2.0-beta01.jar',
+        '//.okbuck/cache:com.android.databinding--library--3.2.0-beta01.aar',
+        '//.okbuck/cache:com.android.support--animated-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--appcompat-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--design--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v14--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--preference-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--recyclerview-v7--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-annotations--26.1.0.jar',
+        '//.okbuck/cache:com.android.support--support-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-ui--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-core-utils--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-fragment--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-media-compat--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-v4--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--support-vector-drawable--26.1.0.aar',
+        '//.okbuck/cache:com.android.support--transition--26.1.0.aar',
+        '//.okbuck/cache:com.fernandocejas--arrow--1.0.0.jar',
+        '//.okbuck/cache:com.jakewharton--butterknife--8.0.1.aar',
+        '//.okbuck/cache:com.jakewharton--butterknife-annotations--8.0.1.jar',
+        '//.okbuck/cache:com.jakewharton.rxbinding--rxbinding--1.0.0.aar',
+        '//.okbuck/cache:com.squareup.picasso--picasso--2.5.2.jar',
+        '//.okbuck/cache:com.takisoft.fix--preference-v7--23.3.0.4-beta.aar',
+        '//.okbuck/cache:io.reactivex--rxandroid--1.2.1.aar',
+        '//.okbuck/cache:io.reactivex--rxjava--1.2.3.jar',
+        '//.okbuck/cache:joda-time--joda-time--2.9.3--no-tzdb.jar',
+        '//.okbuck/cache:net.danlew--android.joda--2.9.3.aar',
+        '//.okbuck/cache:org.jetbrains--annotations--13.0.jar',
+        '//.okbuck/cache:oxim.digital--rxanim--0.9.1.aar',
+        '//neatier-commons/commons:res_release',
+        '//neatier-commons/commons:src_release',
+        ':build_config_release',
+        ':res_release',
+    ],
+    visibility = [
+        'PUBLIC',
+    ],
+)
+

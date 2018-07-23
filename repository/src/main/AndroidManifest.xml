@@ -14,10 +14,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.neatier.repository">
-
   <uses-sdk
       tools:overrideLibrary="com.neatier.commons"
       android:minSdkVersion="21"
-      android:targetSdkVersion="27"/>
+      android:targetSdkVersion="28"/>
+
   <application android:allowBackup="true"/>
 </manifest>
