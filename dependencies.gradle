@@ -30,8 +30,8 @@ ext.versions = [//Android framework
 
                 androidBuildToolsVersion     : "27.0.3",
                 androidMinSdkVersion         : 16,
-                androidTargetSdkVersion      : 26,
-                androidCompileSdkVersion     : 26,
+                androidTargetSdkVersion      : 27,
+                androidCompileSdkVersion     : 27,
                 multidexVersion              : '1.0.1',
 
                 androidGradlePlugin          : '3.0.1',
