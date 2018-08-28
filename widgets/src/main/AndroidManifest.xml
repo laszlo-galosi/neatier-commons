@@ -24,13 +24,6 @@
   ~  Delight Solutions Kft.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest
     package="com.neatier.widgets">
-
-  <uses-sdk
-      tools:overrideLibrary="com.neatier.commons"
-      android:minSdkVersion="21"
-      android:targetSdkVersion="27"/>
-  <application android:allowBackup="true"/>
 </manifest>
