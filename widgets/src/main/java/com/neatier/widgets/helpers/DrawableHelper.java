@@ -14,6 +14,7 @@
 
 package com.neatier.widgets.helpers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -28,6 +29,7 @@ import android.support.annotation.NonNull;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -77,7 +79,7 @@ public class DrawableHelper {
             @ColorRes int colorStateRes, int[] state, @ColorRes int defaultColorRes,
             final Context context) {
         ColorStateList colorStateList = ContextCompat.getColorStateList(context, colorStateRes);
-        Drawable drawable = ContextCompat.getDrawable(context, drawableRes);
+        Drawable drawable = AppCompatResources.getDrawable(context, drawableRes);
         int defaultColor = ContextCompat.getColor(context, defaultColorRes);
         return drawableForColorState(drawable, colorStateList, state, defaultColor, context);
     }
@@ -185,11 +187,12 @@ public class DrawableHelper {
      *
      * @see VectorDrawableCompat#create(Resources, int, Resources.Theme)
      */
+    @SuppressLint("RestrictedApi")
     public DrawableHelper withDrawable(@DrawableRes int drawableRes) {
-        //mDrawable = ContextCompat.getDrawable(mContext, drawableRes);
-        mDrawable = VectorDrawableCompat.create(mContext.getResources(), drawableRes, null);
+        //mDrawable = AppCompatResources.getDrawable(mContext, drawableRes);
+        mDrawable = AppCompatResources.getDrawable(mContext, drawableRes);
         if (mDrawable == null) {
-            withDrawable(ContextCompat.getDrawable(mContext, drawableRes));
+            withDrawable(AppCompatResources.getDrawable(mContext, drawableRes));
         }
         return this;
     }
@@ -200,7 +203,7 @@ public class DrawableHelper {
      * @see ContextCompat#getDrawable(Context, int)
      */
     public DrawableHelper withRasterDrawable(@DrawableRes int drawableRes) {
-        mDrawable = ContextCompat.getDrawable(mContext, drawableRes);
+        mDrawable = AppCompatResources.getDrawable(mContext, drawableRes);
         //mDrawable = VectorDrawableCompat.create(mContext.getResources(), drawableRes, null);
         return this;
     }

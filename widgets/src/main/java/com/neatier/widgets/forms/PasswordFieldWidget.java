@@ -88,7 +88,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
                 R.styleable.EditFieldWidget, defStyleAttr, 0);
         mRevealDrawable = a.hasValue(R.styleable.PasswordFieldWidget_pf_buttonDrawable)
                 ? a.getDrawable(R.styleable.PasswordFieldWidget_pf_buttonDrawable) :
-                ContextCompat.getDrawable(getContext(), R.drawable.ic_eye_24dp);
+                          AppCompatResources.getDrawable(getContext(), R.drawable.ic_eye_24dp);
         mIconColorStateList =
                 createDefaultColorStateList(a, R.styleable.PasswordFieldWidget_pf_buttonTintList,
                         android.R.attr.textColorPrimary,

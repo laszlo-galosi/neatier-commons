@@ -107,7 +107,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         mButtonDrawable = a.hasValue(R.styleable.CompoundButtonFieldWidget_cbfw_buttonDrawable)
                 ? a.getDrawable(R.styleable.CompoundButtonFieldWidget_cbfw_buttonDrawable)
                 :
-                        ContextCompat.getDrawable(getContext(), R.drawable.ic_eye_24dp);
+                          AppCompatResources.getDrawable(getContext(), R.drawable.ic_eye_24dp);
         mClickableViewId =
                 a.getResourceId(R.styleable.CompoundButtonFieldWidget_cbfw_clickableViewId, 0);
         mDrawableColor =

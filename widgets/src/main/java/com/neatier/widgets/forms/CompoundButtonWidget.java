@@ -157,11 +157,12 @@ public class CompoundButtonWidget extends FrameLayout
 
         mIconDrawable = wa.hasValue(R.styleable.CompoundButtonWidget_cbw_icon)
                         ? wa.getDrawable(R.styleable.CompoundButtonWidget_cbw_icon) :
-                        ContextCompat.getDrawable(getContext(), android.R.drawable.ic_input_add);
+                        AppCompatResources.getDrawable(getContext(),
+                                                       android.R.drawable.ic_input_add);
         mBackgroundDrawable = wa.hasValue(R.styleable.CompoundButtonWidget_cbw_background)
                               ? wa.getDrawable(R.styleable.CompoundButtonWidget_cbw_background) :
-                              ContextCompat.getDrawable(getContext(),
-                                                        R.drawable.background_panel_cornered_2dp);
+                              AppCompatResources.getDrawable(getContext(),
+                                                             R.drawable.background_panel_cornered_2dp);
         mIconTintList =
               createDefaultColorStateList(wa, R.styleable.CompoundButtonWidget_cbw_iconTintList,
                                           android.R.attr.textColorPrimary,

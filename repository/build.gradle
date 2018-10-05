@@ -20,7 +20,7 @@ apply plugin: 'com.fernandocejas.frodo'
 
 android {
   compileSdkVersion versions.androidCompileSdkVersion
-  buildToolsVersion versions.androidBuildToolsVersion
+//  buildToolsVersion versions.androidBuildToolsVersion
 
   defaultConfig {
     minSdkVersion minSdk()
@@ -56,41 +56,38 @@ android {
 
 
 dependencies {
-  //    compile fileTree(dir: 'libs', include: ['*.jar'])
+  //    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  //Uncomment next line when building a project using this library
-//  debugCompile project(path: ':neatier-commons:commons', configuration: "debug")
-  compile project(':neatier-commons:commons')
-//  releaseCompile project(path: ':neatier-commons:commons', configuration: "release")
+  implementation project(':neatier-commons:commons')
   //Uncomment next line  while building the library.
-  //      compile project(path: ':commons')
+  //      implementation project(path: ':commons')
 
   //Optional, Collections, Guava like but lightweight on method count library
-  compile appBuildingDependencies.arrow
-  compile appBuildingDependencies.rxJava
+  implementation appBuildingDependencies.arrow
+  implementation appBuildingDependencies.rxJava
   annotationProcessor appBuildingDependencies.autoValue
-  provided 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
+  compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
   annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
 
   //Dagger 2 related
-  compile appBuildingDependencies.dagger
+  implementation appBuildingDependencies.dagger
   annotationProcessor appBuildingDependencies.daggerCompiler
-  provided appBuildingDependencies.javaxInject
-  compile appBuildingDependencies.androidAnnotations
+  compileOnly appBuildingDependencies.javaxInject
+  implementation appBuildingDependencies.androidAnnotations
 
   //libraries on demand per project
-  compile appBuildingDependencies.trikitaLog
+  implementation appBuildingDependencies.trikitaLog
 
   //Networking
-  compile dataDependencies.gson
-  compile dataDependencies.okHttp
-  compile dataDependencies.okHttpInterceptor
-  compile dataDependencies.retrofit
-  compile dataDependencies.retrofitRxJava
-  compile dataDependencies.retrofitGsonConverter
+  implementation dataDependencies.gson
+  implementation dataDependencies.okHttp
+  implementation dataDependencies.okHttpInterceptor
+  implementation dataDependencies.retrofit
+  implementation dataDependencies.retrofitRxJava
+  implementation dataDependencies.retrofitGsonConverter
 
   //Datarepository
-  //    compile 'com.karumi.rosie:rosie:2.0.0'
+  //    implementation 'com.karumi.rosie:rosie:2.0.0'
 
   //testing
   testImplementation robolectricTestDependencies.junit

@@ -20,7 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -92,7 +92,7 @@ public class DrawableItemDecoration extends RecyclerView.ItemDecoration {
      * Constructor with the given drawable resource and context and orientation.
      */
     public DrawableItemDecoration(@DrawableRes int drawableRes, Context context, int orientation) {
-        mDivider = ContextCompat.getDrawable(context, drawableRes);
+        mDivider = AppCompatResources.getDrawable(context, drawableRes);
         setOrientation(orientation);
     }
 

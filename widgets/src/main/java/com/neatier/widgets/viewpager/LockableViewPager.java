@@ -61,8 +61,16 @@ public class LockableViewPager extends ViewPager {
         this.swipeable = swipeable;
     }
 
+    public boolean shouldAdjustHeight() {
+        return true;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (!shouldAdjustHeight()) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            return;
+        }
         int height = 0;
         View child = findViewWithTag(getCurrentItem());
         if (child != null) {
