@@ -106,14 +106,12 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
                 defStyleAttr, 0);
         mButtonDrawable = a.hasValue(R.styleable.CompoundButtonFieldWidget_cbfw_buttonDrawable)
                 ? a.getDrawable(R.styleable.CompoundButtonFieldWidget_cbfw_buttonDrawable)
-                :
-                          AppCompatResources.getDrawable(getContext(), R.drawable.ic_eye_24dp);
+                : ContextCompat.getDrawable(getContext(), R.drawable.ic_eye_24dp);
         mClickableViewId =
                 a.getResourceId(R.styleable.CompoundButtonFieldWidget_cbfw_clickableViewId, 0);
         mDrawableColor =
                 createDefaultColorStateList(a,
-                        R.styleable
-                                .CompoundButtonFieldWidget_cbfw_drawableTintList,
+                        R.styleable.CompoundButtonFieldWidget_cbfw_drawableTintList,
                         android.R.attr.textColorPrimary,
                         R.color.colorTextPrimary);
         setExpanded(mExpanded);
@@ -222,7 +220,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         }
         mButton.setImageDrawable(
               DrawableHelper.drawableForColorState(mButtonDrawable, mDrawableColor,
-                                                   getDrawableState(),
+                                                   getDrawableState(getDrawableState()),
                                                    defaultColor, getContext()
               )
         );
