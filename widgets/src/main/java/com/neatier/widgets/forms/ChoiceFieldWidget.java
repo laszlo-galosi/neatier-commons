@@ -17,12 +17,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.SparseArray;
@@ -33,6 +27,12 @@ import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.TypedArrayUtils;
 import com.fernandocejas.arrow.collections.Lists;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.WidgetUtils;
@@ -216,19 +216,19 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
     }
 
     public void initView(Context context) {
-        if (mLayoutRes > 0) {
+        if (mLayoutRes != 0) {
             removeAllViews();
             mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                                         LayoutParams.MATCH_PARENT);
             addView(mItemView);
-            if (mHelperViewId > 0) {
-                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
+            if (mHelperViewId != 0) {
+                mHelperView = mItemView.findViewById(mHelperViewId);
                 setHelper(mHelperText, 0);
                 mHelperView.setTextColor(mHelperTextColor);
             }
-            if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+            if (mLabelViewId != 0) {
+                mLabelView = mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
                 mLabelView.setTextColor(mLabelTextColor);
                 setLabel(mLabelText);
@@ -236,8 +236,8 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
             WidgetUtils.setVisibilityOf(mHelperView, mShowHelper);
             WidgetUtils.setVisibilityOf(mLabelView, mShowLabel);
             mItemView.setClickable(false);
-            if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+            if (mLabelViewId != 0) {
+                mLabelView = mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
             }
             setLabel(mLabelText);
@@ -311,8 +311,8 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
 
     @Override public void setLabel(final String labelText) {
         mLabelText = labelText;
-        if (mLabelView == null && mLabelViewId > 0) {
-            mLabelView = (TextView) findViewById(mLabelViewId);
+        if (mLabelView == null && mLabelViewId != 0) {
+            mLabelView = findViewById(mLabelViewId);
         }
         WidgetUtils.setTextOf(mLabelView, String.format(mLabelFormat, mLabelText));
         //Update left padding of editText.
@@ -324,11 +324,11 @@ public abstract class ChoiceFieldWidget<V> extends FrameLayout
 
     @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
         mHelperText = helperText;
-        if (mHelperView == null && mHelperViewId > 0) {
-            mHelperView = (TextView) findViewById(mHelperViewId);
+        if (mHelperView == null && mHelperViewId != 0) {
+            mHelperView = findViewById(mHelperViewId);
         }
         WidgetUtils.setTextOf(mHelperView, mHelperText);
-        if (colorRes > 0 && mHelperView != null) {
+        if (colorRes != 0 && mHelperView != null) {
             mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
         }
     }

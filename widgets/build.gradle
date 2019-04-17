@@ -16,11 +16,12 @@
 buildscript {
   repositories {
     jcenter()
+    google()
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-    classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
+    classpath 'com.jakewharton:butterknife-gradle-plugin:10.1.0'
   }
 }
 
@@ -74,13 +75,7 @@ android {
 
 dependencies {
   //Internal dependencies
-  //Uncomment next line when building a project using this library
-  //  compile project(path: ':neatier-commons:commons')
   implementation project(':neatier-commons:commons')
-//  debugCompile project(path: ':neatier-commons:commons', configuration: "debug")
-//  releaseCompile project(path: ':neatier-commons:commons', configuration: "release")
-  //Uncomment next line  while building the library.
-  //      implementation project(path: ':commons')
   //Optional, Collections, Guava like but lightweight on method count library
   implementation appBuildingDependencies.arrow
   //    implementation appBuildingDependencies.dagger
@@ -95,14 +90,15 @@ dependencies {
   implementation appBuildingDependencies.androidAnnotations
   implementation appBuildingDependencies.supportV7
   implementation appBuildingDependencies.supportDesign;
-  implementation appBuildingDependencies.supportPreference;
+  implementation appBuildingDependencies.supportPreferenceV7;
   implementation appBuildingDependencies.jodaTimeAndroid
   implementation appBuildingDependencies.picasso
   implementation appBuildingDependencies.butterKnife
   //    implementation dataDependencies.gson
 
   testImplementation robolectricTestDependencies.junit
-  //    testCompile robolectricTestDependencies.assertj
-  //    testCompile robolectricTestDependencies.mockito
-  //    testCompile robolectricTestDependencies.robolectric
+  implementation 'androidx.fragment:fragment:1.0.0'
+  //    testImplementation robolectricTestDependencies.assertj
+  //    testImplementation robolectricTestDependencies.mockito
+  //    testImplementation robolectricTestDependencies.robolectric
 }

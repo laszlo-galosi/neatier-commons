@@ -15,12 +15,11 @@
 package com.neatier.widgets.recyclerview;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.commons.helpers.Leakable;
 import com.neatier.widgets.Bindable;
@@ -33,7 +32,7 @@ import java.util.List;
  * It has a custom {@link View.OnClickListener} attached by
  * {@link ItemWidget#setOnClickListener(View.OnClickListener)}
  */
-public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
+public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements Leakable {
     protected final Context mContext;
     @LayoutRes protected int mItemLayout;
@@ -59,7 +58,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
     /**
      * Create new views (invoked by the layout manager)
      */
-    @Override public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemWidget itemWidget =
                 new ItemWidget(getItemLayout(viewType), getItemHeight(viewType), mContext)
                         .setContentClickable(mItemClickable);
@@ -72,7 +71,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
      * @param holder
      * @param position
      */
-    @Override public void onBindViewHolder(ViewHolder holder, int position) {
+    @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         //noinspection unchecked
@@ -136,7 +135,7 @@ public class ItemWidgetAdapter<T> extends RecyclerView.Adapter<ViewHolder>
         return this;
     }
 
-    private Optional<ItemWidget> getItemWidget(final ViewHolder holder) {
+    private Optional<ItemWidget> getItemWidget(final RecyclerView.ViewHolder holder) {
         if (holder instanceof ListItemViewHolder) {
             Optional.of((ItemWidget) ((ListItemViewHolder) holder).itemView);
         }

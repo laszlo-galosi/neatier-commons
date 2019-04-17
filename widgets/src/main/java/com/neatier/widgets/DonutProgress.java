@@ -22,9 +22,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -35,6 +32,9 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
 import com.neatier.widgets.helpers.WidgetUtils;
 import java.util.Arrays;
 import oxim.digital.rxanim.RxAnimationBuilder;
@@ -181,7 +181,7 @@ public class DonutProgress extends FrameLayout {
     }
 
     protected void initByAttributes(TypedArray attributes) {
-        if (attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0) > 0) {
+        if (attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0) != 0) {
             mWidgetLayout =
                     attributes.getResourceId(R.styleable.DonutProgress_donut_widgetLayout, 0);
         }
@@ -243,12 +243,12 @@ public class DonutProgress extends FrameLayout {
 
     private void initView(Context context) {
         setWillNotDraw(false);
-        if (mWidgetLayout > 0) {
+        if (mWidgetLayout != 0) {
             removeAllViews();
             mContentView = LayoutInflater.from(getContext()).inflate(mWidgetLayout, this, false);
-            mLabelTextView = (TextView) mContentView.findViewById(mPrefixViewId);
-            mProgressTextView = (TextView) mContentView.findViewById(mProgressViewId);
-            mSuffixView = (TextView) mContentView.findViewById(mSuffixViewId);
+            mLabelTextView = mContentView.findViewById(mPrefixViewId);
+            mProgressTextView = mContentView.findViewById(mProgressViewId);
+            mSuffixView = mContentView.findViewById(mSuffixViewId);
             WidgetUtils.setLayoutSizeOf(mContentView, LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT);
             addView(mContentView);

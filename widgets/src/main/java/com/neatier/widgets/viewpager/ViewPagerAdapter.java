@@ -1,10 +1,10 @@
 package com.neatier.widgets.viewpager;
 
 import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.viewpager.widget.PagerAdapter;
 import java.util.Map;
 import java.util.WeakHashMap;
 import trikita.log.Log;

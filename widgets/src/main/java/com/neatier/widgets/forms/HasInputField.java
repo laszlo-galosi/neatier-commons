@@ -13,8 +13,8 @@
 
 package com.neatier.widgets.forms;
 
-import android.support.annotation.ColorRes;
 import android.view.View;
+import androidx.annotation.ColorRes;
 import com.neatier.widgets.helpers.WidgetUtils;
 
 /**

@@ -16,14 +16,14 @@ package com.neatier.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.databinding.BindingMethod;
-import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.TintTypedArray;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.BindingMethod;
+import androidx.databinding.BindingMethods;
 import com.neatier.widgets.helpers.ColorStates;
 import com.neatier.widgets.helpers.DrawableHelper;
 
@@ -64,7 +64,6 @@ public class TintedBackgroundRelativeLayout extends RelativeLayout {
      * @param defStyleAttr An attribute in the current theme that contains a
      * reference to a style resource that supplies default values for
      * the view. Can be 0 to not look for defaults.
-     * @see R.styleable#TintedBackgroundViewGroup_tbvg_drawableTintList
      */
     @SuppressLint("RestrictedApi")
     public TintedBackgroundRelativeLayout(final Context context,

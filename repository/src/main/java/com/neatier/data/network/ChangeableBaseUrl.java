@@ -14,7 +14,7 @@
 
 package com.neatier.data.network;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import java.util.concurrent.atomic.AtomicReference;
 import okhttp3.HttpUrl;
 

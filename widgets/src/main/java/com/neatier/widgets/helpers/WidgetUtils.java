@@ -20,14 +20,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
@@ -42,6 +34,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import com.fernandocejas.arrow.collections.Lists;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.R;
@@ -82,7 +82,7 @@ public class WidgetUtils {
             @DrawableRes int drawableRes = stateDrawables.get(state, defaultDrawableRes);
             stateListDrawable.addState(new int[] { state },
                     context.getResources()
-                            .getDrawable(drawableRes > 0 ? drawableRes
+                            .getDrawable(drawableRes != 0 ? drawableRes
                                     : defaultDrawableRes));
         }
         stateListDrawable.addState(new int[] {}, defaultDrawable);
@@ -108,7 +108,7 @@ public class WidgetUtils {
         if (forceVisible.length > 0) {
             setVisibilityOf(view, forceVisible[0]);
         } else {
-            setVisibilityOf(view, stringRes > 0);
+            setVisibilityOf(view, stringRes != 0);
         }
     }
 
@@ -117,7 +117,7 @@ public class WidgetUtils {
      * <p>The view nullability and instance of {@link TextView} is checked.</p>
      */
     public static void setTextOf(View view, @StringRes int textRes) {
-        if (view != null && textRes > 0) {
+        if (view != null && textRes != 0) {
             ((TextView) view).setText(textRes);
         }
     }
@@ -460,7 +460,7 @@ public class WidgetUtils {
         };
         ss.setSpan(span, 0, label.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         int color = ContextCompat.getColor(view.getContext(),
-                fgColor > 0 ? fgColor : R.color.colorAccent);
+                fgColor != 0 ? fgColor : R.color.colorAccent);
         int start = range.length > 0 ? range[0] : 0;
         int end = range.length > 1 ? range[1] : label.length();
         ss.setSpan(new ForegroundColorSpan(color),

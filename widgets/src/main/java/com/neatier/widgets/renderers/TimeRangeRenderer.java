@@ -15,10 +15,10 @@
 package com.neatier.widgets.renderers;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.commons.helpers.DateTimeHelper;
 import com.neatier.widgets.helpers.DisplayableValue;

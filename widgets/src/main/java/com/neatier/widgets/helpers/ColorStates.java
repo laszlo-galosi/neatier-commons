@@ -3,15 +3,15 @@ package com.neatier.widgets.helpers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.StyleableRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.TintTypedArray;
 import android.util.TypedValue;
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StyleableRes;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.content.ContextCompat;
 import com.fernandocejas.arrow.checks.Preconditions;
 
 /**
@@ -65,7 +65,7 @@ public class ColorStates {
      *
      * @param styleableRes the styleable resource
      * @param baseColorThemeAttr the base color theme attribute or 0 if not defined. It uses {@link
-     * android.support.v7.appcompat.R.attr#colorControlNormal} if not defined.
+     * androidx.appcompat.R.attr#colorControlNormal} if not defined.
      * @see AppCompatResources#getCachedColorStateList(Context, int)
      */
     public ColorStates styleable(@StyleableRes int styleableRes, @AttrRes int baseColorThemeAttr) {
@@ -73,7 +73,7 @@ public class ColorStates {
         Preconditions.checkNotNull(mContext);
         final TypedValue typedValue = new TypedValue();
         if (baseColorThemeAttr == 0) {
-            baseColorThemeAttr = android.support.v7.appcompat.R.attr.colorControlNormal;
+            baseColorThemeAttr = androidx.appcompat.R.attr.colorControlNormal;
         }
         boolean resolved =
                 mContext.getTheme().resolveAttribute(baseColorThemeAttr, typedValue, true);

@@ -13,7 +13,7 @@
 
 package com.neatier.commons.helpers;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.neatier.commons.exception.ErrorBundleException;
 import java.util.Map;
 import rx.Observable;

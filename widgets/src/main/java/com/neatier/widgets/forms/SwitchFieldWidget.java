@@ -13,23 +13,24 @@
 
 package com.neatier.widgets.forms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.support.v7.widget.SwitchCompat;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.TypedArrayUtils;
 import com.neatier.commons.helpers.Preconditions;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.WidgetUtils;
@@ -88,6 +89,7 @@ public class SwitchFieldWidget extends FrameLayout
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RestrictedApi")
     public SwitchFieldWidget(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -119,19 +121,19 @@ public class SwitchFieldWidget extends FrameLayout
     }
 
     public void initView(Context context) {
-        if (mLayoutRes > 0) {
+        if (mLayoutRes != 0) {
             removeAllViews();
             mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                                         LayoutParams.MATCH_PARENT);
             addView(mItemView);
-            if (mHelperViewId > 0) {
-                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
+            if (mHelperViewId != 0) {
+                mHelperView = mItemView.findViewById(mHelperViewId);
                 setHelper(mHelperText, 0);
             }
-            mSwitch = (SwitchCompat) mItemView.findViewById(R.id.switcher);
-            if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+            mSwitch = mItemView.findViewById(R.id.switcher);
+            if (mLabelViewId != 0) {
+                mLabelView = mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
             }
             setLabel(mLabelText);
@@ -168,7 +170,7 @@ public class SwitchFieldWidget extends FrameLayout
 
     @Override public void setLabel(final String labelText) {
         mLabelText = labelText;
-        if (mLabelView != null && mLabelViewId > 0) {
+        if (mLabelView != null && mLabelViewId != 0) {
             WidgetUtils.setTextOf(mLabelView, String.format(mLabelFormat, mLabelText));
             mSwitch.setText(null);
         } else {
@@ -183,12 +185,12 @@ public class SwitchFieldWidget extends FrameLayout
 
     @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
         mHelperText = helperText;
-        if (mHelperView == null && mHelperViewId > 0) {
-            mHelperView = (TextView) findViewById(mHelperViewId);
+        if (mHelperView == null && mHelperViewId != 0) {
+            mHelperView = findViewById(mHelperViewId);
         }
         ;
         WidgetUtils.setTextOf(mHelperView, mHelperText);
-        if (colorRes > 0 && mHelperView != null) {
+        if (colorRes != 0 && mHelperView != null) {
             mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
         }
     }

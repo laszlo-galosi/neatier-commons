@@ -16,14 +16,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Paint;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -31,6 +23,14 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.TypedArrayUtils;
 import com.neatier.commons.helpers.Preconditions;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.WidgetUtils;
@@ -123,19 +123,19 @@ public class CheckboxFieldWidget extends FrameLayout
     }
 
     public void initView(Context context) {
-        if (mLayoutRes > 0) {
+        if (mLayoutRes != 0) {
             removeAllViews();
             mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
             addView(mItemView);
-            if (mHelperViewId > 0) {
-                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
+            if (mHelperViewId != 0) {
+                mHelperView = mItemView.findViewById(mHelperViewId);
                 setHelper(mHelperText, 0);
             }
-            mCheckBox = (AppCompatCheckBox) mItemView.findViewById(R.id.checkbox);
-            if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+            mCheckBox = mItemView.findViewById(R.id.checkbox);
+            if (mLabelViewId != 0) {
+                mLabelView = mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
             }
             setLabel(mLabelText);
@@ -200,8 +200,8 @@ public class CheckboxFieldWidget extends FrameLayout
 
     @Override public void setLabel(final String labelText) {
         mLabelText = labelText;
-        if (mLabelView == null && mLabelViewId > 0) {
-            mLabelView = (TextView) findViewById(mLabelViewId);
+        if (mLabelView == null && mLabelViewId != 0) {
+            mLabelView = findViewById(mLabelViewId);
         }
         if (mLabelView != null) {
             WidgetUtils.setTextOf(mLabelView, String.format(mLabelFormat, mLabelText));
@@ -213,11 +213,11 @@ public class CheckboxFieldWidget extends FrameLayout
 
     @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
         mHelperText = helperText;
-        if (mHelperView == null && mHelperViewId > 0) {
-            mHelperView = (TextView) findViewById(mHelperViewId);
+        if (mHelperView == null && mHelperViewId != 0) {
+            mHelperView = findViewById(mHelperViewId);
         }
         WidgetUtils.setTextOf(mHelperView, mHelperText);
-        if (colorRes > 0 && mHelperView != null) {
+        if (colorRes != 0 && mHelperView != null) {
             mHelperView.setTextColor(ContextCompat.getColor(getContext(), colorRes));
         }
     }

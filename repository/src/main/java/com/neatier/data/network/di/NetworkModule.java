@@ -15,7 +15,7 @@
 package com.neatier.data.network.di;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.neatier.commons.settings.NetworkSettings;
 import com.neatier.data.network.retrofit.OkHttpInterceptors;
 import com.neatier.data.network.retrofit.OkHttpNetworkInterceptors;

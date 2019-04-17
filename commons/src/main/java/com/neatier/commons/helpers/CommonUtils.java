@@ -5,7 +5,7 @@
  *
  * All information contained herein is, and remains the property of Delight Solutions Kft.
  *  The intellectual and technical concepts contained herein are proprietary to Delight Solutions
-  *  Kft.
+ *  Kft.
  *  and may be covered by U.S. and Foreign Patents, pending patents, and are protected
  *  by trade secret or copyright law. Dissemination of this information or reproduction of
  *  this material is strictly forbidden unless prior written permission is obtained from
@@ -17,10 +17,11 @@ package com.neatier.commons.helpers;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
 import java.util.Collections;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.StringTokenizer;
-import org.jetbrains.annotations.NotNull;
 import trikita.log.Log;
 
 import static android.text.Html.fromHtml;
@@ -154,7 +154,7 @@ public class CommonUtils {
      *
      * @see NetworkInterface#getHardwareAddress()
      */
-    @NotNull public static String getMacAddress() {
+    @NonNull public static String getMacAddress() {
         try {
             List<NetworkInterface> all = Collections.list(NetworkInterface.getNetworkInterfaces());
             for (NetworkInterface nif : all) {

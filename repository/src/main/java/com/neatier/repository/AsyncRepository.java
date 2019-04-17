@@ -14,7 +14,7 @@
 
 package com.neatier.repository;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.neatier.commons.exception.InternalErrorException;
 import com.neatier.commons.helpers.KeyValuePairs;

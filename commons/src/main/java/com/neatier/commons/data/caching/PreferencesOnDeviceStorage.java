@@ -16,7 +16,7 @@ package com.neatier.commons.data.caching;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import com.google.gson.JsonElement;
 import com.google.gson.internal.LinkedTreeMap;
 import com.neatier.commons.helpers.JsonSerializer;

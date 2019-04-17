@@ -17,20 +17,20 @@ package com.neatier.widgets.helpers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.AnimRes;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v4.view.ViewPropertyAnimatorListener;
-import android.support.v4.view.animation.FastOutLinearInInterpolator;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import androidx.annotation.AnimRes;
+import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewPropertyAnimatorCompat;
+import androidx.core.view.ViewPropertyAnimatorListener;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.google.android.material.appbar.AppBarLayout;
 import com.neatier.widgets.R;
 import rx.functions.Action1;
 
@@ -63,10 +63,10 @@ public class AnimationUtils {
     public static ViewPropertyAnimatorCompat fadeCompat(View targetView, float endAlphaValue,
             Interpolator interpolator, ViewPropertyAnimatorListener listener) {
         return ViewCompat.animate(targetView)
-                .alpha(endAlphaValue)
-                .setInterpolator(interpolator)
-                .withLayer()
-                .setListener(listener);
+                         .alpha(endAlphaValue)
+                         .setInterpolator(interpolator)
+                         .withLayer()
+                         .setListener(listener);
     }
 
     /**

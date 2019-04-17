@@ -20,7 +20,7 @@ apply plugin: 'com.fernandocejas.frodo'
 
 android {
   compileSdkVersion versions.androidCompileSdkVersion
-//  buildToolsVersion versions.androidBuildToolsVersion
+  //  buildToolsVersion versions.androidBuildToolsVersion
 
   defaultConfig {
     minSdkVersion minSdk()
@@ -54,7 +54,6 @@ android {
   }
 }
 
-
 dependencies {
   //    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -85,9 +84,6 @@ dependencies {
   implementation dataDependencies.retrofit
   implementation dataDependencies.retrofitRxJava
   implementation dataDependencies.retrofitGsonConverter
-
-  //Datarepository
-  //    implementation 'com.karumi.rosie:rosie:2.0.0'
 
   //testing
   testImplementation robolectricTestDependencies.junit

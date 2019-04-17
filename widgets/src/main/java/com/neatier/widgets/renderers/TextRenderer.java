@@ -14,9 +14,8 @@
 
 package com.neatier.widgets.renderers;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.view.View;
+import androidx.annotation.NonNull;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.helpers.WidgetUtils;
 

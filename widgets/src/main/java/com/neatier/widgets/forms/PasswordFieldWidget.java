@@ -17,11 +17,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.TintTypedArray;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
@@ -30,6 +25,11 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.content.ContextCompat;
 import com.neatier.commons.helpers.Preconditions;
 import com.neatier.widgets.R;
 import com.neatier.widgets.ThemeUtil;
@@ -112,7 +112,7 @@ public class PasswordFieldWidget extends EditFieldWidget {
         ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
                 getContext(), value.resourceId);
         if (!getContext().getTheme().resolveAttribute(
-                android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
+              androidx.appcompat.R.attr.colorControlNormal, value, true)) {
             return null;
         }
         int baseColor = baseColorStateList.getDefaultColor();

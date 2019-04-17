@@ -18,9 +18,9 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
-import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+import androidx.annotation.ColorInt;
 
 /**
  * ImageView that changes it's image color depending on the state (pressed, selected...)

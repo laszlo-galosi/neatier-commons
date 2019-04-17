@@ -14,8 +14,8 @@
 
 package com.neatier.widgets.renderers;
 
-import android.support.annotation.NonNull;
 import android.view.View;
+import androidx.annotation.NonNull;
 
 /**
  * Interface for rendering a data with type T.

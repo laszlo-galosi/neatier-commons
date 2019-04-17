@@ -17,7 +17,7 @@ package com.neatier.commons.helpers;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import java.io.Serializable;
 import rx.Observable;
 import rx.functions.Func1;

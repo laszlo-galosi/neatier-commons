@@ -15,8 +15,8 @@
 package com.neatier.widgets.recyclerview;
 
 import android.content.Context;
-import android.support.annotation.IdRes;
 import android.view.View;
+import androidx.annotation.IdRes;
 import com.neatier.widgets.Bindable;
 
 /**

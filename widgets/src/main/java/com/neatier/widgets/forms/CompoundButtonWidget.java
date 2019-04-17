@@ -13,21 +13,12 @@
 
 package com.neatier.widgets.forms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.databinding.BindingMethod;
-import android.databinding.BindingMethods;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.TintTypedArray;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -36,6 +27,16 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.TypedArrayUtils;
+import androidx.databinding.BindingMethod;
+import androidx.databinding.BindingMethods;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.DrawableHelper;
 import com.neatier.widgets.helpers.WidgetUtils;
@@ -116,6 +117,7 @@ public class CompoundButtonWidget extends FrameLayout
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RestrictedApi")
     public CompoundButtonWidget(final Context context, final AttributeSet attrs,
           final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -178,25 +180,25 @@ public class CompoundButtonWidget extends FrameLayout
     }
 
     public void initView(final Context context) {
-        if (mLayoutRes > 0) {
+        if (mLayoutRes != 0) {
             removeAllViews();
             mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                                         LayoutParams.MATCH_PARENT);
             addView(mItemView);
-            if (mHelperViewId > 0) {
-                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
+            if (mHelperViewId != 0) {
+                mHelperView = mItemView.findViewById(mHelperViewId);
                 setHelper(mHelperText, 0);
                 mHelperView.setTextColor(mHelperTextColor);
             }
-            if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+            if (mLabelViewId != 0) {
+                mLabelView = mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
                 mLabelView.setTextColor(mLabelTextColor);
                 setLabel(mLabelText);
             }
-            if (mIconViewId > 0) {
-                mIconView = (ImageView) mItemView.findViewById(mIconViewId);
+            if (mIconViewId != 0) {
+                mIconView = mItemView.findViewById(mIconViewId);
                 setDrawables();
             }
             WidgetUtils.setVisibilityOf(mHelperView, mShowHelper);
@@ -258,7 +260,7 @@ public class CompoundButtonWidget extends FrameLayout
     @Override public void setLabel(final String labelText) {
         mLabelText = labelText;
         if (mLabelView == null) {
-            mLabelView = (TextView) findViewById(mLabelViewId);
+            mLabelView = findViewById(mLabelViewId);
         }
         WidgetUtils.setTextOf(mLabelView, String.format(mLabelFormat, mLabelText));
     }
@@ -365,7 +367,7 @@ public class CompoundButtonWidget extends FrameLayout
         ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
               getContext(), value.resourceId);
         if (!getContext().getTheme().resolveAttribute(
-              android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
+              androidx.appcompat.R.attr.colorControlNormal, value, true)) {
             return null;
         }
         int baseColor = baseColorStateList.getDefaultColor();

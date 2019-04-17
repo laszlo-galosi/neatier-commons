@@ -13,12 +13,13 @@
 
 package com.neatier.widgets.viewpager;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
+
 import android.util.SparseArray;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 /**
  * An abstract {@link FragmentPagerAdapter} sub class which contains helper function
@@ -29,7 +30,7 @@ import android.view.ViewGroup;
  * @see #getPageId(int)
  */
 public abstract class SmartFragmentStatePagerAdapter<T extends Fragment>
-        extends FragmentStatePagerAdapter {
+      extends FragmentStatePagerAdapter {
 
     protected SparseArray<T> mRegisteredFragments = new SparseArray<>(3);
 

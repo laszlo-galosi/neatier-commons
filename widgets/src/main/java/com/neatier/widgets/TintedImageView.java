@@ -16,13 +16,13 @@ package com.neatier.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.databinding.BindingMethod;
-import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.TintTypedArray;
 import android.util.AttributeSet;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.BindingMethod;
+import androidx.databinding.BindingMethods;
 import com.neatier.widgets.helpers.ColorStates;
 import com.neatier.widgets.helpers.DrawableHelper;
 
@@ -62,7 +62,6 @@ public class TintedImageView extends AppCompatImageView {
      * reference to a style resource that supplies default values for
      * the view. Can be 0 to not look for defaults.
      * @see super#AppCompatImageView(Context)  (Context, AttributeSet, int)
-     * @see R.styleable#TintedImageView_tiv_drawableTintList
      */
     @SuppressLint("RestrictedApi")
     public TintedImageView(final Context context, final AttributeSet attrs,

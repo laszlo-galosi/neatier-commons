@@ -26,49 +26,49 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdkVersion versions.androidCompileSdkVersion
-//    buildToolsVersion versions.androidBuildToolsVersion
-    defaultConfig {
-        minSdkVersion minSdk()
-        targetSdkVersion versions.androidTargetSdkVersion
-        defaultPublishConfig 'release'
-        publishNonDefault true
-    }
+  compileSdkVersion versions.androidCompileSdkVersion
+  //    buildToolsVersion versions.androidBuildToolsVersion
+  defaultConfig {
+    minSdkVersion minSdk()
+    targetSdkVersion versions.androidTargetSdkVersion
+    defaultPublishConfig 'release'
+    publishNonDefault true
+  }
 
-    dataBinding {
-        enabled = true
-    }
+  dataBinding {
+    enabled = true
+  }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  dexOptions {
+    javaMaxHeapSize "4g"
+  }
 }
 
 configurations {
-    testOutput.extendsFrom(testImplementation)
+  testOutput.extendsFrom(testImplementation)
 }
 
 dependencies {
-    //Optional, Collections, Guava like but lightweight on method count library
-    implementation appBuildingDependencies.arrow
-    implementation appBuildingDependencies.dagger
-    implementation appBuildingDependencies.javaxInject
-//  implementation appBuildingDependencies.javaxAnnotationApi
+  //Optional, Collections, Guava like but lightweight on method count library
+  implementation appBuildingDependencies.arrow
+  implementation appBuildingDependencies.dagger
+  implementation appBuildingDependencies.javaxInject
+  //  implementation appBuildingDependencies.javaxAnnotationApi
 
-    implementation appBuildingDependencies.trikitaLog
-    implementation appBuildingDependencies.rxAndroid
-    implementation appBuildingDependencies.rxJava
-    implementation appBuildingDependencies.androidAnnotations
-    implementation appBuildingDependencies.supportV7
-    implementation appBuildingDependencies.jodaTimeAndroid
-    implementation dataDependencies.gson
+  implementation appBuildingDependencies.trikitaLog
+  implementation appBuildingDependencies.rxAndroid
+  implementation appBuildingDependencies.rxJava
+  implementation appBuildingDependencies.androidAnnotations
+  implementation appBuildingDependencies.supportV7
+  implementation appBuildingDependencies.jodaTimeAndroid
+  implementation dataDependencies.gson
 
-    testImplementation robolectricTestDependencies.junit
-    testImplementation robolectricTestDependencies.assertj
-    testImplementation robolectricTestDependencies.mockito
-    testImplementation robolectricTestDependencies.robolectric
+  testImplementation robolectricTestDependencies.junit
+  testImplementation robolectricTestDependencies.assertj
+  testImplementation robolectricTestDependencies.mockito
+  testImplementation robolectricTestDependencies.robolectric
 }

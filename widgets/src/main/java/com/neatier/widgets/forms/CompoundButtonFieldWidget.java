@@ -16,21 +16,21 @@ package com.neatier.widgets.forms;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.databinding.BindingMethod;
-import android.databinding.BindingMethods;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
-import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.content.res.AppCompatResources;
-import android.support.v7.widget.TintTypedArray;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.appcompat.widget.TintTypedArray;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.BindingMethod;
+import androidx.databinding.BindingMethods;
 import com.fernandocejas.arrow.checks.Preconditions;
 import com.neatier.widgets.R;
 import com.neatier.widgets.helpers.DrawableHelper;
@@ -130,7 +130,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         ColorStateList baseColorStateList = AppCompatResources.getColorStateList(
                 getContext(), value.resourceId);
         if (!getContext().getTheme().resolveAttribute(
-                android.support.v7.appcompat.R.attr.colorControlNormal, value, true)) {
+              androidx.appcompat.R.attr.colorControlNormal, value, true)) {
             return null;
         }
         int baseColor = baseColorStateList.getDefaultColor();
@@ -152,7 +152,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
         mButton = (ImageView) mItemView.findViewById(R.id.btn_action);
         Preconditions.checkNotNull(mButton, "No ImageButton with id btn_action found.");
         getEditText().setInputType(InputType.TYPE_CLASS_TEXT);
-        if (mClickableViewId > 0) {
+        if (mClickableViewId != 0) {
             mClickableView = mItemView.findViewById(mClickableViewId);
         }
     }

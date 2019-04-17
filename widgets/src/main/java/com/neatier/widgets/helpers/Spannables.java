@@ -13,10 +13,6 @@
 package com.neatier.widgets.helpers;
 
 import android.content.Context;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -30,6 +26,10 @@ import android.text.style.StyleSpan;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import com.fernandocejas.arrow.checks.Preconditions;
 import com.neatier.commons.helpers.KeyValuePairs;
 import com.neatier.widgets.ThemeUtil;
@@ -147,7 +147,7 @@ public class Spannables {
         Preconditions.checkArgument(mSpanRanges.containsKey(substring),
                 String.format("No sub span added yet:%s", substring));
         int defaultColor = ThemeUtil.colorFromAttrRes(
-                android.support.v7.appcompat.R.attr.colorControlNormal, mContext);
+              androidx.appcompat.R.attr.colorControlNormal, mContext);
         return foreground(substring, ThemeUtil.getColor(mContext, colorRes, defaultColor));
     }
 
@@ -174,7 +174,7 @@ public class Spannables {
         Preconditions.checkArgument(mSpanRanges.containsKey(substring),
                 String.format("No sub span added yet:%s", substring));
         int defaultColor = ThemeUtil.colorFromAttrRes(
-                android.support.v7.appcompat.R.attr.colorPrimary, mContext);
+              androidx.appcompat.R.attr.colorPrimary, mContext);
         return background(substring, ThemeUtil.getColor(mContext, colorRes, defaultColor));
     }
 
@@ -246,7 +246,7 @@ public class Spannables {
             subSpan(mTextToSpan);
         }
         int defaultFgColor = ThemeUtil.colorFromAttrRes(
-                android.support.v7.appcompat.R.attr.colorControlNormal, mContext);
+              androidx.appcompat.R.attr.colorControlNormal, mContext);
         mSpanRanges.keysAsStream()
                 .subscribe(key -> {
                     Pair<Integer, Integer> range = mSpanRanges.get(key);

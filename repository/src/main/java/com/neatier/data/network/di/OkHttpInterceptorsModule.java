@@ -14,7 +14,7 @@
 
 package com.neatier.data.network.di;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import com.neatier.data.network.retrofit.OkHttpInterceptors;
 import com.neatier.data.network.retrofit.OkHttpNetworkInterceptors;
 import dagger.Module;

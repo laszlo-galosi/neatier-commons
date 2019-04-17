@@ -19,13 +19,6 @@ import android.content.res.TypedArray;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.TypedArrayUtils;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -42,6 +35,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.TypedArrayUtils;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 import com.neatier.commons.helpers.Flags;
@@ -249,16 +249,16 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
     }
 
     public void initView(Context context) {
-        if (mLayoutRes > 0) {
+        if (mLayoutRes != 0) {
             removeAllViews();
             mItemView = LayoutInflater.from(getContext()).inflate(mLayoutRes, this, false);
             WidgetUtils.setLayoutSizeOf(mItemView, LayoutParams.MATCH_PARENT,
                     LayoutParams.MATCH_PARENT);
             addView(mItemView);
-            mEditText = (EditText) mItemView.findViewById(R.id.inputField);
+            mEditText = mItemView.findViewById(R.id.inputField);
             mEditText.setTextColor(mFieldTextColor);
-            if (mHelperViewId > 0) {
-                mHelperView = (TextView) mItemView.findViewById(mHelperViewId);
+            if (mHelperViewId != 0) {
+                mHelperView = mItemView.findViewById(mHelperViewId);
                 setHelperWithColor(mHelperText, mHelperTextColor);
                 mHelperView.setTextColor(mHelperTextColor);
             }
@@ -266,8 +266,8 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             mEditText.setImeOptions(mImeOptions);
             mEditText.setImeActionLabel(mImeActionLabel, mImeOptions);
             mDefaultFieldPaddingStart = mEditText.getPaddingLeft();
-            if (mLabelViewId > 0) {
-                mLabelView = (TextView) mItemView.findViewById(mLabelViewId);
+            if (mLabelViewId != 0) {
+                mLabelView = mItemView.findViewById(mLabelViewId);
                 initLabelPaint();
                 mLabelView.setTextColor(mLabelTextColor);
             }
@@ -400,7 +400,7 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
             setHint(formatted);
         }
         if (mLabelView == null) {
-            mLabelView = (TextView) findViewById(mLabelViewId);
+            mLabelView = findViewById(mLabelViewId);
         }
         WidgetUtils.setTextOf(mLabelView, formatted);
         //Update left padding of editText.
@@ -417,13 +417,13 @@ public class EditFieldWidget extends FrameLayout implements HasInputField<String
 
     @Override public void setHelper(final String helperText, @ColorRes int colorRes) {
         setHelperWithColor(helperText, ContextCompat.getColor(getContext(),
-                colorRes > 0 ? colorRes : R.color.colorTextSecondary));
+                colorRes != 0 ? colorRes : R.color.colorTextSecondary));
     }
 
     public void setHelperWithColor(final String helperText, @ColorInt int color) {
         mHelperText = helperText;
-        if (mHelperView == null && mHelperViewId > 0) {
-            mHelperView = (TextView) findViewById(mHelperViewId);
+        if (mHelperView == null && mHelperViewId != 0) {
+            mHelperView = findViewById(mHelperViewId);
         }
         mHelperTextColor = color;
         if (mHelperAsHint) {

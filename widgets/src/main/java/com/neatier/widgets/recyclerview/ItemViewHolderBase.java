@@ -15,11 +15,11 @@
 package com.neatier.widgets.recyclerview;
 
 import android.content.Context;
-import android.support.annotation.IdRes;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import androidx.annotation.IdRes;
+import androidx.recyclerview.widget.RecyclerView;
 import com.fernandocejas.arrow.optional.Optional;
 import com.neatier.widgets.Bindable;
 
