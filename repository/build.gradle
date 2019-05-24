@@ -27,7 +27,6 @@ android {
     targetSdkVersion versions.androidTargetSdkVersion
 
     defaultPublishConfig 'release'
-    publishNonDefault true
 
     versionCode versions.code
     versionName versions.name
