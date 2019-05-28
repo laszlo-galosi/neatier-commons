@@ -214,7 +214,7 @@ public class CompoundButtonFieldWidget extends EditFieldWidget {
     public void setExpanded(final boolean expanded) {
         mExpanded = expanded;
         int defaultColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-        int[] drawableState = getDrawableState(getDrawableState());
+        int[] drawableState = getDrawableState(/*getDrawableState()*/);
         if (mButtonDrawable.isStateful()) {
             mButtonDrawable.setState(drawableState);
         }
