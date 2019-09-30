@@ -14,7 +14,7 @@
 package com.neatier.commons;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 import com.neatier.commons.helpers.LongTaskScheduler;
 import java.util.Arrays;
 import java.util.List;

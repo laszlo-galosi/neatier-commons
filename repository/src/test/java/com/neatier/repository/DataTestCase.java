@@ -15,7 +15,7 @@
 package com.neatier.repository;
 
 import android.content.Context;
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
