@@ -137,7 +137,7 @@ public class RestApiResponseException extends ErrorBundleException {
      */
     public RestApiResponseException(final KeyValuePairs<String, Object> params,
             final Throwable cause) {
-        super((String) params.getOrDefault(RESP_REASON, "Server response: Unknown error:"), cause);
+        super(params.toString(), cause);
         this.mResponseInfo = params;
         this.mSerializeOn = new LongTaskOnIOScheduler();
         this.mJsonSerializer = new JsonSerializer<>();
