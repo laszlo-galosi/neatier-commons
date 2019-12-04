@@ -306,7 +306,11 @@ public class MaterialRatingBar extends AppCompatRatingBar {
      */
     @Nullable
     public ColorStateList getSupportProgressTintList() {
-        return mProgressTintInfo.mProgressTintList;
+        // mProgressTintInfo can be null during super class initialization.
+        if (mProgressTintInfo != null) {
+            return mProgressTintInfo.mProgressTintList;
+        }
+        return null;
     }
 
     /**
