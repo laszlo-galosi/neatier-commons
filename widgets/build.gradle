@@ -21,28 +21,27 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-    classpath 'com.jakewharton:butterknife-gradle-plugin:10.1.0'
+    classpath Deps.butterknife_plugin
   }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
-apply from: '../dependencies.gradle'
 
 
 android {
-  compileSdkVersion versions.androidCompileSdkVersion
+  compileSdkVersion NeatierSdk.compile_sdk
 //  buildToolsVersion versions.androidBuildToolsVersion
 
   defaultConfig {
-    minSdkVersion minSdk()
-    targetSdkVersion versions.androidTargetSdkVersion
+    minSdkVersion NeatierSdk.min_sdk
+    targetSdkVersion NeatierSdk.target_sdk
 
     defaultPublishConfig 'release'
 
-    versionCode versions.code
-    versionName versions.name
-    testInstrumentationRunner versions.testInstrumentationRunner
+    versionCode NeatierSdk.version_code
+    versionName NeatierSdk.version_name
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
   }
 
@@ -76,27 +75,24 @@ dependencies {
   //Internal dependencies
   implementation project(':neatier-commons:commons')
   //Optional, Collections, Guava like but lightweight on method count library
-  implementation appBuildingDependencies.arrow
-  //    implementation appBuildingDependencies.dagger
-  //    implementation appBuildingDependencies.javaxInject
-  //  implementation appBuildingDependencies.javaxAnnotationApi
+  implementation Deps.arrow
 
-  implementation appBuildingDependencies.trikitaLog
-  implementation appBuildingDependencies.rxAndroid
-  implementation appBuildingDependencies.rxJava
-  implementation appBuildingDependencies.rxBinding
-  implementation appBuildingDependencies.rxAnim
-  implementation appBuildingDependencies.androidAnnotations
-  implementation appBuildingDependencies.supportV7
-  implementation appBuildingDependencies.supportDesign;
-  implementation appBuildingDependencies.supportPreferenceV7;
-  implementation appBuildingDependencies.jodaTimeAndroid
-  implementation appBuildingDependencies.picasso
-  implementation appBuildingDependencies.butterKnife
+  implementation Deps.trikita_log
+  implementation Deps.rxAndroid1
+  implementation Deps.rxJava1
+  implementation Deps.rxBinding1
+  implementation Deps.rxAnim1
+  implementation Deps.android_annotations
+  implementation Deps.support_v7
+  implementation Deps.support_design
+  implementation Deps.support_preference_v7
+  implementation Deps.joda_android
+  implementation Deps.picasso
+  implementation Deps.butterknife
   //    implementation dataDependencies.gson
 
-  testImplementation robolectricTestDependencies.junit
-  implementation 'androidx.fragment:fragment:1.0.0'
+  testImplementation Deps.junit
+  implementation Deps.androidx_fragment
   //    testImplementation robolectricTestDependencies.assertj
   //    testImplementation robolectricTestDependencies.mockito
   //    testImplementation robolectricTestDependencies.robolectric

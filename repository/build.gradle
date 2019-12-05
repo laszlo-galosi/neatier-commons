@@ -11,25 +11,23 @@
  *   Delight Solutions Kft.
  */
 
-apply from: '../dependencies.gradle'
+//apply from: '../dependencies.gradle'
 apply plugin: 'com.android.library'
-//Dagger 2 annotation processor
-//apply plugin: 'com.neenbedankt.android-apt'
 //RxJava debugging
 apply plugin: 'com.fernandocejas.frodo'
 
 android {
-  compileSdkVersion versions.androidCompileSdkVersion
+  compileSdkVersion NeatierSdk.compile_sdk
   //  buildToolsVersion versions.androidBuildToolsVersion
 
   defaultConfig {
-    minSdkVersion minSdk()
-    targetSdkVersion versions.androidTargetSdkVersion
+    minSdkVersion NeatierSdk.min_sdk
+    targetSdkVersion NeatierSdk.target_sdk
 
     defaultPublishConfig 'release'
 
-    versionCode versions.code
-    versionName versions.name
+    versionCode NeatierSdk.version_code
+    versionName NeatierSdk.version_name
   }
 
   compileOptions {
@@ -61,33 +59,33 @@ dependencies {
   //      implementation project(path: ':commons')
 
   //Optional, Collections, Guava like but lightweight on method count library
-  implementation appBuildingDependencies.arrow
-  implementation appBuildingDependencies.rxJava
-  annotationProcessor appBuildingDependencies.autoValue
-  compileOnly 'com.jakewharton.auto.value:auto-value-annotations:1.2-update1'
-  annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.3.2-rc1'
+  implementation Deps.arrow
+  implementation Deps.rxJava1
+  annotationProcessor Deps.autovalue
+  compileOnly Deps.autovalue_annotation
+  annotationProcessor Deps.autovalue_gson
 
   //Dagger 2 related
-  implementation appBuildingDependencies.dagger
-  annotationProcessor appBuildingDependencies.daggerCompiler
-  compileOnly appBuildingDependencies.javaxInject
-  implementation appBuildingDependencies.androidAnnotations
+  implementation Deps.dagger
+  annotationProcessor Deps.dagger_compiler
+  compileOnly Deps.javax_inject
+  implementation Deps.android_annotations
 
   //libraries on demand per project
-  implementation appBuildingDependencies.trikitaLog
+  implementation Deps.trikita_log
 
   //Networking
-  implementation dataDependencies.gson
-  implementation dataDependencies.okHttp
-  implementation dataDependencies.okHttpInterceptor
-  implementation dataDependencies.retrofit
-  implementation dataDependencies.retrofitRxJava
-  implementation dataDependencies.retrofitGsonConverter
+  implementation Deps.gson
+  implementation Deps.okhttp
+  implementation Deps.okhttp_interceptor
+  implementation Deps.retrofit
+  implementation Deps.retrofit_rxjava
+  implementation Deps.retrofit_gson_converter
 
   //testing
-  testImplementation robolectricTestDependencies.junit
-  testImplementation robolectricTestDependencies.assertj
-  testImplementation robolectricTestDependencies.mockito
-  testImplementation robolectricTestDependencies.robolectric
-  testImplementation robolectricTestDependencies.okHttpMockWebServer
+  testImplementation Deps.junit
+  testImplementation Deps.assertj
+  testImplementation Deps.mockito
+  testImplementation Deps.robolectric
+  testImplementation Deps.okhttp_mock_webserver
 }
