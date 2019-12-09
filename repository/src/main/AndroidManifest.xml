@@ -16,5 +16,5 @@
     package="com.neatier.repository">
 
   <uses-sdk tools:overrideLibrary="com.neatier.commons"/>
-  <application android:allowBackup="true"/>
+  <application android:allowBackup="false" />
 </manifest>
