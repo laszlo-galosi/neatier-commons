@@ -11,7 +11,6 @@
  *   Delight Solutions Kft.
  */
 
-//apply from: '../dependencies.gradle'
 apply plugin: 'com.android.library'
 //RxJava debugging
 apply plugin: 'com.fernandocejas.frodo'
