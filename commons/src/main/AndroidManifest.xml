@@ -18,5 +18,5 @@
       tools:overrideLibrary="com.neatier.commons"
       android:targetSdkVersion="27"/>-->
   <uses-sdk tools:overrideLibrary="com.neatier.commons"/>
-  <application android:allowBackup="true"/>
+  <application android:allowBackup="false"/>
 </manifest>
