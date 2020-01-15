@@ -35,7 +35,7 @@ import com.neatier.widgets.helpers.DrawableHelper;
  */
 @BindingMethods(
         @BindingMethod(type = TintedBackgroundFrameLayout.class, attribute = "tbvg_drawableTintList",
-                     method = "setBackgroundDrawableColor")
+                       method = "setBackgroundDrawableColor")
 )
 public class TintedBackgroundFrameLayout extends FrameLayout {
 

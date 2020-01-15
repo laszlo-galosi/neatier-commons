@@ -26,11 +26,11 @@ apply plugin: 'com.android.library'
 
 
 android {
-  compileSdkVersion versions.androidCompileSdkVersion
+  compileSdkVersion NeatierSdk.compile_sdk
   //    buildToolsVersion versions.androidBuildToolsVersion
   defaultConfig {
     minSdkVersion minSdk()
-    targetSdkVersion versions.androidTargetSdkVersion
+    targetSdkVersion NeatierSdk.target_sdk
     defaultPublishConfig 'release'
   }
 
@@ -53,21 +53,20 @@ configurations {
 
 dependencies {
   //Optional, Collections, Guava like but lightweight on method count library
-  implementation appBuildingDependencies.arrow
-  implementation appBuildingDependencies.dagger
-  implementation appBuildingDependencies.javaxInject
-  //  implementation appBuildingDependencies.javaxAnnotationApi
+  implementation Deps.arrow
+  implementation Deps.dagger
+  implementation Deps.javax_inject
 
-  implementation appBuildingDependencies.trikitaLog
-  implementation appBuildingDependencies.rxAndroid
-  implementation appBuildingDependencies.rxJava
-  implementation appBuildingDependencies.androidAnnotations
-  implementation appBuildingDependencies.supportV7
-  implementation appBuildingDependencies.jodaTimeAndroid
-  implementation dataDependencies.gson
+  implementation Deps.trikita_log
+  implementation Deps.rxAndroid1
+  implementation Deps.rxJava1
+  implementation Deps.android_annotations
+  implementation Deps.support_v7
+  implementation Deps.joda_android
+  implementation Deps.gson
 
-  testImplementation robolectricTestDependencies.junit
-  testImplementation robolectricTestDependencies.assertj
-  testImplementation robolectricTestDependencies.mockito
-  testImplementation robolectricTestDependencies.robolectric
+  testImplementation Deps.junit
+  testImplementation Deps.assertj
+  testImplementation Deps.mockito
+  testImplementation Deps.robolectric
 }
